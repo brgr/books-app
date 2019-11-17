@@ -14,7 +14,7 @@
 ; https://github.com/tmarble/webica/blob/master/examples/lmgtfy
 ; https://towardsdatascience.com/data-science-skills-web-scraping-javascript-using-python-97a29738353f
 
-(def driver (firefox {:headless true})) ;; here, a Firefox window should appear
+(def driver (firefox {:headless true}))
 (go driver "https://amazon.de/hz/wishlist/ls/13XXXLP6RR1X9/ref=nav_wishlist_lists_1?_encoding=UTF8&type=wishlist")
 
 (wait-visible driver [{:id :twotabsearchtextbox}])
@@ -41,11 +41,21 @@
 (load_all_books driver)
 
 ;(def wishlist_html (html/parse-string (get-element-inner-html driver {:id :wishlist-page})))
-; :class :a-list-item
-(def wishlist_items
-  (map (partial get-element-inner-html-el driver) (query-all driver {:xpath "//div[starts-with(@id, 'item_')]"})))
-;(println "wishlist html parsed:\n" wishlist_html)
-(spit "itemNames.html" (pr-str wishlist_items))
+;(def wishlist_items
+;  (map (partial get-element-inner-html-el driver) (query-all driver {:xpath "//div[starts-with(@id, 'item_')]"})))
+
+
+; using this code script from reddit:
+; https://old.reddit.com/r/amazon/comments/7paenb/amazon_wishlist_web_scraper/
+
+(def whole_html (get-source driver))
+(spit "whole_html.html" whole_html)
+
+;(def wishlist_items_reddit
+;  (map (partial get-element-inner-html-el driver)
+;       (query-all driver {:xpath "//li[contains(@class, 'g-item-sortable')]"})))
+;
+;(spit "itemNames_reddit.html" (pr-str wishlist_items_reddit))
 
 
 (comment "
