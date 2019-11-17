@@ -1,0 +1,8 @@
+<component name="ProjectCodeStyleConfiguration">
+  <code_scheme name="Project" version="173">
+    <ClojureCodeStyleSettings>{
+  :clojuire-project-euler2.core/n 0
+  :clojure.core/require 0
+}</ClojureCodeStyleSettings>
+  </code_scheme>
+</component>
