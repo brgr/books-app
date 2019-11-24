@@ -22,6 +22,3 @@
 
 
 (println (load_book_data_from_wishlist (slurp "whole_html.html")))
-
-
-
