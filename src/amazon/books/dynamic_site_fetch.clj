@@ -32,5 +32,7 @@
 
 (def wishlist_url "https://amazon.de/hz/wishlist/ls/13XXXLP6RR1X9/ref=nav_wishlist_lists_1?_encoding=UTF8&type=wishlist")
 
-(def whole_html (get_wishlist_html wishlist_url true))
-(println whole_html)
+(def whole_html (get_wishlist_html wishlist_url false))
+;(println whole_html)
+(spit "resources/file.txt" "test file content")
+(spit "whole.html" whole_html)
