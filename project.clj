@@ -6,7 +6,8 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [etaoin "0.3.5"]
                  [com.novemberain/monger "3.1.0"]
-                 [metosin/compojure-api "1.1.13"]]
+                 [metosin/compojure-api "1.1.13"]
+                 [org.jsoup/jsoup "1.13.1"]]
   :plugins [[lein-ring "0.12.5"]]
   :ring {:handler bookstore.api.server/app}
   :repl-options {:init-ns amazon-wishlist.core})
