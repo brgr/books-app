@@ -1,22 +1,35 @@
-# amazon-wishlist
+# Books
 
-A Clojure library designed to ... well, that part is up to you.
+A full stack implementation of a book library. Primarily a book wishlist, but 
+I would be happy to include features like a "Read" state of a book, notes on books,
+tags on books, etc.
 
-## Usage
+## Frontend
 
-FIXME
+The fronted is currently not in this project and there is no real work done on it so
+far. It will probably consist of the following components:
 
-## License
+* ClojureScript
+* Reagent, a React wrapper
+* Reframe, for storing the data in a single place (sort of MVC)
 
-Copyright © 2019 FIXME
+More on this later, when work on it is actually started.
 
-This program and the accompanying materials are made available under the
-terms of the Eclipse Public License 2.0 which is available at
-http://www.eclipse.org/legal/epl-2.0.
+## Backend
 
-This Source Code may also be made available under the following Secondary
-Licenses when the conditions for such availability set forth in the Eclipse
-Public License, v. 2.0 are satisfied: GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or (at your
-option) any later version, with the GNU Classpath Exception which is available
-at https://www.gnu.org/software/classpath/license.html.
+The backend currently consists of the following components:
+
+* Clojure
+* MongoDB + Docker
+* Clojure libraries:
+  * `monger` for access to MongoDB
+  * `ring` for the REST api server things
+    * together with `compojure` and `compojure-api`
+  * `selenium` and `Jsoup` for getting some books from Amazon
+  
+## Deployment
+
+Currently the project is just run locally. There are multiple sites I could run this
+on (DigitalOcean, Heroku, Google App Engine, AWS, Azure). I think DigitalOcean would
+probably a good start. It would cost a fix amount of 5-15$ per month, I think,
+depending on all the things I need - but these would be fairly fix.
