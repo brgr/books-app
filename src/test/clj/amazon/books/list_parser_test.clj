@@ -3,7 +3,7 @@
             [amazon.books.list-parser :as list-parser]))
 
 (deftest book-data-test
-  (is (= (->> (slurp "resources/whole.html")
+  (is (= (->> (slurp "src/test/resources/whole.html")
               (list-parser/load-books-from-amazon-wishlist-html)
               (second))
          {:amazon-id     "IONL7ZDL5YEP7",
@@ -13,3 +13,4 @@
           :thumbnail     "https://images-na.ssl-images-amazon.com/images/I/61HycdeGrGL._SS135_.jpg",
           :itemAddedDate "Hinzugefügt am 1. April 2020",
           :price         "14,64 €"})))
+
