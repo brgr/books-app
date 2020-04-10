@@ -54,6 +54,10 @@
              :consumes ["application/json"]
              :produces ["application/json"]}}}
 
+    (GET "/" []
+      :summary "Redirects to /api-docs"
+      (permanent-redirect "/api-docs"))
+
     (context "/books" []
       :tags ["api"]
 
