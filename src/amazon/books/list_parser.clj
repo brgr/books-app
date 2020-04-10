@@ -37,8 +37,3 @@
   (let [soup (Jsoup/parse whole-wishlist-html)
         wishlist-items (.select soup "li.g-item-sortable")]
     (mapv book-data wishlist-items)))
-
-
-(->> (slurp "resources/whole.html")
-     (load-book-data-from-wishlist-html)
-     (second))
