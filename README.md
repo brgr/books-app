@@ -37,6 +37,8 @@ depending on all the things I need - but these would be fairly fix.
 ## Ideas and Notes
 
 * For unit testing network stuff etc.: [mockery][1]
+* Seems to be similar to `testcontainers`: [docker-fixture][2]
 
 
 [1]: https://github.com/igrishaev/mockery
+[2]: https://github.com/brabster/docker-fixture
