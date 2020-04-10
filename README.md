@@ -33,3 +33,10 @@ Currently the project is just run locally. There are multiple sites I could run 
 on (DigitalOcean, Heroku, Google App Engine, AWS, Azure). I think DigitalOcean would
 probably a good start. It would cost a fix amount of 5-15$ per month, I think,
 depending on all the things I need - but these would be fairly fix.
+
+## Ideas and Notes
+
+* For unit testing network stuff etc.: [mockery][1]
+
+
+[1]: https://github.com/igrishaev/mockery
