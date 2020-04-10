@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+#  web:
+#    build: .
+#    volumes:
+#      - .:/code
+#      - logvolume01:/var/log
+#    links:
+#      - redis
+
+  database:
+    image: mongo:4.2
+    restart: always
+    container_name: mongo-books
+    environment:
+      MONGO_DATA_DIR: /data/db
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: GJabLafh53j4LL
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - 27017-27019:27017-27019
+
+  mongo-express:
+    image: mongo-express
+    depends_on:
+      - database
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: GJabLafh53j4LL
+      ME_CONFIG_MONGODB_SERVER: mongo-books
+      # Do I need a normal user here?
+#      ME_CONFIG_BASICAUTH_USERNAME: admin
+#      ME_CONFIG_BASICAUTH_PASSWORD: ihavealongpassword
+
+volumes:
+  mongo-data: {}
