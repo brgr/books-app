@@ -59,7 +59,7 @@
       (permanent-redirect "/api-docs"))
 
     (context "/books" []
-      :tags ["api"]
+      :tags ["books"]
 
       (GET "/" []
         ; todo: use a Schema to specify what is returned!
@@ -68,6 +68,17 @@
         (ok
           {:result bookstore/all-books}
           ))
+
+      (GET "/file" []
+        :summary "file download"
+        ;:return File
+        :produces ["image/jpeg"]
+        (->
+            (file-response "img1.jpg" {:root "resources/public"})
+            (header "Content-Type" "image/jpg"))))
+
+    (context "/playground" []
+      :tags ["playground"]
 
       (GET "/plus" []
         :return {:result Long}
@@ -83,12 +94,4 @@
 
       (GET "/hello" []
         :query-params [name :- String]
-        (ok {:message (str "Hello, " name)}))
-
-      (GET "/file" []
-        :summary "file download"
-        ;:return File
-        :produces ["image/jpeg"]
-        (->
-            (file-response "img1.jpg" {:root "resources/public"})
-            (header "Content-Type" "image/jpg"))))))
+        (ok {:message (str "Hello, " name)})))))
