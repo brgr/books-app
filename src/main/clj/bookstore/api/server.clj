@@ -66,7 +66,7 @@
         :return s/Any
         :summary "returns all books that are in the DB currently"
         (ok
-          {:result bookstore/all-books}
+          {:result (bookstore/all-books)}
           ))
 
       (GET "/file" []
