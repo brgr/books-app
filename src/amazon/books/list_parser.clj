@@ -1,6 +1,7 @@
 (ns amazon.books.list-parser
   (:require [clojure.pprint :refer :all]
-            [clojure.string :as str])
+            [clojure.string :as str]
+            [amazon.books.dynamic-site-fetch :as amazon-fetch])
   (:import [org.jsoup Jsoup]))
 
 ; For selectors, see this reddit post:
@@ -12,7 +13,7 @@
     (subs amazon-author-string 5)
     amazon-author-string))
 
-(defn book-data [wishlist-item]
+(defn- book-data [wishlist-item]
   (let [id (.attr wishlist-item "data-itemid")
         title (->> (str "#itemName_" id) (.select wishlist-item) (.text))
         url (as-> (str "#itemName_" id) element
@@ -33,7 +34,11 @@
      :price         price}))
 ; todo: change price and author (remove unnecessary things)
 
-(defn load-book-data-from-wishlist-html [whole-wishlist-html]
-  (let [soup (Jsoup/parse whole-wishlist-html)
+(defn load-books-from-amazon-wishlist-html [wishlist-html-content]
+  (let [soup (Jsoup/parse wishlist-html-content)
         wishlist-items (.select soup "li.g-item-sortable")]
     (mapv book-data wishlist-items)))
+
+(defn load-books-from-amazon-wishlist-url [url]
+  (let [html (amazon-fetch/get-wishlist-html url true)]
+    (load-books-from-amazon-wishlist-html html)))

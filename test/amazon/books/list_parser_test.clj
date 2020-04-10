@@ -4,7 +4,7 @@
 
 (deftest book-data-test
   (is (= (->> (slurp "resources/whole.html")
-              (list-parser/load-book-data-from-wishlist-html)
+              (list-parser/load-books-from-amazon-wishlist-html)
               (second))
          {:amazon-id     "IONL7ZDL5YEP7",
           :title         "In Search of Respect: Selling Crack in El Barrio Second Edition (Structural Analysis in the Social Sciences, Band 10)",
