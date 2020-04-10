@@ -48,9 +48,9 @@
     {:swagger
      {:ui   "/api-docs"
       :spec "/swagger.json"
-      :data {:info     {:title       "Sample API"
-                        :description "Compojure Api example"}
-             :tags     [{:name "api", :description "some apis"}]
+      :data {:info     {:title       "Books API"
+                        :description "An API for retrieving and setting a (wish-)list of books"}
+             :tags     ["api" "books" "wishlist"]
              :consumes ["application/json"]
              :produces ["application/json"]}}}
 
