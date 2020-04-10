@@ -23,20 +23,20 @@
   (assoc entry :_id (str (get entry :_id))))
 
 (def all-books
-  (let [connection (monger/connect)
+  (let [connection (monger/connect {:host host})
         db (monger/get-db connection db-name)
         mongo_entries (mc/find-maps db "books")]
     (map (partial stringify-id) mongo_entries)))
 
 
-(insert-new-book {:amazon-id                     "asdf"
-                  :title                         "Buch Sowieso"
-                  :amazon-url                    "www.amazonas.br"
-                  :authors                       ["Autor 1", "Autor 2"]
-                  :amazon-thumbnail-url          "www.amasdfa.sdfwe"
-                  :amazon-date-added-to-wishlist "date representation!? -> Joda!"
-                  :amazon-price                  {:date  "date sowieso"
-                                                  :price {:amount 5.02 :currency "EUR"}}
-                  ; TODO: Beschreibung, Veroeffentlichungsdatum, Verlag, user-generated tags, book language,
-                  ;  original book language, length of book
-                  })
+;(insert-new-book {:amazon-id                     "asdf"
+;                  :title                         "Buch Sowieso"
+;                  :amazon-url                    "www.amazonas.br"
+;                  :authors                       ["Autor 1", "Autor 2"]
+;                  :amazon-thumbnail-url          "www.amasdfa.sdfwe"
+;                  :amazon-date-added-to-wishlist "date representation!? -> Joda!"
+;                  :amazon-price                  {:date  "date sowieso"
+;                                                  :price {:amount 5.02 :currency "EUR"}}
+;                  ; TODO: Beschreibung, Veroeffentlichungsdatum, Verlag, user-generated tags, book language,
+;                  ;  original book language, length of book
+;                  })
