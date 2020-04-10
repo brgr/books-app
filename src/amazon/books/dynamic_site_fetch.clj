@@ -6,33 +6,26 @@
 ; https://github.com/mozilla/geckodriver
 
 
-(defn more_books_available? [driver]
-  (.contains (get-element-inner-html driver {:id :wishlist-page}) "wl-see-more"))
+(defn- more-books-available? [driver]
+  (-> (get-element-inner-html driver {:id :wishlist-page})
+      (.contains "wl-see-more")))
 
-(defn load_all_books [driver]
-  (while (more_books_available? driver)
+(defn- load-all-books [driver]
+  (while (more-books-available? driver)
     (scroll-query driver {:id :navBackToTop})
     (scroll-up driver 300)))
 
-(defn get_source_of_whole_wishlist [driver wishlist_url]
+(defn- get-source-of-whole-wishlist [driver wishlist-url]
   (doto driver
-    (go wishlist_url)
+    (go wishlist-url)
     (wait-visible [{:id :twotabsearchtextbox}])
-    (load_all_books))
+    (load-all-books))
   ; get-source needs to be outside of (doto ...), otherwise it is not returned
   (get-source driver))
 
-(defn get_wishlist_html [wishlist_url headless?]
+(defn get-wishlist-html [wishlist_url headless?]
   (let [driver (firefox {:headless headless?})]
     (try
-      (get_source_of_whole_wishlist driver wishlist_url)
+      (get-source-of-whole-wishlist driver wishlist_url)
       (finally
         (quit driver)))))
-
-
-(def wishlist_url "https://amazon.de/hz/wishlist/ls/13XXXLP6RR1X9/ref=nav_wishlist_lists_1?_encoding=UTF8&type=wishlist")
-
-(def whole_html (get_wishlist_html wishlist_url false))
-;(println whole_html)
-(spit "resources/file.txt" "test file content")
-(spit "whole.html" whole_html)

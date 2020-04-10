@@ -3,11 +3,17 @@
   :url "http://example.com/FIXME"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
             :url "https://www.eclipse.org/legal/epl-2.0/"}
+
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [etaoin "0.3.5"]
                  [com.novemberain/monger "3.1.0"]
                  [metosin/compojure-api "1.1.13"]
                  [org.jsoup/jsoup "1.13.1"]]
+
   :plugins [[lein-ring "0.12.5"]]
   :ring {:handler bookstore.api.server/app}
-  :repl-options {:init-ns amazon-wishlist.core})
+
+  :repl-options {:init-ns amazon-wishlist.core}
+
+  :test-selectors {:default (complement :amazon)
+                   :amazon :amazon})
