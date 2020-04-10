@@ -54,22 +54,22 @@
              :consumes ["application/json"]
              :produces ["application/json"]}}}
 
-    (context "/api" []
+    (context "/books" []
       :tags ["api"]
+
+      (GET "/" []
+        ; todo: use a Schema to specify what is returned!
+        :return s/Any
+        :summary "returns all books that are in the DB currently"
+        (ok
+          {:result bookstore/all-books}
+          ))
 
       (GET "/plus" []
         :return {:result Long}
         :query-params [x :- Long, y :- Long]
         :summary "adds two numbers together"
         (ok {:result (+ x y)}))
-
-      (GET "/books" []
-        :return s/Any                                       ; Books
-        :summary "returns all books that are in the DB currently"
-        (ok
-          {:result bookstore/all-books}
-          ; TODO: I think for the above to work, each book needs to be transformed into Book schema
-          ))
 
       (POST "/echo" []
         :return Pizza
