@@ -1,5 +1,5 @@
 name: Build + Deploy
-description: 'Build and deploy to my DigitalOcean droplet'
+#description: 'Build and deploy to my DigitalOcean droplet'
 
 on:
   push:
