@@ -20,5 +20,6 @@
 
   :repl-options {:init-ns amazon-wishlist.core}
 
-  :test-selectors {:default (complement :amazon)
-                   :amazon :amazon})
+  :test-selectors {:default (complement :amazon :integration)
+                   :amazon :amazon
+                   :integration :integration})

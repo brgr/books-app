@@ -10,27 +10,34 @@
 ; or, better, with Docker:
 ; docker run -p 27017-27019:27017-27019 --name mongodb -d mongo
 
+; always using default port
 (def host "0.0.0.0")
 ;(def host "165.22.76.70")
 (def db-name "bookstore")
+(def admin-db "admin")
+(def user "root")
+(def password (.toCharArray "GJabLafh53j4LL"))
 
-(def credentials
-  (let [admin-db "admin"
-        user "root"
-        password (.toCharArray "GJabLafh53j4LL")]
-    (credentials/create user admin-db password)))
-
-; using default port
-(defn insert-new-book [book]
-  (let [connection (monger/connect-with-credentials host credentials)
-        db (monger/get-db connection db-name)]
-    (collection/insert-and-return db "books" book)))
+(def collection "books")
 
 (defn stringify-id [entry]
   (assoc entry :_id (str (get entry :_id))))
 
+(defn get-db []
+  (let [credentials (credentials/create user admin-db password)
+        connection (monger/connect-with-credentials host credentials)]
+    (monger/get-db connection db-name)))
+
+(defn insert-new-book [book]
+  (let [db (get-db)]
+    (-> (collection/insert-and-return db collection book)
+        (stringify-id))))
+
 (defn all-books []
-  (let [connection (monger/connect-with-credentials host credentials)
-        db (monger/get-db connection db-name)
-        mongo_entries (collection/find-maps db "books")]
-    (map (partial stringify-id) mongo_entries)))
+  (let [db (get-db)
+        all-entries (collection/find-maps db collection)]
+    (map stringify-id all-entries)))
+
+(defn remove-book-with-amazon-id [amazon-id]
+  (let [db (get-db)]
+    (collection/remove db collection {:amazon-id amazon-id})))
