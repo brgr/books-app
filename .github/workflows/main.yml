@@ -20,8 +20,12 @@ jobs:
         env:
           DIGITALOCEAN_SSH_KEY_GITHUB_ACTIONS: ${{ secrets.DIGITALOCEAN_SSH_KEY_GITHUB_ACTIONS }}
         run: |
-          eval "$(ssh-agent -s)"
-          ssh-add - <<< "${DIGITALOCEAN_SSH_KEY_GITHUB_ACTIONS}"
+          mkdir ~/.ssh
+          echo "$DIGITALOCEAN_SSH_KEY_GITHUB_ACTIONS" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+#          eval "$(ssh-agent -s)"
+#          ssh-add - <<< "${DIGITALOCEAN_SSH_KEY_GITHUB_ACTIONS}"
           ssh -tt dominik@165.22.76.70
       - name: Touch some file to check if ssh works
         run: touch ssh_works.txt
