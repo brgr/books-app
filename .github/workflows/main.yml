@@ -19,7 +19,9 @@ jobs:
         shell: bash
         env:
           DIGITALOCEAN_SSH_KEY_GITHUB_ACTIONS: ${{ secrets.DIGITALOCEAN_SSH_KEY_GITHUB_ACTIONS }}
-        run: ssh -i <(echo "$DIGITALOCEAN_SSH_KEY_GITHUB_ACTIONS") dominik@165.22.76.70
+        run: |
+          echo "$DIGITALOCEAN_SSH_KEY_GITHUB_ACTIONS" > DIGITALOCEAN_SSH_KEY_GITHUB_ACTIONS
+          ssh -i DIGITALOCEAN_SSH_KEY_GITHUB_ACTIONS dominik@165.22.76.70
       - name: Touch some file to check if ssh works
         run: touch ssh_works.txt
       - name: Test multi-line bash
