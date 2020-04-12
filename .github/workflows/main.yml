@@ -23,7 +23,7 @@ jobs:
           mkdir ~/.ssh
           echo "$DIGITALOCEAN_SSH_KEY_GITHUB_ACTIONS" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh -tt dominik@165.22.76.70
+          ssh -o StrictHostKeyChecking=no -tt dominik@165.22.76.70
       - name: Touch some file to check if ssh works
         run: touch ssh_works.txt
       - name: Test multi-line bash
