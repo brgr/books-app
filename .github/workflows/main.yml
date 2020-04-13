@@ -35,7 +35,7 @@ jobs:
           stop_docker: 'docker stop $(cat container_id)'
           ls_and_pwd: 'ls -a && pwd'
           docker_build: 'docker build -t ring-books .'
-          docker_run: 'docker run --cidfile container_id -p 3000-3001:3000-3001 ring-books'
+          docker_run: 'docker run --cidfile container_id -p 3000-3001:3000-3001 -d ring-books'
         run: |
           ssh -o StrictHostKeyChecking=no dominik@165.22.76.70 "$stop_docker || $ls_and_pwd && $docker_build && $docker_run"
 
