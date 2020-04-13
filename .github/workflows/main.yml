@@ -7,6 +7,16 @@ on:
       - github-actions-test
 
 jobs:
+  test:
+    name: Test Backend
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v2
+      - name: Run tests (lein test)
+        run: lein test
+
+
   build:
     name: Build
     runs-on: ubuntu-18.04
@@ -26,7 +36,7 @@ jobs:
         run: |
           lein ring uberjar
 
-      - name: Using SCP, load ring-books-container to DigitalOcean droplet
+      - name: Using SCP, load uberjar and Dockerfile to DigitalOcean droplet
         run: |
           scp -o StrictHostKeyChecking=no target/*-standalone.jar Dockerfile dominik@165.22.76.70:/home/dominik
 
