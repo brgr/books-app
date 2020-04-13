@@ -33,12 +33,12 @@ jobs:
       - name: Using SSH, stop old container, build and run new ring-books server
         env:
           docker_stop: 'docker stop $(cat container_id)'
-          rm_cid: 'rm container_id'
+          rm_cid: 'if [[ -f container_id ]] ; then rm container_id ; fi'
           ls_and_pwd: 'ls -a && pwd'
           docker_build: 'docker build -t ring-books .'
           docker_run: 'docker run --rm --cidfile container_id -p 3000-3001:3000-3001 -d ring-books'
         run: |
-          ssh -o StrictHostKeyChecking=no dominik@165.22.76.70 "$docker_stop || $rm_cid || $ls_and_pwd && $docker_build && $docker_run"
+          ssh -o StrictHostKeyChecking=no dominik@165.22.76.70 "$docker_stop || $rm_cid && $ls_and_pwd && $docker_build && $docker_run"
 
 # Next steps for Github Actions:
 # - MongoDB server is still missing --> docker compose!
