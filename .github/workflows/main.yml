@@ -11,12 +11,10 @@ jobs:
     name: Build
     runs-on: ubuntu-18.04
     steps:
-#      - name: Checkout Project
-#        uses: actions/checkout@v2
+      - name: Checkout Project
+        uses: actions/checkout@v2
 
-      # TODO: Do the two steps below work? Maybe test on a different branch than master! (e.g. github-actions-test)
-      - name: SSH into DigitalOcean Droplet (on 165.22.76.70)
-        shell: bash
+      - name: Setup DigitalOcean Private Key for SSH and SCP Access
         env:
           DIGITALOCEAN_SSH_KEY_GITHUB_ACTIONS: ${{ secrets.DIGITALOCEAN_SSH_KEY_GITHUB_ACTIONS }}
         run: |
@@ -24,7 +22,37 @@ jobs:
           echo "$DIGITALOCEAN_SSH_KEY_GITHUB_ACTIONS" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-          ssh -o StrictHostKeyChecking=no dominik@165.22.76.70 touch ssh_works.txt
+      - name: Build uberjar file
+        run: |
+          lein ring uberjar
+
+      - name: Build ring server docker container and save container
+        run: |
+          docker build -t ring-books ./wishlist-docker
+
+      - name: Using SCP, load ring-books-container to DigitalOcean droplet
+        run: |
+          scp -o StrictHostKeyChecking=no target/*-standalone.jar Dockerfile dominik@165.22.76.70:/home/dominik
+
+      - name: Using SSH, stop old container, build and run new ring-books server
+        run: |
+          ssh -o StrictHostKeyChecking=no dominik@165.22.76.70 \
+            docker stop $(cat container_id) ; \
+            docker build -t ring-books . && \
+            docker run --cidfile container_id -p 3000-3001:3000-3001 ring-books
+
+# TODO: Regarding the step below:
+#  Right now, this leaves a lot of lein ring servers hanging. I think I need to change to directly use the ring Jetty
+#  server!
+# TODO: Maybe use a dockerized Jetty server? See my simple Dockerfile in amazon-wishlist/
+#      - name: Using SSH, Create a New File in the DigitalOcean Droplet
+#        run: |
+#          ssh -o StrictHostKeyChecking=no dominik@165.22.76.70 \
+#            rm -rf amazon-wishlist && \
+#            git clone git@github.com:brgr/amazon-wishlist.git && \
+#            cd amazon-wishlist && \
+#            LEIN_NO_DEV=true lein ring server-headless
+
 #      - name: Touch some file to check if ssh works
 #        run: touch ssh_works.txt
 #      - name: Test multi-line bash
