@@ -37,9 +37,8 @@ jobs:
           ls_and_pwd: 'ls -a && pwd'
           docker_build: 'docker build -t ring-books .'
           docker_run: 'docker run --rm --cidfile container_id -p 3000-3001:3000-3001 -d ring-books'
-          ssh_command: '$docker_stop || $rm_cid || $ls_and_pwd && $docker_build && $docker_run'
         run: |
-          ssh -o StrictHostKeyChecking=no dominik@165.22.76.70 "$ssh_command"
+          ssh -o StrictHostKeyChecking=no dominik@165.22.76.70 "$docker_stop || $rm_cid || $ls_and_pwd && $docker_build && $docker_run"
 
 # Next steps for Github Actions:
 # - MongoDB server is still missing --> docker compose!
