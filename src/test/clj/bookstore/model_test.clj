@@ -4,9 +4,6 @@
 
 ;(use-fixtures)
 
-(model/remove-book-with-amazon-id "amazon-id")
-(model/remove-book-with-amazon-id "asdf")
-
 ; todo: this works once, but if done multiple times the entry is created multiple times
 (deftest ^:integration insert-new-book-test
   (model/insert-new-book {:amazon-id                     "amazon-id"
@@ -24,5 +21,3 @@
   (is (= 1 (count (model/all-books))))
   (model/remove-book-with-amazon-id "amazon-id")
   (is (= 0 (count (model/all-books)))))
-
-(meta #'insert-new-book-test)

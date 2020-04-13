@@ -10,12 +10,9 @@
   ([uri output-path]
    (let [filename (get-file-name uri)
          filepath (str output-path filename)]
-     (do
-       (println "filename:" filename)
-       (println "filepath:" filepath)
-       (with-open [in (io/input-stream uri)
-                  out (io/output-stream filepath)]
-        (io/copy in out)))))
+     (with-open [in (io/input-stream uri)
+                 out (io/output-stream filepath)]
+       (io/copy in out))))
   ; todo: maybe remove
   ([uri] (load-file-from uri "resources/test_wishlist/book_images/")))
 

@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Run tests (lein test)
         run: lein test
+# TODO: also run integration tests --> first start a mongoDB database
 
 
   build:
