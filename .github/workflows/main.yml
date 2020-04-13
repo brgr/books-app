@@ -26,10 +26,6 @@ jobs:
         run: |
           lein ring uberjar
 
-      - name: Build ring server docker container and save container
-        run: |
-          docker build -t ring-books ./wishlist-docker
-
       - name: Using SCP, load ring-books-container to DigitalOcean droplet
         run: |
           scp -o StrictHostKeyChecking=no target/*-standalone.jar Dockerfile dominik@165.22.76.70:/home/dominik
