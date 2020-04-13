@@ -34,6 +34,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no dominik@165.22.76.70 \
             docker stop $(cat container_id) || \
+            ls -a && pwd && \
             docker build -t ring-books . && \
             docker run --cidfile container_id -p 3000-3001:3000-3001 ring-books
 
