@@ -33,35 +33,17 @@ jobs:
       - name: Using SSH, stop old container, build and run new ring-books server
         env:
           stop_docker: 'docker stop $(cat container_id)'
+          rm_cid: 'rm container_id'
           ls_and_pwd: 'ls -a && pwd'
           docker_build: 'docker build -t ring-books .'
-          docker_run: 'docker run --cidfile container_id -p 3000-3001:3000-3001 -d ring-books'
+          docker_run: 'docker run --rm --cidfile container_id -p 3000-3001:3000-3001 -d ring-books'
+          ssh_command: '$stop_docker || $rm_cid && $ls_and_pwd && $docker_build && $docker_run'
         run: |
-          ssh -o StrictHostKeyChecking=no dominik@165.22.76.70 "$stop_docker || $ls_and_pwd && $docker_build && $docker_run"
+          ssh -o StrictHostKeyChecking=no dominik@165.22.76.70 "$ssh_command"
 
-# TODO: Regarding the step below:
-#  Right now, this leaves a lot of lein ring servers hanging. I think I need to change to directly use the ring Jetty
-#  server!
-# TODO: Maybe use a dockerized Jetty server? See my simple Dockerfile in amazon-wishlist/
-#      - name: Using SSH, Create a New File in the DigitalOcean Droplet
-#        run: |
-#          ssh -o StrictHostKeyChecking=no dominik@165.22.76.70 \
-#            rm -rf amazon-wishlist && \
-#            git clone git@github.com:brgr/amazon-wishlist.git && \
-#            cd amazon-wishlist && \
-#            LEIN_NO_DEV=true lein ring server-headless
-
-#      - name: Touch some file to check if ssh works
-#        run: touch ssh_works.txt
-#      - name: Test multi-line bash
-#        run: |
-#          touch some_file.txt
-#          echo "Hello file" > some_other_file.txt
-
-#      - name: Run Tests
-#        run: lein test
-#        # TODO: probably ssh to my droplet first? then git checkout there, then the action below
-#      - name: Build uberjar
-#        run: LEIN_NO_DEV=true lein ring server-headless
+# Next steps for Github Actions:
+# - MongoDB server is still missing --> docker compose!
+# - at some point: also build the frontend
+# - also include some tests!
 
 
