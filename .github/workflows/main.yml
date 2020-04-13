@@ -32,12 +32,12 @@ jobs:
 
       - name: Using SSH, stop old container, build and run new ring-books server
         env:
-          stop-docker: 'docker stop $(cat container_id)'
-          ls-and-pwd: 'ls -a && pwd'
-          docker-build: 'docker build -t ring-books .'
-          docker-run: 'docker run --cidfile container_id -p 3000-3001:3000-3001 ring-books'
+          stop_docker: 'docker stop $(cat container_id)'
+          ls_and_pwd: 'ls -a && pwd'
+          docker_build: 'docker build -t ring-books .'
+          docker_run: 'docker run --cidfile container_id -p 3000-3001:3000-3001 ring-books'
         run: |
-          ssh -o StrictHostKeyChecking=no dominik@165.22.76.70 $stop-docker || $ls-and-pwd && $docker-build && $docker-run
+          ssh -o StrictHostKeyChecking=no dominik@165.22.76.70 $stop_docker || $ls_and_pwd && $docker_build && $docker_run
 
 # TODO: Regarding the step below:
 #  Right now, this leaves a lot of lein ring servers hanging. I think I need to change to directly use the ring Jetty
