@@ -66,8 +66,7 @@
         :return s/Any
         :summary "returns all books that are in the DB currently"
         (ok
-          {:result (bookstore/all-books)}
-          ))
+          {:result (bookstore/all-books)}))
 
       (GET "/file" []
         :summary "file download"
@@ -75,7 +74,14 @@
         :produces ["image/jpeg"]
         (->
             (file-response "img1.jpg" {:root "resources/public"})
-            (header "Content-Type" "image/jpg"))))
+            (header "Content-Type" "image/jpg")))
+
+      (POST "/book" []
+        :summary "Insert a new book"
+        ; TODO: check that book is of the correct type! (schema check)
+        :body [book s/Any]
+        (let [id (bookstore/insert-new-book book)]
+          (ok id))))
 
     (context "/playground" []
       :tags ["playground"]
