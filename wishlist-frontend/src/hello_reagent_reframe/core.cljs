@@ -1,7 +1,12 @@
 (ns hello-reagent-reframe.core
   (:require [reagent.core :as reagent]
             [re-frame.core :as rf]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [books.views]
+            ; Note: the 2 below are needed s.t. they are loaded!!
+            [books.events]
+            [books.subs]
+            ))
 
 ;; A detailed walk-through of this source code is provided in the docs:
 ;; https://github.com/day8/re-frame/blob/master/docs/CodeWalkthrough.md
@@ -95,11 +100,15 @@
   []
   [:div
    [:h1 "Hello world, it is"]
-   [clock]
+   ; something seems to be wrong with clock?
+   ;[clock]
    [color-input]
    [:hr]
    [my-input-field]
    [:p (str "This is it: " @(rf/subscribe [:my-input-text]))]
+   [:hr]
+   [:h1 "Books"]
+   [books.views/ui]
    ])
 
 ;; -- Entry Point -------------------------------------------------------------
@@ -107,7 +116,7 @@
 (defn render
   []
   (reagent.dom/render [ui]
-                  (js/document.getElementById "app")))
+                  (js/document.getElementById "books-app")))
 
 (defn ^:dev/after-load clear-cache-and-render!
   []
@@ -120,5 +129,6 @@
 (defn run
   []
   (rf/dispatch-sync [:initialize]) ;; put a value into application state
+  (rf/dispatch-sync [:initialize-books])
   (render)                         ;; mount the application's ui into '<div id="app" />'
   )
