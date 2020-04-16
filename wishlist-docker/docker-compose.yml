@@ -1,13 +1,16 @@
 version: '3.7'
 
 services:
-#  web:
-#    build: .
-#    volumes:
-#      - .:/code
-#      - logvolume01:/var/log
-#    links:
-#      - redis
+
+  jetty-ring:
+    build:
+      context: .
+      dockerfile: jetty-ring-dockerfile
+    depends_on:
+      - database
+    ports:
+      - 3000-3001:3000-3001
+
 
   database:
     image: mongo:4.2
