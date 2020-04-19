@@ -5,3 +5,8 @@
   :single-book
   (fn [db _]
     (:single-book db)))
+
+(reg-sub
+  :all-books
+  (fn [db _]
+    (:all-books db)))
