@@ -15,7 +15,9 @@
 
                  [binaryage/devtools         "0.9.10"]
                  [clj-commons/secretary      "1.2.4"]
-                 [day8.re-frame/tracing      "0.5.3"]]
+                 [day8.re-frame/tracing      "0.5.3"]
+
+                 [cljs-ajax "0.8.0"]]
 
   :plugins [[lein-shadow "0.1.7"]]
 
