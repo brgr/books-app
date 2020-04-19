@@ -65,16 +65,19 @@
         ; todo: use a Schema to specify what is returned!
         :return s/Any
         :summary "returns all books that are in the DB currently"
-        (ok
-          {:result (bookstore/all-books)}))
+        (->
+          (ok {:result (bookstore/all-books)})
+          ; The following two are important for AJAX to work
+          (header "Access-Control-Allow-Origin"  "*")
+          (header "Access-Control-Allow-Headers" "Content-Type")))
 
       (GET "/file" []
         :summary "file download"
         ;:return File
         :produces ["image/jpeg"]
         (->
-            (file-response "img1.jpg" {:root "resources/public"})
-            (header "Content-Type" "image/jpg")))
+          (file-response "img1.jpg" {:root "resources/public"})
+          (header "Content-Type" "image/jpg")))
 
       (POST "/book" []
         :summary "Insert a new book"
