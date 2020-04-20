@@ -28,6 +28,22 @@ For more info:
 https://serverfault.com/questions/758225/cannot-connect-to-mongodb-in-docker
 (see: service name instead of IP)
 
+## Servers
+
+Quick note on Jetty: Both Jetty and Tomcat are widely used. I have decided to use Jetty just by chance. I think in the
+end it does not matter so much for a small application. Tomcat would have probably also been a good choice.
+
+### WAR vs JAR
+
+Apparently both a WAR file can be created for a server (I think WAR files are exclusively for servers), and a JAR file.
+Using ring, this looks like this: `lein ring uberwar` (directly integrated in `ring`) or `lein ring uberjar` (this
+needs the `lein-ring` plugin). In the execution, the WAR file needs to be placed correctly in Jetty (or Tomcat), and
+the JAR file needs to be executed on the server (on the server: `java -jar file.jar`). Besides that, I currently do 
+not know of any difference (but I haven't really searched).
+
+I have now switched to using the uberwar as this needs slightly fewer dependencies. It would be nice to know the
+differences between these two.
+
 ## SSH Key: With or without passphrase?
 
 When automating access to a server, which means that the private SSH key needs to be written
