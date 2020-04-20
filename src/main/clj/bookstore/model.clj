@@ -11,8 +11,10 @@
 ; docker run -p 27017-27019:27017-27019 --name mongodb -d mongo
 
 ; always using default port
-(def host "0.0.0.0")
+;(def host "0.0.0.0")
 ;(def host "165.22.76.70")
+; Note: database is the service name, which forwards to the IP address of its docker container
+(def host "database")
 (def db-name "bookstore")
 (def admin-db "admin")
 (def user "root")

@@ -12,6 +12,21 @@ Some links and small notes:
   https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
 - Common use cases for Docker compose:
   https://docs.docker.com/compose/#common-use-cases
+  
+### Interacting between containers
+
+While I can access a container on my local machine (normally) by using `localhost` or `0.0.0.0`, this can NOT be done
+from inside a container. Say for example I want to access the database container from my server (ring) container. For
+this to be possible I need to know the real IP address of the database container. 
+
+This can be found out with the command `docker inspect $CONTAINER_ID`. However, since this is quite cumbersome to do
+all the time, and would not directly allow docker-compose to up all services at the same time, this can be
+circumvented by just **using the service name** instead of the IP address of the docker container. Inside the docker
+container, the service name is re-mapped to the IP address of the other container name. This is done by docker-compose.
+
+For more info:
+https://serverfault.com/questions/758225/cannot-connect-to-mongodb-in-docker
+(see: service name instead of IP)
 
 ## SSH Key: With or without passphrase?
 
