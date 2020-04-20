@@ -1,6 +1,9 @@
 name: Build + Deploy
 #description: 'Build and deploy to my DigitalOcean droplet'
 
+# TODO: Check this site out: https://css-tricks.com/continuous-deployments-for-wordpress-using-github-actions/
+#  Seems like a good resource for how to deploy via Github Actions, using rsync!
+
 on:
   push:
     branches:
