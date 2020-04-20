@@ -1,3 +1,2 @@
 FROM jetty:9.4
-COPY resources/*-standalone.jar .
-CMD java -jar ./*-standalone.jar
+ADD resources/*-standalone.war /var/lib/jetty/webapps/ROOT.war

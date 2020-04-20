@@ -6,18 +6,27 @@ docker-compose-file = ./wishlist-docker/docker-compose.yml
 start-frontend:
 	cd wishlist-frontend && lein do clean, shadow watch client
 
-start-backend: stop-all uberjar
+start-backend: stop-all uberwar rebuild-jetty-ring
 	docker-compose -f $(docker-compose-file) up -d
+
 
 start-ring-server:
 	lein ring server
 
+rebuild-jetty-ring: stop-all uberwar
+	docker-compose -f $(docker-compose-file) build jetty-ring
+
+
 start-database:
 	docker-compose -f $(docker-compose-file) up -d database mongo-express
+
 
 stop-all:
 	docker-compose -f $(docker-compose-file) down
 
-uberjar:
-	lein ring uberjar
-	ln -sf -t wishlist-docker/resources/ ./target/*-standalone.jar
+
+uberwar:
+	rm target/*-standalone.war
+	lein ring uberwar
+	mv -f target/*-standalone.war wishlist-docker/resources/
+	ln -sf -t target/ wishlist-docker/resources/*-standalone.war

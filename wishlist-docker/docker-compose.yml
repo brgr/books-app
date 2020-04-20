@@ -9,7 +9,8 @@ services:
     depends_on:
       - database
     ports:
-      - 3000-3001:3000-3001
+      - 3000:3000
+      - 8080:8080
 
 
   database:
