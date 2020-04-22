@@ -5,7 +5,7 @@
 ;(use-fixtures)
 
 ; todo: this works once, but if done multiple times the entry is created multiple times
-(deftest ^:integration insert-new-book-test
+(deftest ^:integration insert-and-remove-new-book-by-amazon-id
   (model/insert-new-book {:amazon-id                     "amazon-id"
                           :title                         "Buch Sowieso"
                           :amazon-url                    "actually this is no URL"
@@ -21,3 +21,12 @@
   (is (= 1 (count (model/all-books))))
   (model/remove-book-with-amazon-id "amazon-id")
   (is (= 0 (count (model/all-books)))))
+
+(deftest ^:integration remove-book-by-id-test
+  (let [title "Sowieso"
+        inserted-book (model/insert-new-book {:title title})
+        id (inserted-book :_id)
+        found-book (model/get-book-by-id id)]
+    (is (= title (found-book :title)))
+    (model/remove-book-by-id id)
+    (is (nil? (model/get-book-by-id id)))))

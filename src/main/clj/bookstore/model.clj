@@ -1,9 +1,10 @@
 (ns bookstore.model
   (:require [monger.core :as monger]
             [monger.credentials :as credentials]
-            [monger.collection :as collection])
+            [monger.collection :as collection]
+            [monger.conversion :as conversion])
   ;(:require [validateur.validation :refer :all])
-  )
+  (:import org.bson.types.ObjectId))
 
 ; To start MongoDB:
 ; mongod --dbpath=./resources/bookstore
@@ -43,3 +44,14 @@
 (defn remove-book-with-amazon-id [amazon-id]
   (let [db (get-db)]
     (collection/remove db collection {:amazon-id amazon-id})))
+
+(defn remove-book-by-id [id]
+  (let [db (get-db)]
+    (collection/remove-by-id db collection (ObjectId. id))))
+
+(defn get-book-by-id [id]
+  (let [db (get-db)
+        book (-> (collection/find-by-id db collection (ObjectId. id))
+                 (conversion/from-db-object true)
+                 (stringify-id))]
+    (if (empty? (book :_id)) nil book)))
