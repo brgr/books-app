@@ -2,7 +2,8 @@
   (:require [compojure.api.sweet :refer :all]
             [schema.core :as s]
             [ring.util.http-response :refer :all]
-            [bookstore.model :as bookstore]))
+            [bookstore.model :as bookstore]
+            [ring.middleware.cors :refer [wrap-cors]]))
 
 ; to run local server on port 3000:
 ; lein ring server
@@ -44,63 +45,66 @@
 
 
 (def app
-  (api
-    {:swagger
-     {:ui   "/api-docs"
-      :spec "/swagger.json"
-      :data {:info     {:title       "Books API"
-                        :description "An API for retrieving and setting a (wish-)list of books"}
-             :tags     ["api" "books" "wishlist"]
-             :consumes ["application/json"]
-             :produces ["application/json"]}}}
-
-    (GET "/" []
-      :summary "Redirects to /api-docs"
-      (permanent-redirect "/api-docs"))
-
-    (context "/books" []
-      :tags ["books"]
+  (wrap-cors
+    (api
+      {:swagger
+       {:ui   "/api-docs"
+        :spec "/swagger.json"
+        :data {:info     {:title       "Books API"
+                          :description "An API for retrieving and setting a (wish-)list of books"}
+               :tags     ["api" "books" "wishlist"]
+               :consumes ["application/json"]
+               :produces ["application/json"]}}}
 
       (GET "/" []
-        ; todo: use a Schema to specify what is returned!
-        :return s/Any
-        :summary "returns all books that are in the DB currently"
-        (->
-          (ok {:result (bookstore/all-books)})
-          ; The following two are important for AJAX to work
-          (header "Access-Control-Allow-Origin"  "*")
-          (header "Access-Control-Allow-Headers" "Content-Type")))
+        :summary "Redirects to /api-docs"
+        (permanent-redirect "/api-docs"))
 
-      (GET "/file" []
-        :summary "file download"
-        ;:return File
-        :produces ["image/jpeg"]
-        (->
-          (file-response "img1.jpg" {:root "resources/public"})
-          (header "Content-Type" "image/jpg")))
+      (context "/books" []
+        :tags ["books"]
 
-      (POST "/book" []
-        :summary "Insert a new book"
-        ; TODO: check that book is of the correct type! (schema check)
-        :body [book s/Any]
-        (let [id (bookstore/insert-new-book book)]
-          (ok id))))
+        (GET "/" []
+          ; todo: use a Schema to specify what is returned!
+          :return s/Any
+          :summary "returns all books that are in the DB currently"
+          (ok {:result (bookstore/all-books)}))
 
-    (context "/playground" []
-      :tags ["playground"]
+        (GET "/file" []
+          :summary "file download"
+          ;:return File
+          :produces ["image/jpeg"]
+          (->
+            (file-response "img1.jpg" {:root "resources/public"})
+            (header "Content-Type" "image/jpg")))
 
-      (GET "/plus" []
-        :return {:result Long}
-        :query-params [x :- Long, y :- Long]
-        :summary "adds two numbers together"
-        (ok {:result (+ x y)}))
+        (POST "/book" []
+          :summary "Insert a new book"
+          ; TODO: check that book is of the correct type! (schema check)
+          :body [book s/Any]
+          (let [id (bookstore/insert-new-book book)]
+            (ok id))))
 
-      (POST "/echo" []
-        :return Pizza
-        :body [pizza Pizza]
-        :summary "echoes a Pizza"
-        (ok pizza))
+      (context "/playground" []
+        :tags ["playground"]
 
-      (GET "/hello" []
-        :query-params [name :- String]
-        (ok {:message (str "Hello, " name)})))))
+        (GET "/plus" []
+          :return {:result Long}
+          :query-params [x :- Long, y :- Long]
+          :summary "adds two numbers together"
+          (ok {:result (+ x y)}))
+
+        (POST "/echo" []
+          :return Pizza
+          :body [pizza Pizza]
+          :summary "echoes a Pizza"
+          (ok pizza))
+
+        (GET "/hello" []
+          :query-params [name :- String]
+          (ok {:message (str "Hello, " name)}))))
+
+    ; the following are important for AJAX to work
+    :access-control-allow-origin #"http://localhost:8280"
+    :access-control-allow-headers ["Origin" "X-Requested-With"
+                                   "Content-Type" "Accept"]
+    :access-control-allow-methods [:get :put :post :delete :options]))

@@ -13,7 +13,8 @@
                  [etaoin "0.3.5"]
                  [com.novemberain/monger "3.1.0"]
                  [metosin/compojure-api "1.1.13"]
-                 [org.jsoup/jsoup "1.13.1"]]
+                 [org.jsoup/jsoup "1.13.1"]
+                 [ring-cors "0.1.13"]]
 
   :plugins [[lein-ring "0.12.5"]]
   :ring {:handler bookstore.api.server/app}
