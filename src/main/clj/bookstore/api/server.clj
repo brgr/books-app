@@ -82,7 +82,16 @@
           ; TODO: check that book is of the correct type! (schema check)
           :body [book s/Any]
           (let [id (bookstore/insert-new-book book)]
-            (ok id))))
+            (ok id)))
+
+        (DELETE "/book" []
+          :summary "Delete book by given ID"
+          :query-params [id :- String]
+          (let [write-result (bookstore/remove-book-by-id id)
+                count-removed-books (.getN write-result)]
+            (if (= 1 count-removed-books)
+              (ok id)
+              (not-found id)))))
 
       (context "/playground" []
         :tags ["playground"]
