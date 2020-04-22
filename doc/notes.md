@@ -44,6 +44,13 @@ not know of any difference (but I haven't really searched).
 I have now switched to using the uberwar as this needs slightly fewer dependencies. It would be nice to know the
 differences between these two.
 
+### CORS Headers
+
+These headers are needed for AJAX. I had problems because I did not set them for my whole API. It is important to set
+the headers for all, not just for some single requests.
+
+This helped me solve it: https://stackoverflow.com/questions/52745107/how-do-i-add-cors-to-a-compojure-api-app
+
 ## SSH Key: With or without passphrase?
 
 When automating access to a server, which means that the private SSH key needs to be written
