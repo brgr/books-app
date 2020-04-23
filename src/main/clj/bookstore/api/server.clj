@@ -90,8 +90,8 @@
           (let [write-result (bookstore/remove-book-by-id id)
                 count-removed-books (.getN write-result)]
             (if (= 1 count-removed-books)
-              (ok id)
-              (not-found id)))))
+              (ok {:id id})
+              (not-found {:id id})))))
 
       (context "/playground" []
         :tags ["playground"]
