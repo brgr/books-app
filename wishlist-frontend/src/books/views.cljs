@@ -25,7 +25,11 @@
     [:div.book-list
      [:p (str "Count books: " (count books))]
      (for [book books]
-       [:p "Buch: " book])]))
+       [:div.single-book-in-list
+        [:p "Buch: " book "  "
+         [:input {:type  "button"
+                  :value "x"
+                  :on-click #(dispatch [:remove-book-by-id book])}]]])]))
 
 (defn ui []
   [:div.books-ui

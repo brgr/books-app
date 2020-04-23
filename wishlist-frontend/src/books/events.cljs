@@ -1,5 +1,5 @@
 (ns books.events
-  (:require [ajax.core :refer [GET POST json-request-format]]
+  (:require [ajax.core :refer [GET POST DELETE json-request-format raw-response-format]]
             [re-frame.core :refer [reg-event-db dispatch]]))
 
 (def localhost "http://localhost")
@@ -26,6 +26,18 @@
                                      :handler         #(println "Worked fine:" %1)
                                      :error-handler   #(println "Error:" %1)})
       db)))
+
+(reg-event-db
+  :remove-book-by-id
+  (fn [db [_ book-to-remove]]
+    (do
+      (DELETE (str url "/books/book") {:url-params {:id (book-to-remove :_id)}
+                                       ;:format :json
+                                       :response-format :json
+                                       :handler         #(println "Worked fine:" %1)
+                                       :error-handler   #(println "Error:" %1)})
+      db))
+  )
 
 (reg-event-db
   :process-all-books
