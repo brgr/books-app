@@ -36,8 +36,7 @@
                                        :response-format :json
                                        :handler         #(println "Worked fine:" %1)
                                        :error-handler   #(println "Error:" %1)})
-      db))
-  )
+      db)))
 
 (reg-event-db
   :process-all-books

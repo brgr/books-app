@@ -2,20 +2,20 @@
   (:require [reagent.core :as reagent]
             [re-frame.core :refer [subscribe dispatch]]))
 
-(defn single-book-edit-input-field [single-book]
-  [:div.title-edit
-   "Titel: "
+(defn single-book-edit-input-field [single-book field-name field]
+  [:div {:id (str "div." (name field) "-edit")}
+   (str field-name ": ")
    [:input {:type      "text"
-            :value     (single-book :book-title)
-            ; TODO: is this the reframe way?
-            :on-change #(dispatch [:update-in-single-book [:book-title] (-> % .-target .-value)])
+            :value     (single-book field)
+            :on-change #(dispatch [:update-in-single-book [field] (-> % .-target .-value)])
             }]
    [:br] [:br]])
 
 (defn single-book-edit []
   (let [single-book @(subscribe [:single-book])]
     [:div.single-book-edit
-     [single-book-edit-input-field single-book]
+     [single-book-edit-input-field single-book "Titel" :book-title]
+     [single-book-edit-input-field single-book "Autor(en)" :authors]
      [:input {:type     "button"
               :value    "Submit"
               :on-click #(dispatch [:insert-book-to-db single-book])}]]))
