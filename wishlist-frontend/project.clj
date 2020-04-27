@@ -31,10 +31,10 @@
 
                 :builds {:client {:target     :browser
                                   :output-dir "resources/public/js"
-                                  :modules    {:client {:init-fn hello-reagent-reframe.core/run}}
+                                  :modules    {:client {:init-fn books.entrypoint/run}}
                                   :devtools   {:http-root "resources/public"
                                                :http-port 8280}}}}
 
   :aliases {"dev-auto" ["shadow" "watch" "client"]}
 
-  :repl-options {:init-ns hello-reagent-reframe.core})
+  :repl-options {:init-ns books.entrypoint})

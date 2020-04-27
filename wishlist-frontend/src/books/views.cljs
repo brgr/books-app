@@ -33,6 +33,9 @@
 
 (defn ui []
   [:div.books-ui
+   [:h1 "Books"]
+   [:h2 "All Books"]
    [list-all-books]
    [:hr]
+   [:h2 "Add a new book"]
    [single-book-edit]])

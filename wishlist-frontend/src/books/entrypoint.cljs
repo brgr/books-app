@@ -1,10 +1,13 @@
 (ns books.entrypoint
   (:require [reagent.dom :as dom]
             [re-frame.core :as reframe]
-            [books.views :as views]))
+            [books.views :as views]
+            ; Note: the 2 below are needed s.t. they are loaded!!
+            [books.events]
+            [books.subs]))
 
 (defn render []
-  (dom/render [views/single-book-edit]
+  (dom/render [views/ui]
               (js/document.getElementById "books-app")))
 
 (defn ^:dev/after-load clear-cache-and-render! []
@@ -18,7 +21,6 @@
 ; I have currently not done that, as I still want to see results from the old project in this
 ; build.
 (defn run []
-  ;; put a value into application state
-  (reframe/dispatch-sync [:initialize])
+  (reframe/dispatch-sync [:initialize-books])
   ;; mount the application's ui into '<div id="app" />'
   (render))
