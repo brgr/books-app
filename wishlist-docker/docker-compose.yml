@@ -3,6 +3,8 @@ version: '3.7'
 services:
 
   jetty-ring:
+    container_name: jetty-ring-backend
+    image: jetty-ring-backend
     build:
       context: .
       dockerfile: jetty-ring-dockerfile
@@ -29,6 +31,7 @@ services:
 
   mongo-express:
     image: mongo-express
+    container_name: mongo-express
     depends_on:
       - database
     restart: always
