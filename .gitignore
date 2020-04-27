@@ -18,4 +18,5 @@ resources/bookstore
 **/resources/public/js
 **/node_modules
 **/.shadow-cljs
+**/public.js*
 **/shadow-cljs.edn
