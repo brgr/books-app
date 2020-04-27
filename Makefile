@@ -26,7 +26,12 @@ stop-all:
 
 
 uberwar:
-	rm target/*-standalone.war
+	rm target/*-standalone.war || true
 	lein ring uberwar
 	mv -f target/*-standalone.war wishlist-docker/resources/
 	ln -sf -t target/ wishlist-docker/resources/*-standalone.war
+
+
+clean:
+	# Remove all images that are not associated with a container
+	docker system prune
