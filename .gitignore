@@ -15,4 +15,6 @@ pom.xml.asc
 *.iml
 resources/bookstore
 
+**/resources/public/js
+**/node_modules
 **/.shadow-cljs
