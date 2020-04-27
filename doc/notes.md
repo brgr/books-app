@@ -51,6 +51,16 @@ the headers for all, not just for some single requests.
 
 This helped me solve it: https://stackoverflow.com/questions/52745107/how-do-i-add-cors-to-a-compojure-api-app
 
+
+## Environments
+
+I am using `environ` [5] for putting environment-specific variables like e.g. the database URL etc. It is from the
+same creator(s) as leiningen. Also not the last part on the README from the project: It also takes into account
+environment variables, which is important on docker e.g., as I am creating an uberwar on there and this needs to
+have an environment variable set to recognize the env variables. This is why I have put that into the docker-compose
+file.
+
+
 ## SSH Key: With or without passphrase?
 
 When automating access to a server, which means that the private SSH key needs to be written
@@ -87,3 +97,4 @@ discussion on this, see [here][2].
 [2]: https://stackoverflow.com/questions/57916983/github-actions-are-there-security-concerns-using-an-external-action-in-a-workfl
 [3]: https://github.com/sdras/awesome-actions
 [4]: https://github.com/nektos/act
+[5]: https://github.com/weavejester/environ

@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: jetty-ring-dockerfile
+    environment:
+      DATABASE_URL: database
     depends_on:
       - database
     ports:
