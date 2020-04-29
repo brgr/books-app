@@ -2,14 +2,18 @@
   (:require [reagent.core :as reagent]
             [re-frame.core :refer [subscribe dispatch]]))
 
-(defn single-book-edit-input-field [single-book field-name field]
+(defn single-edit-input-field [{:keys [operated-on-object field field-text]} dispatch-id]
   [:div {:id (str "div." (name field) "-edit")}
-   (str field-name ": ")
+   (str field-text ": ")
    [:input {:type      "text"
-            :value     (single-book field)
-            :on-change #(dispatch [:update-in-single-book [field] (-> % .-target .-value)])
-            }]
+            :value     (if (nil? operated-on-object) "" (operated-on-object field))
+            :on-change #(dispatch [dispatch-id [field] (-> % .-target .-value)])}]
    [:br] [:br]])
+
+(defn single-book-edit-input-field [single-book field-name field]
+  (single-edit-input-field {:operated-on-object single-book
+                            :field              field
+                            :field-text         field-name} :update-in-single-book))
 
 (defn single-book-edit []
   (let [single-book @(subscribe [:single-book])]
@@ -27,9 +31,27 @@
      (for [book books]
        [:div.single-book-in-list
         [:p "Buch: " book "  "
-         [:input {:type  "button"
-                  :value "x"
+         [:input {:type     "button"
+                  :value    "x"
                   :on-click #(dispatch [:remove-book-by-id book])}]]])]))
+
+(defn add-new-amazon-wishlist-form []
+  (let [amazon-wishlist @(subscribe [:current-amazon-wishlist])]
+    [:div.amazon-wishlist-add
+     [single-edit-input-field {:operated-on-object amazon-wishlist
+                               :field              :url
+                               :field-text         "Wishlist URL"} :update-in-amazon-wishlist]
+     [:input {:type     "button"
+              :value    "Submit"
+              :on-click #(dispatch [:add-new-wishlist-url (amazon-wishlist :url)])}]]))
+
+(defn amazon-wishlist-forms []
+  (let [watched-wishlists []]                               ; todo: get from backend
+    [:div.amazon-wishlists
+     [:h3 "Watched Wishlists"]
+     [:p "No wishlists yet"]
+     [add-new-amazon-wishlist-form]]
+    ))
 
 (defn ui []
   [:div.books-ui
@@ -38,4 +60,7 @@
    [list-all-books]
    [:hr]
    [:h2 "Add a new book"]
-   [single-book-edit]])
+   [single-book-edit]
+   [:hr]
+   [:h2 "Import Amazon Wishlist"]
+   [amazon-wishlist-forms]])
