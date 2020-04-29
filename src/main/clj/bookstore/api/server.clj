@@ -93,6 +93,17 @@
               (ok {:id id})
               (not-found {:id id})))))
 
+      (context "/import/amazon" []
+        :tags ["import"]
+
+        (PUT "/wishlist" []
+          :summary "Import a new amazon wishlist"
+          :return String
+          :query-params [url :- String]
+          ; todo: start to fetch the wishlist!
+          (let [id (bookstore/insert-new-wishlist-url url)]
+            (ok id))))
+
       (context "/playground" []
         :tags ["playground"]
 

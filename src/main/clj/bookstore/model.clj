@@ -30,6 +30,11 @@
     (-> (collection/insert-and-return db collection book)
         (stringify-id))))
 
+ (defn insert-new-wishlist-url [url]
+  (let [db (get-db)]
+    (-> (collection/insert-and-return db "wishlists" {:url url})
+        (stringify-id))))
+
 (defn all-books []
   (let [db (get-db)
         all-entries (collection/find-maps db collection)]
