@@ -1,7 +1,10 @@
 (ns books.entrypoint
   (:require [reagent.dom :as dom]
             [re-frame.core :as reframe]
-            [books.views :as views]
+
+            [books.views.views :as views]
+            [books.views.base :as base-view]
+            [books.routing :as routing]
 
             [reitit.frontend :as rf]
             [reitit.frontend.easy :as rfe]
@@ -13,11 +16,11 @@
 
 (defn render []
   (rfe/start!
-    (rf/router views/routes {:data {:coercion rss/coercion}})
+    (rf/router routing/routes {:data {:coercion rss/coercion}})
     (fn [m] (reset! views/match m))
     ;; set to false to enable HistoryAPI
     {:use-fragment true})
-  (dom/render [views/current-page]
+  (dom/render [base-view/current-page]
               (js/document.getElementById "books-app")))
 
 (defn ^:dev/after-load clear-cache-and-render! []

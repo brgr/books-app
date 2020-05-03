@@ -1,8 +1,7 @@
-(ns books.views
+(ns books.views.views
   (:require [reagent.core :as reagent]
             [re-frame.core :refer [subscribe dispatch]]
-            [reitit.frontend.easy :as routing]
-            [spec-tools.data-spec :as ds]))
+            [reitit.frontend.easy :as routing]))
 
 (defn single-edit-input-field [{:keys [operated-on-object field field-text]} dispatch-id]
   [:div {:id (str "div." (name field) "-edit")}
@@ -104,34 +103,6 @@
      (if (:foo query)
        [:p "Optional foo query param: " (:foo query)])]))
 
+; todo: use reframe for this!
 (defonce match (reagent.core/atom nil))
 
-(defn current-page []
-  [:div
-   [:ul
-    [:li [:a {:href (routing/href ::ui)} "Books UI"]]
-    [:li [:a {:href (routing/href ::frontpage)} "Frontpage"]]
-    [:li [:a {:href (routing/href ::about)} "About"]]
-    [:li [:a {:href (routing/href ::item {:id 1})} "Item 1"]]
-    [:li [:a {:href (routing/href ::item {:id 2} {:foo "bar"})} "Item 2"]]]
-   (if @match
-     (let [view (:view (:data @match))]
-       [view @match]))
-   [:pre (with-out-str (cljs.pprint/pprint @match))]])
-
-(def routes
-  [["/" {:name ::ui, :view ui}]
-
-   ["/frontpage"
-    {:name ::frontpage
-     :view home-page}]
-
-   ["/about"
-    {:name ::about
-     :view about-page}]
-
-   ["/item/:id"
-    {:name       ::item
-     :view       item-page
-     :parameters {:path  {:id int?}
-                  :query {(ds/opt :foo) keyword?}}}]])
