@@ -27,9 +27,6 @@
   (reframe/clear-subscription-cache!)
   (render))
 
-; TODO: I need to set this as :init-fn in project.clj
-; I have currently not done that, as I still want to see results from the old project in this
-; build.
 (defn run []
   (reframe/dispatch-sync [:initialize-books])
   ;; mount the application's ui into '<div id="app" />'
