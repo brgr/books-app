@@ -15,6 +15,7 @@
 
                  [binaryage/devtools         "0.9.10"]
                  [clj-commons/secretary      "1.2.4"]
+                 [metosin/reitit "0.4.2"]
                  [day8.re-frame/tracing      "0.5.3"]
 
                  [cljs-ajax "0.8.0"]]

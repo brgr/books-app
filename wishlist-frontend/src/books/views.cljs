@@ -1,6 +1,8 @@
 (ns books.views
   (:require [reagent.core :as reagent]
-            [re-frame.core :refer [subscribe dispatch]]))
+            [re-frame.core :refer [subscribe dispatch]]
+            [reitit.frontend.easy :as routing]
+            [spec-tools.data-spec :as ds]))
 
 (defn single-edit-input-field [{:keys [operated-on-object field field-text]} dispatch-id]
   [:div {:id (str "div." (name field) "-edit")}
@@ -55,7 +57,8 @@
 
 (defn ui []
   [:div.books-ui
-   [:h1 "Books"]
+   [:navbar "Seite 1" "Seite 2"]
+   [:h1 "Books \uD83D\uDCD6"]
    [:h2 "All Books"]
    [list-all-books]
    [:hr]
@@ -64,3 +67,71 @@
    [:hr]
    [:h2 "Import Amazon Wishlist"]
    [amazon-wishlist-forms]])
+
+(defn home-page []
+  [:div
+   [:h2 "Welcome to frontend"]
+
+   [:button
+    {:type     "button"
+     :on-click #(routing/push-state ::item {:id 3})}
+    "Item 3"]
+
+   [:button
+    {:type     "button"
+     :on-click #(routing/replace-state ::item {:id 4})}
+    "Replace State Item 4"]])
+
+(defn about-page []
+  [:div
+   [:h2 "About frontend"]
+   [:ul
+    [:li [:a {:href "http://google.com"} "external link"]]
+    [:li [:a {:href (routing/href ::foobar)} "Missing route"]]
+    [:li [:a {:href (routing/href ::item)} "Missing route params"]]]
+
+   [:div
+    {:content-editable               true
+     :suppressContentEditableWarning true}
+    [:p "Link inside contentEditable element is ignored."]
+    [:a {:href (routing/href ::frontpage)} "Link"]]])
+
+(defn item-page [match]
+  (let [{:keys [path query]} (:parameters match)
+        {:keys [id]} path]
+    [:div
+     [:h2 "Selected item " id]
+     (if (:foo query)
+       [:p "Optional foo query param: " (:foo query)])]))
+
+(defonce match (reagent.core/atom nil))
+
+(defn current-page []
+  [:div
+   [:ul
+    [:li [:a {:href (routing/href ::ui)} "Books UI"]]
+    [:li [:a {:href (routing/href ::frontpage)} "Frontpage"]]
+    [:li [:a {:href (routing/href ::about)} "About"]]
+    [:li [:a {:href (routing/href ::item {:id 1})} "Item 1"]]
+    [:li [:a {:href (routing/href ::item {:id 2} {:foo "bar"})} "Item 2"]]]
+   (if @match
+     (let [view (:view (:data @match))]
+       [view @match]))
+   [:pre (with-out-str (cljs.pprint/pprint @match))]])
+
+(def routes
+  [["/" {:name ::ui, :view ui}]
+
+   ["/frontpage"
+    {:name ::frontpage
+     :view home-page}]
+
+   ["/about"
+    {:name ::about
+     :view about-page}]
+
+   ["/item/:id"
+    {:name       ::item
+     :view       item-page
+     :parameters {:path  {:id int?}
+                  :query {(ds/opt :foo) keyword?}}}]])

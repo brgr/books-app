@@ -2,12 +2,22 @@
   (:require [reagent.dom :as dom]
             [re-frame.core :as reframe]
             [books.views :as views]
+
+            [reitit.frontend :as rf]
+            [reitit.frontend.easy :as rfe]
+            [reitit.coercion.spec :as rss]
+
             ; Note: the 2 below are needed s.t. they are loaded!!
             [books.events]
             [books.subs]))
 
 (defn render []
-  (dom/render [views/ui]
+  (rfe/start!
+    (rf/router views/routes {:data {:coercion rss/coercion}})
+    (fn [m] (reset! views/match m))
+    ;; set to false to enable HistoryAPI
+    {:use-fragment true})
+  (dom/render [views/current-page]
               (js/document.getElementById "books-app")))
 
 (defn ^:dev/after-load clear-cache-and-render! []
