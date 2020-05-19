@@ -7,7 +7,7 @@ docker-compose-file = ./wishlist-docker/docker-compose.yml
 frontend:
 	cd wishlist-frontend && lein do clean, shadow watch client
 
-start-backend: stop-all uberwar docker/rebuild
+start-backend: docker/down uberwar docker/rebuild
 	docker-compose -f $(docker-compose-file) up -d
 
 dev/backend: docker/database ring-server
