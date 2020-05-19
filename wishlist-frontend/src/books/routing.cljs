@@ -1,9 +1,11 @@
 (ns books.routing
-  (:require [books.views.views :refer :all]
+  (:require [books.views.views :refer [home-page about-page item-page ui]]
             [spec-tools.data-spec :as ds]))
 
 (def routes
-  [["/" {:name ::ui, :view ui}]
+  [["/"
+    {:name ::ui,
+         :view ui}]
 
    ["/frontpage"
     {:name ::frontpage
