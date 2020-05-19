@@ -17,6 +17,7 @@
                  [com.novemberain/monger "3.1.0"]
                  [metosin/compojure-api "1.1.13"]
                  [org.jsoup/jsoup "1.13.1"]
+                 [manifold "0.1.8"]
                  [ring-cors "0.1.13"]
                  [environ "1.1.0"]]
 

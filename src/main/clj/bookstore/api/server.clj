@@ -3,6 +3,7 @@
             [schema.core :as s]
             [ring.util.http-response :refer :all]
             [bookstore.model :as bookstore]
+            [manifold.deferred :as deferred]
             [ring.middleware.cors :refer [wrap-cors]]))
 
 ; to run local server on port 3000:
@@ -98,11 +99,40 @@
 
         (PUT "/wishlist" []
           :summary "Import a new amazon wishlist"
-          :return String
+          ;:return String
           :query-params [url :- String]
           ; todo: start to fetch the wishlist!
-          (let [id (bookstore/insert-new-wishlist-url url)]
-            (ok id))))
+          ;(let [id (bookstore/insert-new-wishlist-url url)]
+          ;  (do
+          ;    ;(Thread/sleep 10000)
+          ;    (ok id)))
+          (deferred/chain
+            ;(http/get
+            ;  (str "https://clojars.org/api/artifacts/" group "/" artifact)
+            ;  {:as :json
+            ;   :throw-exceptions false})
+            ;:body
+            ;:downloads
+            ; todo: use this async call to fetch the wishlist - but first check if it works (on the frontend) with Thread/sleep
+            (deferred/future (Thread/sleep 10000) (println "slept a little") "this is from wishlist")
+            ok)
+          )
+
+        (GET "/downloads" []
+          :summary "Async gets the clojars download count"
+          ;:path-params [group :- s/Str, artifact :- s/Str]
+          :return (s/maybe s/Int)
+          (deferred/chain
+            ;(http/get
+            ;  (str "https://clojars.org/api/artifacts/" group "/" artifact)
+            ;  {:as :json
+            ;   :throw-exceptions false})
+            ;:body
+            ;:downloads
+            ; todo: use this async call to fetch the wishlist - but first check if it works (on the frontend) with Thread/sleep
+            (deferred/future (Thread/sleep 10000) (println "slept a little") 10)
+            ok))
+        )
 
       (context "/playground" []
         :tags ["playground"]
