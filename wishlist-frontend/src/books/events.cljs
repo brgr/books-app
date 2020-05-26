@@ -1,6 +1,9 @@
 (ns books.events
   (:require [ajax.core :refer [GET PUT POST DELETE json-request-format raw-response-format]]
-            [re-frame.core :refer [reg-event-db dispatch]]))
+            [re-frame.core :refer [reg-event-db reg-event-fx dispatch reg-fx]]
+
+            [reitit.frontend.controllers :as rfc]
+            [reitit.frontend.easy :as rfe]))
 
 (def localhost "http://localhost")
 (def port "3000")
@@ -15,7 +18,21 @@
                   :error-handler #(do (println "error:" %1))})]
       {:single-book             {:book-title "Buchtitel"}
        :all-books               []
-       :current-amazon-wishlist {:url ""}})))
+       :current-amazon-wishlist {:url ""}
+       :current-route nil})))
+
+(reg-event-fx
+  :navigate
+  (fn [db [_ & route]]
+    ;; See `navigate` effect in routes.cljs
+    {:navigate! route}))
+
+(reg-event-db
+  :navigated
+  (fn [db [_ new-match]]
+    (let [old-match   (:current-route db)
+          controllers (rfc/apply-controllers (:controllers old-match) new-match)]
+      (assoc db :current-route (assoc new-match :controllers controllers)))))
 
 (reg-event-db
   :insert-book-to-db
@@ -65,3 +82,13 @@
   :update-in-amazon-wishlist
   (fn [db [_ path new-value]]
     (assoc-in db [:current-amazon-wishlist (first path)] new-value)))
+
+
+; todo: move to its own file
+;;; Effects ;;;
+
+;; Triggering navigation from events.
+(reg-fx
+  :navigate!
+  (fn [route]
+    (apply rfe/push-state route)))

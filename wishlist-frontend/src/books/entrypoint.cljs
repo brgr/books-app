@@ -1,6 +1,7 @@
 (ns books.entrypoint
   (:require [reagent.dom :as dom]
             [re-frame.core :as reframe]
+            [re-frame.core :refer [subscribe dispatch]]
 
             [books.views.views :as views]
             [books.views.base :as base-view]
@@ -10,17 +11,32 @@
             [reitit.frontend.easy :as rfe]
             [reitit.coercion.spec :as rss]
 
-            ; Note: the 2 below are needed s.t. they are loaded!!
+    ; Note: the 2 below are needed s.t. they are loaded!!
             [books.events]
             [books.subs]))
 
+
+(defn on-navigate [new-match]
+  (when new-match
+    (dispatch [:navigated new-match])))
+
+(def router
+  (rf/router routing/routes {:data {:coercion rss/coercion}}))
+
+(defn router-component [{:keys [router]}]
+  (let [current-route @(subscribe [:current-route])]
+    [:div
+     [base-view/nav {:router router :current-route current-route}]
+     (when current-route
+       [(-> current-route :data :view)])]))
+
+(defn init-routes! []
+  (rfe/start! router on-navigate {:use-fragment true}))
+
 (defn render []
-  (rfe/start!
-    (rf/router routing/routes {:data {:coercion rss/coercion}})
-    (fn [m] (reset! views/match m))
-    ;; set to false to enable HistoryAPI
-    {:use-fragment true})
-  (dom/render [base-view/current-page]
+  (reframe/clear-subscription-cache!)
+  (init-routes!)
+  (dom/render [router-component {:router router}]
               (js/document.getElementById "books-app")))
 
 (defn ^:dev/after-load clear-cache-and-render! []

@@ -1,7 +1,8 @@
 (ns books.views.views
   (:require [reagent.core :as reagent]
             [re-frame.core :refer [subscribe dispatch]]
-            [reitit.frontend.easy :as routing]))
+            [reitit.frontend.easy :as routing]
+            [spec-tools.data-spec :as ds]))
 
 (defn single-edit-input-field [{:keys [operated-on-object field field-text]} dispatch-id]
   [:div {:id (str "div." (name field) "-edit")}
@@ -19,6 +20,7 @@
 (defn single-book-edit []
   (let [single-book @(subscribe [:single-book])]
     [:div.single-book-edit
+     [:h2 "Add a new book"]
      [single-book-edit-input-field single-book "Titel" :book-title]
      [single-book-edit-input-field single-book "Autor(en)" :authors]
      [:input {:type     "button"
@@ -49,6 +51,7 @@
 (defn amazon-wishlist-forms []
   (let [watched-wishlists []]                               ; todo: get from backend
     [:div.amazon-wishlists
+     [:h2 "Import Amazon Wishlist"]
      [:h3 "Watched Wishlists"]
      [:p "No wishlists yet"]
      [add-new-amazon-wishlist-form]]
@@ -56,53 +59,6 @@
 
 (defn ui []
   [:div.books-ui
-   [:navbar "Seite 1" "Seite 2"]
    [:h1 "Books \uD83D\uDCD6"]
    [:h2 "All Books"]
-   [list-all-books]
-   [:hr]
-   [:h2 "Add a new book"]
-   [single-book-edit]
-   [:hr]
-   [:h2 "Import Amazon Wishlist"]
-   [amazon-wishlist-forms]])
-
-(defn home-page []
-  [:div
-   [:h2 "Welcome to frontend"]
-
-   [:button
-    {:type     "button"
-     :on-click #(routing/push-state ::item {:id 3})}
-    "Item 3"]
-
-   [:button
-    {:type     "button"
-     :on-click #(routing/replace-state ::item {:id 4})}
-    "Replace State Item 4"]])
-
-(defn about-page []
-  [:div
-   [:h2 "About frontend"]
-   [:ul
-    [:li [:a {:href "http://google.com"} "external link"]]
-    [:li [:a {:href (routing/href ::foobar)} "Missing route"]]
-    [:li [:a {:href (routing/href ::item)} "Missing route params"]]]
-
-   [:div
-    {:content-editable               true
-     :suppressContentEditableWarning true}
-    [:p "Link inside contentEditable element is ignored."]
-    [:a {:href (routing/href ::frontpage)} "Link"]]])
-
-(defn item-page [match]
-  (let [{:keys [path query]} (:parameters match)
-        {:keys [id]} path]
-    [:div
-     [:h2 "Selected item " id]
-     (if (:foo query)
-       [:p "Optional foo query param: " (:foo query)])]))
-
-; todo: use reframe for this!
-(defonce match (reagent.core/atom nil))
-
+   [list-all-books]])
