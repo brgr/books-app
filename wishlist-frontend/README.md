@@ -6,9 +6,10 @@ The frontend of the books wishlist, written using the following technologies / l
  - Reframe (for state management)
  - shadow-cljs
  - `cljs-ajax`
- - `reitit` for routing (i.e. URL routing) [1]
-   - (Note: While I am writing this, I am just at the point of introducing `reitit` to the project, so some things
-     will probably change still)
+ - `reitit` for routing (i.e. URL routing) [[1]]
+   - for an example where `reitit` works together with `reframe`, see [[2]]
+     - this is not really trivial, and once I want to introduce book-specific routes I will likely need to have a look
+       at this again
    - `reitit` can be used for the backend also (instead of `compojure-api`). It is also from the same maintainer! Maybe
      at some point I'd like to remove `compojur-api` and use `reitit` instead.
  
@@ -27,3 +28,4 @@ make frontend
 Generally, watch in the Makefile for how to start the frontend, backend etc.
 
 [1]: https://github.com/metosin/reitit
+[2]: https://github.com/metosin/reitit/blob/master/examples/frontend-re-frame/src/cljs/frontend_re_frame/core.cljs
