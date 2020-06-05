@@ -1,0 +1,18 @@
+
+.navbar {
+    overflow: hidden;
+}
+
+.navbar li {
+    display: block;
+    float: left;
+    padding: 14px 16px;
+}
+
+.navbar li:hover {
+    background-color: cyan;
+}
+
+.navbar li {
+    border: 1px solid;
+}

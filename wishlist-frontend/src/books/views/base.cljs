@@ -3,7 +3,8 @@
             [reitit.frontend.easy :as rfe]))
 
 (defn nav []
-  [:ul
-   [:li [:a {:href (rfe/href :books.routing/ui)} "Homepage"]]
-   [:li [:a {:href (rfe/href :books.routing/new)} "New Book"]]
-   [:li [:a {:href (rfe/href :books.routing/import)} "Import"]]])
+  [:div {:class "navbar"}
+   [:ul
+    [:li [:a {:href (rfe/href :books.routing/ui)} "Homepage"]]
+    [:li [:a {:href (rfe/href :books.routing/new)} "New Book"]]
+    [:li [:a {:href (rfe/href :books.routing/import)} "Import"]]]])
