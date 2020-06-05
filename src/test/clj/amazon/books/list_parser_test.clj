@@ -2,10 +2,12 @@
   (:require [clojure.test :refer :all]
             [amazon.books.list-parser :as list-parser]))
 
-(deftest book-data-test
-  (is (= (->> (slurp "src/test/resources/whole.html")
-              (list-parser/load-books-from-amazon-wishlist-html)
-              (second))
+(def parsed-content
+  (->> (slurp "src/test/resources/whole.html")
+       (list-parser/load-books-from-amazon-wishlist-html)))
+
+(deftest second-book-is-correct
+  (is (= (->> parsed-content (second))
          {:amazon-id     "IONL7ZDL5YEP7",
           :title         "In Search of Respect: Selling Crack in El Barrio Second Edition (Structural Analysis in the Social Sciences, Band 10)",
           :author        "Philippe Bourgois (Taschenbuch)",
@@ -13,4 +15,9 @@
           :thumbnail     "https://images-na.ssl-images-amazon.com/images/I/61HycdeGrGL._SS135_.jpg",
           :itemAddedDate "Hinzugefügt am 1. April 2020",
           :price         "14,64 €"})))
+
+(deftest count-is-correct
+  (is (= (-> parsed-content (count)) 460)))
+
+
 
