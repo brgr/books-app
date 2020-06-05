@@ -15,7 +15,7 @@
 (def user "root")
 (def password (.toCharArray "GJabLafh53j4LL"))
 
-(def collection "books")
+(def books-collection "books")
 
 (defn stringify-id [entry]
   (assoc entry :_id (str (get entry :_id))))
@@ -27,7 +27,7 @@
 
 (defn insert-new-book [book]
   (let [db (get-db)]
-    (-> (collection/insert-and-return db collection book)
+    (-> (collection/insert-and-return db books-collection book)
         (stringify-id))))
 
  (defn insert-new-wishlist-url [url]
@@ -37,20 +37,20 @@
 
 (defn all-books []
   (let [db (get-db)
-        all-entries (collection/find-maps db collection)]
+        all-entries (collection/find-maps db books-collection)]
     (map stringify-id all-entries)))
 
 (defn remove-book-with-amazon-id [amazon-id]
   (let [db (get-db)]
-    (collection/remove db collection {:amazon-id amazon-id})))
+    (collection/remove db books-collection {:amazon-id amazon-id})))
 
 (defn remove-book-by-id [id]
   (let [db (get-db)]
-    (collection/remove-by-id db collection (ObjectId. id))))
+    (collection/remove-by-id db books-collection (ObjectId. id))))
 
 (defn get-book-by-id [id]
   (let [db (get-db)
-        book (-> (collection/find-by-id db collection (ObjectId. id))
+        book (-> (collection/find-by-id db books-collection (ObjectId. id))
                  (conversion/from-db-object true)
                  (stringify-id))]
     (if (empty? (book :_id)) nil book)))
