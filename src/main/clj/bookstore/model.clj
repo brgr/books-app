@@ -30,6 +30,10 @@
     (-> (collection/insert-and-return db books-collection book)
         (stringify-id))))
 
+(defn insert-new-books [books]
+  (let [db (get-db)]
+    (collection/insert-batch db books-collection books)))
+
  (defn insert-new-wishlist-url [url]
   (let [db (get-db)]
     (-> (collection/insert-and-return db "wishlists" {:url url})
