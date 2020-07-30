@@ -72,10 +72,11 @@
 
         (GET "/file" []
           :summary "file download"
+          :query-params [image :- String]
           ;:return File
           :produces ["image/jpeg"]
           (->
-            (file-response "img1.jpg" {:root "resources/public"})
+            (file-response image {:root "src/main/resources/public/img"})
             (header "Content-Type" "image/jpg")))
 
         (POST "/book" []
