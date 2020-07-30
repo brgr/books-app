@@ -4,7 +4,8 @@
             [ring.util.http-response :refer :all]
             [bookstore.model :as bookstore]
             [manifold.deferred :as deferred]
-            [ring.middleware.cors :refer [wrap-cors]]))
+            [ring.middleware.cors :refer [wrap-cors]]
+            [environ.core :refer [env]]))
 
 ; to run local server on port 3000:
 ; lein ring server
@@ -76,7 +77,7 @@
           ;:return File
           :produces ["image/jpeg"]
           (->
-            (file-response image {:root "src/main/resources/public/img"})
+            (file-response image {:root (env :public-image-dir)})
             (header "Content-Type" "image/jpg")))
 
         (POST "/book" []
