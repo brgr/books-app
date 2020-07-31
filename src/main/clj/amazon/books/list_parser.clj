@@ -23,15 +23,15 @@
         thumbnail (as-> (str "#itemImage_" id " img") element
                         (.select wishlist-item element)
                         (.attr element "src"))
-        itemAddedDate (->> (str "#itemAddedDate_" id) (.select wishlist-item) (.text))
+        item-added-date (->> (str "#itemAddedDate_" id) (.select wishlist-item) (.text))
         price (->> (.select wishlist-item ".itemUsedAndNewPrice") (.text))]
-    {:amazon-id     id
-     :title         title
-     :author        author
-     :amazon-url    url
-     :thumbnail     thumbnail
-     :itemAddedDate itemAddedDate
-     :price         price}))
+    {:amazon-id            id
+     :title                title
+     :author               author
+     :amazon-url           url
+     :amazon-thumbnail-url thumbnail
+     :item-added-date        item-added-date
+     :price                price}))
 ; todo: change price and author (remove unnecessary things)
 
 (defn load-books-from-amazon-wishlist-html [wishlist-html-content]
