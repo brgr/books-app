@@ -1,29 +1,9 @@
 (ns bookstore.model
-  (:require [monger.core :as monger]
-            [monger.credentials :as credentials]
-            [monger.collection :as collection]
+  (:require [monger.collection :as collection]
             [monger.conversion :as conversion]
-            [environ.core :refer [env]])
+            [bookstore.access :refer [get-db books-collection stringify-id]])
   ;(:require [validateur.validation :refer :all])
   (:import org.bson.types.ObjectId))
-
-; always using default port
-(def host (env :database-url))
-;(def host "165.22.76.70")
-(def db-name "bookstore")
-(def admin-db "admin")
-(def user "root")
-(def password (.toCharArray "GJabLafh53j4LL"))
-
-(def books-collection "books")
-
-(defn stringify-id [entry]
-  (assoc entry :_id (str (get entry :_id))))
-
-(defn get-db []
-  (let [credentials (credentials/create user admin-db password)
-        connection (monger/connect-with-credentials host credentials)]
-    (monger/get-db connection db-name)))
 
 (defn insert-new-book [book]
   (let [db (get-db)]

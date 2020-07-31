@@ -3,6 +3,7 @@
             [schema.core :as s]
             [ring.util.http-response :refer :all]
             [bookstore.model :as bookstore]
+            [bookstore.update]
             [manifold.deferred :as deferred]
             [ring.middleware.cors :refer [wrap-cors]]
             [environ.core :refer [env]]))
@@ -71,13 +72,13 @@
           :summary "returns all books that are in the DB currently"
           (ok {:result (bookstore/all-books)}))
 
-        (GET "/file" []
+        (GET "/:book-id/thumbnail" []
           :summary "file download"
-          :query-params [image :- String]
+          :path-params [book-id :- String]
           ;:return File
           :produces ["image/jpeg"]
           (->
-            (file-response image {:root (env :public-image-dir)})
+            (file-response "img1.jpg" {:root (env :public-image-dir)})
             (header "Content-Type" "image/jpg")))
 
         (POST "/book" []
@@ -94,7 +95,17 @@
                 count-removed-books (.getN write-result)]
             (if (= 1 count-removed-books)
               (ok {:id id})
-              (not-found {:id id})))))
+              (not-found {:id id}))))
+
+        ; TODO: Next steps:
+        ; 1. add an API method to fetch the thumbnail given a book id
+        ; 2. add a book view to the frontend, including the thumbnail
+        ; 3. maybe switch from thumbnail to main picture (this needs fetching of the main site of the book from amazon)
+        (PUT "/update" []
+          :return s/Any
+          :query-params [book-id :- String]
+          :summary "..."
+          (ok {:result (bookstore.update/load-book-thumbnail book-id)})))
 
       (context "/import/amazon" []
         :tags ["import"]
