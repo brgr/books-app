@@ -6,8 +6,7 @@
             [bookstore.update]
             [manifold.deferred :as deferred]
             [ring.middleware.cors :refer [wrap-cors]]
-            [environ.core :refer [env]])
-  (:import (java.io File)))
+            [environ.core :refer [env]]))
 
 ; to run local server on port 3000:
 ; lein ring server
@@ -74,10 +73,9 @@
           (ok {:result (bookstore/all-books)}))
 
         (GET "/:book-id/thumbnail" []
-          :summary "file download"
+          :summary "Fetch the thumbnail for the given book id"
           :path-params [book-id :- String]
-          :return File
-          :produces ["image/jpeg"]
+          :produces ["image/jpg"]
           (->
             (bookstore.model/get-book-by-id book-id)
             :thumbnail
