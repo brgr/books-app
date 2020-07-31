@@ -18,9 +18,9 @@
 (defn load-book-thumbnail [book-id]
   "Updates the thumbnail of a book that is already in the database and has an amazon thumbnail URL associated to it.
   What this does is take this thumbnail URL, load the image, and save it in the thumbnail directory."
-  (let [thumbnail-url (:thumbnail (model/get-book-by-id book-id))
+  (let [thumbnail-url (:amazon-thumbnail-url (model/get-book-by-id book-id))
         thumbnail-filename (subs thumbnail-url (+ 1 (str/last-index-of thumbnail-url "/")))]
-    (println thumbnail-url thumbnail-filename)
-    (image-fetch/load-file-from thumbnail-url (env :thumbnails-dir))
-    (-> (update-book-thumbnail book-id (subs thumbnail-url (+ 1 (str/last-index-of thumbnail-url "/"))))
-        .getN)))
+    (when (not (empty? thumbnail-url))
+      (image-fetch/load-file-from thumbnail-url (env :thumbnails-dir))
+      (-> (update-book-thumbnail book-id thumbnail-filename)
+          .getN))))
