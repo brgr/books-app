@@ -21,7 +21,7 @@
   (let [single-book @(subscribe [:single-book])]
     [:div.single-book-edit
      [:h2 "Add a new book"]
-     [single-book-edit-input-field single-book "Titel" :book-title]
+     [single-book-edit-input-field single-book "Titel" :title]
      [single-book-edit-input-field single-book "Autor(en)" :authors]
      [:input {:type     "button"
               :value    "Submit"
@@ -31,12 +31,16 @@
   (let [books @(subscribe [:all-books])]
     [:div.book-list
      [:p (str "Count books: " (count books))]
-     (for [book books]
-       [:div.single-book-in-list
-        [:p "Buch: " book "  "
-         [:input {:type     "button"
-                  :value    "x"
-                  :on-click #(dispatch [:remove-book-by-id book])}]]])]))
+     [:div.book-list-grid
+      (for [book books]
+        [:div.single-book-in-list
+         [:img {:src (str "http://localhost:3000/books/" (book :_id) "/thumbnail")
+                :alt (str (book :_id))}]
+         [:br]
+         [:p (book :title) "  "
+          [:input {:type     "button"
+                   :value    "x"
+                   :on-click #(dispatch [:remove-book-by-id book])}]]])]]))
 
 (defn add-new-amazon-wishlist-form []
   (let [amazon-wishlist @(subscribe [:current-amazon-wishlist])]

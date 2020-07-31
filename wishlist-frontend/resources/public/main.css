@@ -16,3 +16,22 @@
 .navbar li {
     border: 1px solid;
 }
+
+.single-book-in-list {
+    display: flex;
+    justify-content: center;
+    /*align-items: center;*/
+    align-items: flex-end;
+}
+
+.book-list-grid {
+    display: grid;
+    gap: 10px;
+    /*grid-auto-rows: fit-content;*/
+    /*grid-auto-columns: fit-content;*/
+    grid-template-columns: repeat(auto-fill, 20em);
+}
+
+img {
+    height: 186px;
+}
