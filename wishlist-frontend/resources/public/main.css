@@ -22,23 +22,25 @@
     justify-content: center;
     align-items: flex-end;
     border: transparent 6px dotted;
+    padding: 1em;
 }
 
 .single-book-in-list:hover {
     border: 6px dotted gainsboro;
 }
-.book-list-grid {
-    display: grid;
-    gap: 10px;
-    grid-template-columns: repeat(auto-fill, 20em);
-    /* The following makes all rows of the same height, see here:
-       https://stackoverflow.com/questions/44488357/equal-height-rows-in-css-grid-layout */
-    grid-auto-rows: 1fr
-}
 
-img {
+.single-book-in-list img {
     height: 186px;
     /* todo: uncomment the code below, once the images don't have these white borders anymore... */
     /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
     margin: 20px;
+}
+
+.book-list-grid {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(20em, auto));
+    /* The following makes all rows of the same height, see here:
+       https://stackoverflow.com/questions/44488357/equal-height-rows-in-css-grid-layout */
+    grid-auto-rows: 1fr
 }
