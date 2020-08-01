@@ -31,7 +31,7 @@
     display: grid;
     gap: 10px;
     grid-template-columns: repeat(auto-fill, 20em);
-    /* The following is here to make all rows of the same height, see here:
+    /* The following makes all rows of the same height, see here:
        https://stackoverflow.com/questions/44488357/equal-height-rows-in-css-grid-layout */
     grid-auto-rows: 1fr
 }
