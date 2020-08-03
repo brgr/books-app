@@ -42,5 +42,5 @@
     grid-template-columns: repeat(auto-fill, minmax(20em, auto));
     /* The following makes all rows of the same height, see here:
        https://stackoverflow.com/questions/44488357/equal-height-rows-in-css-grid-layout */
-    grid-auto-rows: 1fr
+    grid-auto-rows: 1fr;
 }
