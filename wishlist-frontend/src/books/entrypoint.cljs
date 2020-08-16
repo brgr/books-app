@@ -21,7 +21,11 @@
     (dispatch [:navigated new-match])))
 
 (def router
-  (rf/router routing/routes {:data {:coercion rss/coercion}}))
+  (rf/router
+    routing/routes
+    {:data {:controllers [{:start (js/console.log "start" "root-controller")
+                           :stop  (js/console.log "stop" "root controller")}]
+            :coercion    rss/coercion}}))
 
 (defn router-component [{:keys [router]}]
   (let [current-route @(subscribe [:current-route])]

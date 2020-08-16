@@ -5,6 +5,7 @@
             [reitit.frontend.controllers :as rfc]
             [reitit.frontend.easy :as rfe]))
 
+; todo: make this dependent on the environment
 (def localhost "http://localhost")
 (def port "3000")
 (def url (str localhost ":" port))
@@ -17,6 +18,7 @@
                   ; TODO: error handler
                   :error-handler #(do (println "error:" %1))})]
       {:single-book             {:book-title "Buchtitel"}
+       :current-book-id         nil
        :all-books               []
        :current-amazon-wishlist {:url ""}
        :current-route nil})))
@@ -72,6 +74,11 @@
   :edit-single-book
   (fn [db [_ new-single-book]]
     (assoc db :single-book new-single-book)))
+
+(reg-event-db
+  :update-current-book-id
+  (fn [db [_ new-current-book-id]]
+    (assoc db :current-book-id new-current-book-id)))
 
 (reg-event-db
   :update-in-single-book

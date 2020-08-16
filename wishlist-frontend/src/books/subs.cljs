@@ -12,3 +12,4 @@
 (reg-sub-from-db :all-books)
 (reg-sub-from-db :current-amazon-wishlist)
 (reg-sub-from-db :current-route)
+(reg-sub-from-db :current-book-id)

@@ -27,20 +27,37 @@
               :value    "Submit"
               :on-click #(dispatch [:insert-book-to-db single-book])}]]))
 
+(defn single-book-view []
+  (let [current-book-id @(subscribe [:current-book-id])
+        all-books @(subscribe [:all-books])
+        book (first ((group-by :_id all-books) current-book-id))]
+    [:div.single-book-view
+     [:h1 (book :title)]
+     [:h2 (book :author)]
+     [:p
+      [:a {:href (str "https://amazon.de" (book :amazon-url))}
+       "Amazon Link"]]
+     [:img {:src (str "http://localhost:3000/books/" (book :_id) "/thumbnail")
+            :alt (str (book :_id))}]
+     [:br]
+     [:code "" (str (with-out-str (cljs.pprint/pprint book)))]]))
+
 (defn list-all-books []
   (let [books @(subscribe [:all-books])]
     [:div.book-list
      [:p (str "Count books: " (count books))]
      [:div.book-list-grid
       (for [book books]
+        ; todo: add the id to the route! (look up reitit documentation for that)
         [:div.single-book-in-list
-         [:img {:src (str "http://localhost:3000/books/" (book :_id) "/thumbnail")
-                :alt (str (book :_id))}]
-         [:br]
-         [:p (book :title) "  "
-          [:input {:type     "button"
-                   :value    "x"
-                   :on-click #(dispatch [:remove-book-by-id book])}]]])]]))
+         [:a {:href (routing/href :books.routing/book {:id (book :_id)})}
+          [:img {:src (str "http://localhost:3000/books/" (book :_id) "/thumbnail")
+                 :alt (str (book :_id))}]
+          [:br]
+          [:p (book :title) "  "
+           [:input {:type     "button"
+                    :value    "x"
+                    :on-click #(dispatch [:remove-book-by-id book])}]]]])]]))
 
 (defn add-new-amazon-wishlist-form []
   (let [amazon-wishlist @(subscribe [:current-amazon-wishlist])]
