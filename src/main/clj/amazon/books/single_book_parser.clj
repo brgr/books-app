@@ -5,21 +5,25 @@
   (:import [org.jsoup Jsoup]))
 
 (defn- split-information [information]
-  (let [[name info] (str/split information #": ")
+  (let [[name info] (str/split information #":")
         name (cond
                (str/includes? name "Format") :amazon-format
-               (str/includes? name "Seitenzahl") :book-length
+               ; it is important that ISBN is before Seitenzahl - because the name field of the ISBN contains also the
+               ; text Seitenzahl, it would otherwise save it as :book-length
                (str/includes? name "ISBN") :isbn
+               (str/includes? name "Seitenzahl") :book-length
                (str/includes? name "Verlag") :publisher
                (str/includes? name "Sprache") :language
                :else nil)]
+    (println name info)
     (if (nil? name)
       nil
       {name info})))
 
 (defn- information [informations]
   (let [informations (filter #(str/includes? % ": ") informations)]
-    (into {} (->> (map split-information informations) (filter not-empty)))))
+    (into {} (->> (map split-information informations)
+                  (filter not-empty)))))
 
 (defn- parse-html [single-book-html]
   (let [soup (Jsoup/parse single-book-html)
@@ -29,7 +33,8 @@
            :authors                 (.eachText (-> (.select soup ".author") (.select ".notFaded") (.select ".contributorNameID")))
            :amazon-book-image-front (.attr (.select soup "#ebooksImgBlkFront") "src")
            ; todo: try to get the description - doesn't work because of iframe
-           :description             (.text (.select soup "#bookDesc_iframe_wrapper"))}
+           ;:description             (.text (.select soup "#bookDesc_iframe_wrapper"))
+           }
           product-information)))
 
 (defn load-book [url]
