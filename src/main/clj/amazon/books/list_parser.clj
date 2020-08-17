@@ -8,7 +8,7 @@
 ; https://old.reddit.com/r/amazon/comments/7paenb/amazon_wishlist_web_scraper/
 
 ; todo: maybe do this with a real parser combinator? (like parcom in SML)
-(defn get-author [amazon-author-string]
+(defn- get-author [amazon-author-string]
   (if (str/starts-with? amazon-author-string "von: ")
     (subs amazon-author-string 5)
     amazon-author-string))
@@ -30,7 +30,7 @@
      :author               author
      :amazon-url           url
      :amazon-thumbnail-url thumbnail
-     :item-added-date        item-added-date
+     :item-added-date      item-added-date
      :price                price}))
 ; todo: change price and author (remove unnecessary things)
 

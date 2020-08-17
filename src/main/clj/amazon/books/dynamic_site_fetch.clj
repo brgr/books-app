@@ -29,3 +29,11 @@
       (get-source-of-whole-wishlist driver wishlist_url)
       (finally
         (quit driver)))))
+
+(defn get-single-book-html [single-book-url headless?]
+  (let [driver (firefox {:headless headless?})]
+    (try
+      (go driver single-book-url)
+      (get-source driver)
+      (finally
+        (quit driver)))))

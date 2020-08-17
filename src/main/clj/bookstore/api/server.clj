@@ -102,10 +102,10 @@
         ; 1. add an API method to fetch the thumbnail given a book id
         ; 2. add a book view to the frontend, including the thumbnail
         ; 3. maybe switch from thumbnail to main picture (this needs fetching of the main site of the book from amazon)
-        (PUT "/update" []
+        (PUT "/book/load_thumbnail" []
           :return s/Any
           :query-params [book-id :- String]
-          :summary "..."
+          :summary "Load the thumbnail from the URL that is saved for this book's thumbnail."
           (ok {:result (bookstore.update/load-book-thumbnail book-id)})))
 
       (context "/import/amazon" []
@@ -129,8 +129,17 @@
             ;:downloads
             ; todo: use this async call to fetch the wishlist - but first check if it works (on the frontend) with Thread/sleep
             (deferred/future (Thread/sleep 10000) (println "slept a little") "this is from wishlist")
-            ok)
-          )
+            (ok)))
+
+        (PUT "/book" []
+          :summary "Fully import a book from its product page on Amazon"
+          :query-params [book-id :- String]
+          (deferred/chain
+            (deferred/future
+              (let [book (bookstore.model/get-book-by-id book-id)
+                    url (book :amazon-url)]
+                (amazon.books.single-book-parser/load-book url)))
+            (ok)))
 
         (GET "/downloads" []
           :summary "Async gets the clojars download count"
