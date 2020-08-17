@@ -4,6 +4,7 @@
             [ring.util.http-response :refer :all]
             [bookstore.model :as bookstore]
             [bookstore.update]
+            [amazon.books.single-book-parser]
             [manifold.deferred :as deferred]
             [ring.middleware.cors :refer [wrap-cors]]
             [environ.core :refer [env]]))
@@ -133,13 +134,14 @@
 
         (PUT "/book" []
           :summary "Fully import a book from its product page on Amazon"
+          :return s/Any
           :query-params [book-id :- String]
           (deferred/chain
             (deferred/future
               (let [book (bookstore.model/get-book-by-id book-id)
-                    url (book :amazon-url)]
-                (amazon.books.single-book-parser/load-book url)))
-            (ok)))
+                    new-book-data (amazon.books.single-book-parser/load-book (book :amazon-url))]
+                (bookstore.update/update-book-from-amazon-product-page (book :_id) new-book-data)))
+            ok))
 
         (GET "/downloads" []
           :summary "Async gets the clojars download count"
