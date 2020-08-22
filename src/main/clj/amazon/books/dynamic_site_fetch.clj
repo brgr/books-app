@@ -34,6 +34,9 @@
   (let [driver (firefox {:headless headless?})]
     (try
       (go driver single-book-url)
-      (get-source driver)
+      (let [outer-frame-html (get-source driver)
+            description-frame-html (with-frame driver {:id :bookDesc_iframe}
+                                               (get-source driver))]
+        [outer-frame-html description-frame-html])
       (finally
         (quit driver)))))

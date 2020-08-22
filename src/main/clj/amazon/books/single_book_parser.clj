@@ -37,7 +37,16 @@
            }
           product-information)))
 
+(defn parse-description [description-frame-html]
+  (let [soup (Jsoup/parse description-frame-html)]
+    (->> (.select soup "#iframeContent") (.text))))
+
 (defn load-book [url]
+  ; todo: I need to go to the Hardcover / Notebook page (i.e., not the Kindle page) s.t. I can get an ISBN! Kindle
+  ;  documents do not have an ISBN
   (let [url (if (str/includes? url "amazon.de") url (str "https://amazon.de" url))
-        html (amazon-fetch/get-single-book-html url true)]
-    (parse-html html)))
+        [outer-frame-html description-frame-html] (amazon-fetch/get-single-book-html url true)]
+    (into (parse-html outer-frame-html)
+          {:description (parse-description description-frame-html)})))
+
+(load-book "https://www.amazon.de/dp/0198779291/?coliid=IAKICSUW9R9O7&colid=2Y2U31UCNA1ME&psc=1&ref_=lv_vv_lig_dp_it")
