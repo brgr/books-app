@@ -31,10 +31,7 @@
     (into {:title                   (->> (.select soup "#title") (.text))
            ; todo: does it work with multiple authors?
            :authors                 (.eachText (-> (.select soup ".author") (.select ".notFaded") (.select ".a-link-normal")))
-           :amazon-book-image-front (.attr (.select soup "#ebooksImgBlkFront") "src")
-           ; todo: try to get the description - doesn't work because of iframe
-           ;:description             (.text (.select soup "#bookDesc_iframe_wrapper"))
-           }
+           :amazon-book-image-front (.attr (.select soup "#ebooksImgBlkFront") "src")}
           product-information)))
 
 (defn parse-description [description-frame-html]
