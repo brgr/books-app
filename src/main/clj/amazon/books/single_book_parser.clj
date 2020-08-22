@@ -48,5 +48,3 @@
         [outer-frame-html description-frame-html] (amazon-fetch/get-single-book-html url true)]
     (into (parse-html outer-frame-html)
           {:description (parse-description description-frame-html)})))
-
-(load-book "https://www.amazon.de/dp/0198779291/?coliid=IAKICSUW9R9O7&colid=2Y2U31UCNA1ME&psc=1&ref_=lv_vv_lig_dp_it")
