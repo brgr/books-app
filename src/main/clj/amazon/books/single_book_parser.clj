@@ -1,6 +1,7 @@
 (ns amazon.books.single-book-parser
   (:require [clojure.pprint :refer :all]
             [clojure.string :as str]
+            [clojure.data.json :as json]
             [amazon.books.dynamic-site-fetch :as amazon-fetch])
   (:import [org.jsoup Jsoup]))
 
@@ -25,13 +26,23 @@
     (into {} (->> (map split-information informations)
                   (filter not-empty)))))
 
-(defn- parse-html [single-book-html]
+(defn- book-image-front [soup]
+  (if-let [book-image-front (not-empty (-> (.select soup "#ebooksImgBlkFront")
+                                           (.attr "src")))]
+    book-image-front
+    (-> (.select soup "#imgBlkFront")
+        (.attr "data-a-dynamic-image")
+        (json/read-str)
+        (first)
+        (first))))
+
+(defn parse-html [single-book-html]
   (let [soup (Jsoup/parse single-book-html)
         product-information (information (.eachText (-> (.select soup "#productDetailsTable") (.select ".content > ul li"))))]
     (into {:title                   (->> (.select soup "#title") (.text))
            ; todo: does it work with multiple authors?
            :authors                 (.eachText (-> (.select soup ".author") (.select ".notFaded") (.select ".a-link-normal")))
-           :amazon-book-image-front (.attr (.select soup "#ebooksImgBlkFront") "src")}
+           :amazon-book-image-front (book-image-front soup)}
           product-information)))
 
 (defn parse-description [description-frame-html]
