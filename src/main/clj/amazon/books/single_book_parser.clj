@@ -9,19 +9,19 @@
   ; The empty space before the colon is because of the error with the language (see comment below)
   (let [[name info] (str/split information #" :")
         name (cond
-               (str/includes? name "Format") :amazon-format
+               (str/includes? name "Format") :amazon.books/amazon-format
                ; It is important that ISBN is before Seitenzahl - because the name field of the ISBN contains also the
                ; text Seitenzahl, it would otherwise save it as :book-length
-               (str/includes? name "ISBN-10") :isbn-10
-               (str/includes? name "ISBN-13") :isbn-13
-               (str/includes? name "Seitenzahl") :book-length
-               (str/includes? name "Taschenbuch") :book-length
-               (str/includes? name "Gebundene Ausgabe") :book-length
-               (str/includes? name "Verlag") :publisher
-               (str/includes? name "Herausgeber") :publisher
-               (str/includes? name "Sprache") :language
+               (str/includes? name "ISBN-10") :amazon.books/isbn-10
+               (str/includes? name "ISBN-13") :amazon.books/isbn-13
+               (str/includes? name "Seitenzahl") :amazon.books/book-length
+               (str/includes? name "Taschenbuch") :amazon.books/book-length
+               (str/includes? name "Gebundene Ausgabe") :amazon.books/book-length
+               (str/includes? name "Verlag") :amazon.books/publisher
+               (str/includes? name "Herausgeber") :amazon.books/publisher
+               (str/includes? name "Sprache") :amazon.books/language
                ; Unfortunately, Amazon has an error here, it writes e.g.: "Sprache: : Englisch" (with 2 colons!)
-               (str/includes? name "Sprache:") :language
+               (str/includes? name "Sprache:") :amazon.books/language
                :else nil)]
     (if (nil? name)
       nil
@@ -63,10 +63,10 @@
                  (.select ".content > ul li")
                  (.eachText)
                  count))
-    (into {:title                   title
+    (into {:amazon.books/title                   title
            ; todo: does it work with multiple authors?
-           :authors                 authors
-           :amazon-book-image-front amazon-book-image-front}
+           :amazon.books/authors                 authors
+           :amazon.books/amazon-book-image-front amazon-book-image-front}
           product-information)))
 
 (defn parse-description [description-frame-html]
