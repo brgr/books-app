@@ -6,25 +6,38 @@
   (:import [org.jsoup Jsoup]))
 
 (defn- split-information [information]
-  (let [[name info] (str/split information #":")
+  ; The empty space before the colon is because of the error with the language (see comment below)
+  (let [[name info] (str/split information #" :")
         name (cond
                (str/includes? name "Format") :amazon-format
-               ; it is important that ISBN is before Seitenzahl - because the name field of the ISBN contains also the
+               ; It is important that ISBN is before Seitenzahl - because the name field of the ISBN contains also the
                ; text Seitenzahl, it would otherwise save it as :book-length
-               (str/includes? name "ISBN") :isbn
+               (str/includes? name "ISBN-10") :isbn-10
+               (str/includes? name "ISBN-13") :isbn-13
                (str/includes? name "Seitenzahl") :book-length
+               (str/includes? name "Taschenbuch") :book-length
+               (str/includes? name "Gebundene Ausgabe") :book-length
                (str/includes? name "Verlag") :publisher
+               (str/includes? name "Herausgeber") :publisher
                (str/includes? name "Sprache") :language
+               ; Unfortunately, Amazon has an error here, it writes e.g.: "Sprache: : Englisch" (with 2 colons!)
+               (str/includes? name "Sprache:") :language
                :else nil)]
-    (println name info)
     (if (nil? name)
       nil
-      {name info})))
+      {name (str/trim info)})))
 
-(defn- information [informations]
+(defn- parse-informations [informations]
   (let [informations (filter #(str/includes? % ": ") informations)]
     (into {} (->> (map split-information informations)
                   (filter not-empty)))))
+
+(defn- product-informations [soup]
+  (let [informations-table (if-let [table (not-empty (.select soup "#productDetailsTable > .content > ul li"))]
+                             table
+                             (.select soup "#detailBulletsWrapper_feature_div > #detailBullets_feature_div > ul li"))]
+    (-> (.eachText informations-table)
+      (parse-informations))))
 
 (defn- book-image-front [soup]
   (if-let [book-image-front (not-empty (-> (.select soup "#ebooksImgBlkFront")
@@ -38,11 +51,22 @@
 
 (defn parse-html [single-book-html]
   (let [soup (Jsoup/parse single-book-html)
-        product-information (information (.eachText (-> (.select soup "#productDetailsTable") (.select ".content > ul li"))))]
-    (into {:title                   (->> (.select soup "#title") (.text))
+        product-information (product-informations soup)
+        title (->> (.select soup "#title")
+                   (.text))
+        authors (-> (.select soup ".author")
+                    (.select ".notFaded")
+                    (.select ".a-link-normal")
+                    (.eachText))
+        amazon-book-image-front (book-image-front soup)]
+    (println (-> (.select soup "#productDetailsTable")
+                 (.select ".content > ul li")
+                 (.eachText)
+                 count))
+    (into {:title                   title
            ; todo: does it work with multiple authors?
-           :authors                 (.eachText (-> (.select soup ".author") (.select ".notFaded") (.select ".a-link-normal")))
-           :amazon-book-image-front (book-image-front soup)}
+           :authors                 authors
+           :amazon-book-image-front amazon-book-image-front}
           product-information)))
 
 (defn parse-description [description-frame-html]
