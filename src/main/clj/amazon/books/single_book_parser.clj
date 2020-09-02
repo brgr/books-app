@@ -6,26 +6,26 @@
   (:import [org.jsoup Jsoup]))
 
 (defn- split-information [information]
-  ; The empty space before the colon is because of the error with the language (see comment below)
-  (let [[name info] (str/split information #" :")
-        name (cond
-               (str/includes? name "Format") :amazon.books/amazon-format
-               ; It is important that ISBN is before Seitenzahl - because the name field of the ISBN contains also the
-               ; text Seitenzahl, it would otherwise save it as :book-length
-               (str/includes? name "ISBN-10") :amazon.books/isbn-10
-               (str/includes? name "ISBN-13") :amazon.books/isbn-13
-               (str/includes? name "Seitenzahl") :amazon.books/book-length
-               (str/includes? name "Taschenbuch") :amazon.books/book-length
-               (str/includes? name "Gebundene Ausgabe") :amazon.books/book-length
-               (str/includes? name "Verlag") :amazon.books/publisher
-               (str/includes? name "Herausgeber") :amazon.books/publisher
-               (str/includes? name "Sprache") :amazon.books/language
-               ; Unfortunately, Amazon has an error here, it writes e.g.: "Sprache: : Englisch" (with 2 colons!)
-               (str/includes? name "Sprache:") :amazon.books/language
-               :else nil)]
-    (if (nil? name)
-      nil
-      {name (str/trim info)})))
+  (let [[name info & rest] (str/split information #":")
+        key (cond
+              (str/includes? name "Format") :amazon.books/amazon-format
+              ; It is important that ISBN is before Seitenzahl - because the name field of the ISBN contains also the
+              ; text Seitenzahl, it would otherwise save it as :book-length
+              (str/includes? name "ISBN-10") :amazon.books/isbn-10
+              (str/includes? name "ISBN-13") :amazon.books/isbn-13
+              (str/includes? name "Seitenzahl") :amazon.books/book-length
+              (str/includes? name "Taschenbuch") :amazon.books/book-length
+              (str/includes? name "Gebundene Ausgabe") :amazon.books/book-length
+              (str/includes? name "Verlag") :amazon.books/publisher
+              (str/includes? name "Herausgeber") :amazon.books/publisher
+              (str/includes? name "Sprache") :amazon.books/language
+              :else nil)]
+    (cond
+      ;Unfortunately, Amazon has an error here, it writes e.g.: "Sprache: : Englisch" (with 2 colons!)
+      (and (str/includes? name "Sprache")
+           (not (empty? rest))) {:amazon.books/language (-> (first rest) (str/trim))}
+      (or (nil? key) (nil? info)) nil
+      :else {key (str/trim info)})))
 
 (defn- parse-informations [informations]
   (let [informations (filter #(str/includes? % ": ") informations)]
@@ -33,11 +33,11 @@
                   (filter not-empty)))))
 
 (defn- product-informations [soup]
-  (let [informations-table (if-let [table (not-empty (.select soup "#productDetailsTable > .content > ul li"))]
+  (let [informations-table (if-let [table (not-empty (.select soup "#productDetailsTable .content > ul li"))]
                              table
                              (.select soup "#detailBulletsWrapper_feature_div > #detailBullets_feature_div > ul li"))]
     (-> (.eachText informations-table)
-      (parse-informations))))
+        (parse-informations))))
 
 (defn- book-image-front [soup]
   (if-let [book-image-front (not-empty (-> (.select soup "#ebooksImgBlkFront")
