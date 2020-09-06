@@ -19,9 +19,10 @@
   "https://www.amazon.de/dp/0198779291/?coliid=IVUEOO0EISPOI&colid=13XXXLP6RR1X9&psc=1&ref_=lv_ov_lig_dp_it"
   (slurp "src/test/resources/amazon/single_books/01-madness-and-modernism.html"))
 (def single-book-html-02
+  "https://www.amazon.de/Now-You-Other-Essays-Design/dp/1616896248/ref=tmm_hrd_swatch_0?_encoding=UTF8&qid=1599046696&sr=8-34"
   (slurp "src/test/resources/amazon/single_books/02-now-you-see-it.html"))
 
-; todo: add tests first for the given HTMLs above, then also for the direct amazon links
+; todo: add tests also for the direct amazon links
 (deftest single-book-load-test
   (testing "book 01"
     (let [book-01 (parse-html single-book-html-01)]
@@ -38,26 +39,12 @@
   (testing "book 02"
     (let [book-02 (parse-html single-book-html-02)]
       (is (spec/valid? :amazon.books/book book-02))
-      ; Todo: Fix book 02
-      ;  In the link, switch from Kindle to notebook, then get the information there. Also check that it gets the
-      ;  correct information, since, as seen below, it does not do that for the Kindle version (see the commented
-      ;  sections)
-      (is (= #:amazon.books {:title                   "Now You See It and Other Essays on Design (English Edition) Kindle Ausgabe",
-                             ;:authors                 ["Entdecken Sie Michael Bierut bei Amazon"
-                             ;                          "Suchergebnisse"
-                             ;                          "Erfahren Sie mehr über Author Central"
-                             ;                          "Michael Bierut"],
-                             :amazon-book-image-front "https://m.media-amazon.com/images/I/41vZOzm8+aL._SY346_.jpg",
-                             ;:amazon-format           "Kindle Ausgabe",
-                             :book-length             "1616896248",
-                             :publisher               "Princeton Architectural Press (12. März 2019)",
-                             :language                "Englisch"}
+      (is (= #:amazon.books {:title "Now You See It and Other Essays on Design (Englisch) Gebundene Ausgabe – 7. November 2017",
+                            :authors ["Michael Bierut"],
+                            :amazon-book-image-front "https://images-na.ssl-images-amazon.com/images/I/51rj-8gPSOL._SY344_BO1,204,203,200_.jpg",
+                            :book-length "240 Seiten",
+                            :isbn-10 "1616896248",
+                            :isbn-13 "978-1616896249",
+                            :publisher "PRINCETON ARCHITECTURAL PR; 01 Auflage (7. November 2017)",
+                            :language "Englisch"}
              book-02)))))
-
-(parse-html single-book-html-01)
-
-
-(def link-02
-  "https://www.amazon.de/Michael-Bierut-ebook/dp/B07P89NHMP/ref=tmm_kin_swatch_0?_encoding=UTF8&qid=1599046696&sr=8-34")
-
-;(load-book link-02)
