@@ -14,16 +14,24 @@
 
 (defn- book-data [wishlist-item]
   (let [id (.attr wishlist-item "data-itemid")
-        title (->> (str "#itemName_" id) (.select wishlist-item) (.text))
+        title (->> (str "#itemName_" id)
+                   (.select wishlist-item)
+                   (.text))
         url (as-> (str "#itemName_" id) element
                   (.select wishlist-item element)
                   (.attr element "href"))
-        author (->> (str "#item-byline-" id) (.select wishlist-item) (.text) (get-author))
+        author (->> (str "#item-byline-" id)
+                    (.select wishlist-item)
+                    (.text)
+                    (get-author))
         thumbnail (as-> (str "#itemImage_" id " img") element
                         (.select wishlist-item element)
                         (.attr element "src"))
-        item-added-date (->> (str "#itemAddedDate_" id) (.select wishlist-item) (.text))
-        price (->> (.select wishlist-item ".itemUsedAndNewPrice") (.text))]
+        item-added-date (->> (str "#itemAddedDate_" id)
+                             (.select wishlist-item)
+                             (.text))
+        price (->> (.select wishlist-item ".itemUsedAndNewPrice")
+                   (.text))]
     {:amazon-id            id
      :title                title
      :author               author
@@ -31,7 +39,6 @@
      :amazon-thumbnail-url thumbnail
      :item-added-date      item-added-date
      :price                price}))
-; todo: change price and author (remove unnecessary things)
 
 (defn load-books-from-amazon-wishlist-html [wishlist-html-content]
   (let [soup (Jsoup/parse wishlist-html-content)
