@@ -1,4 +1,4 @@
-(ns amazon.books.list-parser
+(ns amazon.books.parse.wishlist
   (:require [clojure.pprint :refer :all]
             [clojure.string :as str]
             [amazon.books.fetch.wishlist :as wishlist])

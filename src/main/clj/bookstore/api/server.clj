@@ -4,7 +4,7 @@
             [ring.util.http-response :refer :all]
             [bookstore.model :as bookstore]
             [bookstore.update]
-            [amazon.books.single-book-parser]
+            [amazon.books.parse.single-book :as single-book]
             [manifold.deferred :as deferred]
             [ring.middleware.cors :refer [wrap-cors]]
             [environ.core :refer [env]]))
@@ -139,7 +139,7 @@
           (deferred/chain
             (deferred/future
               (let [book (bookstore.model/get-book-by-id book-id)
-                    new-book-data (amazon.books.single-book-parser/load-book (book :amazon-url))]
+                    new-book-data (single-book/load-book (book :amazon-url))]
                 (bookstore.update/update-book-from-amazon-product-page (book :_id) new-book-data)))
             ok))
 

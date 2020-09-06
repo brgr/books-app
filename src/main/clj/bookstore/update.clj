@@ -1,6 +1,6 @@
 (ns bookstore.update
   (:require [environ.core :refer [env]]
-            [amazon.books.image-fetch :as image-fetch]
+            [amazon.books.fetch.image :as image-fetch]
             [bookstore.model :as model]
             [bookstore.access :refer [get-db books-collection stringify-id]]
             [monger.collection :as collection]

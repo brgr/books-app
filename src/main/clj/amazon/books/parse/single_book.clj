@@ -1,4 +1,4 @@
-(ns amazon.books.single-book-parser
+(ns amazon.books.parse.single-book
   (:require [clojure.string :as str]
             [clojure.data.json :as json]
             [amazon.books.fetch.single-book :as single-book])
@@ -20,7 +20,7 @@
               (str/includes? name "Sprache") :amazon.books/language
               :else nil)]
     (cond
-      ;Unfortunately, Amazon has an error here, it writes e.g.: "Sprache: : Englisch" (with 2 colons!)
+      ; Unfortunately, Amazon has an error here, it writes e.g.: "Sprache: : Englisch" (with 2 colons!)
       (and (str/includes? name "Sprache")
            (not (empty? rest))) {:amazon.books/language (-> (first rest) (str/trim))}
       (or (nil? key) (nil? info)) nil

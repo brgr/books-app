@@ -1,4 +1,4 @@
-(ns amazon.books.image-fetch
+(ns amazon.books.fetch.image
   (:require [clojure.string :as str]
             [clojure.java.io :as io]))
 
