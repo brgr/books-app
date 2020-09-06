@@ -28,6 +28,7 @@
 
   :repl-options {:init-ns amazon-wishlist.core}
 
+  ; per default, we don't want to test amazon or integration, as these take too long
   :test-selectors {:default     (fn [m] (not (or (:amazon m) (:integration m))))
                    :amazon      :amazon
                    :integration :integration})
