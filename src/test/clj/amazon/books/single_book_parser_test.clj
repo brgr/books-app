@@ -62,7 +62,7 @@
                          :isbn-13                 "978-0262534802",
                          :publisher               "The MIT Press; second edition Auflage (4. Mai 2018)",
                          :language                "Englisch"}
-         (load-book (:url single-book-html-03))))))
+         book-03))))
 
 (deftest ^:amazon single-book-load-test
   (testing "book 01"
