@@ -1,4 +1,4 @@
-(ns amazon.books.dynamic-site-fetch
+(ns amazon.books.fetch.wishlist
   (:require [etaoin.api :refer :all]))
 
 ; Remember to install Geckodriver on the machine that this is run on!

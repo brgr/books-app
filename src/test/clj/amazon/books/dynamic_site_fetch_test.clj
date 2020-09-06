@@ -1,6 +1,6 @@
 (ns amazon.books.dynamic-site-fetch-test
   (:require [clojure.test :refer :all]
-            [amazon.books.dynamic-site-fetch :as amazon]
+            [amazon.books.fetch.wishlist :as amazon]
             [clojure.string :as str]))
 
 (def test-wishlist-local "src/test/resources/test-wishlist.html")

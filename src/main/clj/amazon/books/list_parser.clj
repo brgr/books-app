@@ -1,7 +1,7 @@
 (ns amazon.books.list-parser
   (:require [clojure.pprint :refer :all]
             [clojure.string :as str]
-            [amazon.books.dynamic-site-fetch :as amazon-fetch])
+            [amazon.books.fetch.wishlist :as wishlist])
   (:import [org.jsoup Jsoup]))
 
 ; For selectors, see this reddit post:
@@ -40,5 +40,5 @@
     (mapv book-data wishlist-items)))
 
 (defn load-books-from-amazon-wishlist-url [url]
-  (let [html (amazon-fetch/get-wishlist-html url true)]
+  (let [html (wishlist/get-wishlist-html url true)]
     (load-books-from-amazon-wishlist-html html)))
