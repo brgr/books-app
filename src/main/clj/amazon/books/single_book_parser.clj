@@ -1,6 +1,5 @@
 (ns amazon.books.single-book-parser
-  (:require [clojure.pprint :refer :all]
-            [clojure.string :as str]
+  (:require [clojure.string :as str]
             [clojure.data.json :as json]
             [amazon.books.fetch.single-book :as single-book])
   (:import [org.jsoup Jsoup]))
