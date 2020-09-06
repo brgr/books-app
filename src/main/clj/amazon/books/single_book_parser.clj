@@ -66,10 +66,6 @@
                    (.text))
         authors (authors soup)
         amazon-book-image-front (book-image-front soup)]
-    (println (-> (.select soup "#productDetailsTable")
-                 (.select ".content > ul li")
-                 (.eachText)
-                 count))
     (into {:amazon.books/title                   title
            ; todo: does it work with multiple authors?
            :amazon.books/authors                 authors
@@ -81,9 +77,9 @@
     (->> (.select soup "#iframeContent") (.text))))
 
 (defn load-book [url]
-  ; todo: I need to go to the Hardcover / Notebook page (i.e., not the Kindle page) s.t. I can get an ISBN! Kindle
-  ;  documents do not have an ISBN
-  (let [url (if (str/includes? url "amazon.de") url (str "https://amazon.de" url))
+  (let [url (if (str/includes? url "amazon.de")
+              url
+              (str "https://amazon.de" url))
         [outer-frame-html description-frame-html] (amazon-fetch/get-single-book-html url true)]
     (into (parse-html outer-frame-html)
-          {:description (parse-description description-frame-html)})))
+          {:amazon.books/description (parse-description description-frame-html)})))
