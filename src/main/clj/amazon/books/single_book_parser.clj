@@ -50,14 +50,12 @@
         (first))))
 
 (defn- authors [soup]
-  (let [authors (-> (.select soup ".author")
-                    (.select ".notFaded")
-                    (.select ".a-link-normal"))
-        each-author (-> (.select authors ".contributorNameID")
-                        (.eachText))]
-    (if (empty? each-author)
-      (.eachText authors)
-      each-author)))
+  (let [authors (-> (.select soup "span.author a.a-link-normal.contributorNameID")
+                    (.eachText))]
+    (if (empty? authors)
+      (-> (.select soup "span.author a.a-link-normal")
+          (.eachText))
+      authors)))
 
 (defn parse-html [single-book-html]
   (let [soup (Jsoup/parse single-book-html)
