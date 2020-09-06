@@ -49,6 +49,10 @@
         (first)
         (first))))
 
+
+; Fixme: Amazon does not always include the class .contributorNameID for authors, even though it writes "Autor" next to
+;  the name. To fix this, one would need to read the text that is written in brackets next to the name, instead of
+;  relying on class names. Currently, some authors may be missed using just this approach.
 (defn- authors [soup]
   (let [authors (-> (.select soup "span.author a.a-link-normal.contributorNameID")
                     (.eachText))]
@@ -65,7 +69,6 @@
         authors (authors soup)
         amazon-book-image-front (book-image-front soup)]
     (into {:amazon.books/title                   title
-           ; todo: does it work with multiple authors?
            :amazon.books/authors                 authors
            :amazon.books/amazon-book-image-front amazon-book-image-front}
           product-information)))
