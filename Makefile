@@ -33,3 +33,18 @@ uberwar:
 clean:
 	# Remove all images that are not associated with a container
 	docker system prune
+
+
+### Tests ###
+
+# This runs only the tests that are neither :amazon, nor :integration, as is defined in project.clj
+test:
+	lein test
+
+test-amazon:
+	lein test :amazon
+
+test-integration:
+	lein test :integration
+
+test-all: test test-amazon test-integration
