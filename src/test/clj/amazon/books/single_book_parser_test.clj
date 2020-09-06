@@ -22,6 +22,9 @@
 (def single-book-html-02
   {:url          "https://www.amazon.de/Now-You-Other-Essays-Design/dp/1616896248/ref=tmm_hrd_swatch_0?_encoding=UTF8&qid=1599046696&sr=8-34"
    :html-content (slurp "src/test/resources/amazon/single_books/02-now-you-see-it.html")})
+(def single-book-html-03
+  {:url          "https://www.amazon.de/dp/0262534800/?coliid=I1NB2M0WEXUPTC&colid=13XXXLP6RR1X9&psc=1&ref_=lv_ov_lig_dp_it"
+   :html-content (slurp "src/test/resources/amazon/single_books/03-how-to-design-programs.html")})
 
 ; todo: add tests also for the direct amazon links
 (deftest single-book-parse-test
@@ -48,7 +51,19 @@
                              :isbn-13                 "978-1616896249",
                              :publisher               "PRINCETON ARCHITECTURAL PR; 01 Auflage (7. November 2017)",
                              :language                "Englisch"}
-             book-02)))))
+             book-02))))
+  (testing "book 03"
+    (let [book-03 (parse-html (:html-content single-book-html-03))]
+      (is (spec/valid? :amazon.books/book book-03))
+      (= #:amazon.books {:title                   "How to Design Programs, second edition: An Introduction to Programming and Computing (Mit Press) (Englisch) Taschenbuch – 4. Mai 2018",
+                         :authors                 ["Matthias Felleisen" "Matthew Flatt" "Shriram Krishnamurthi"],
+                         :amazon-book-image-front "https://images-na.ssl-images-amazon.com/images/I/515CMMS6DML._SX258_BO1,204,203,200_.jpg",
+                         :book-length             "792 Seiten",
+                         :isbn-10                 "0262534800",
+                         :isbn-13                 "978-0262534802",
+                         :publisher               "The MIT Press; second edition Auflage (4. Mai 2018)",
+                         :language                "Englisch"}
+         (load-book (:url single-book-html-03))))))
 
 (deftest ^:amazon single-book-load-test
   (testing "book 01"
@@ -72,4 +87,15 @@
                           :amazon-book-image-front "https://images-na.ssl-images-amazon.com/images/I/51rj-8gPSOL._SY344_BO1,204,203,200_.jpg",
                           :book-length             "240 Seiten",
                           :authors                 ["Michael Bierut"]})
-        (load-book (:url single-book-html-02)))))
+        (load-book (:url single-book-html-02))))
+  (testing "book 03"
+    (is (= #:amazon.books {:description             "A completely revised edition, offering new design recipes for interactive programs and support for images as plain values, testing, event-driven programming, and even distributed programming. This introduction to programming places computer science at the core of a liberal arts education. Unlike other introductory books, it focuses on the program design process, presenting program design guidelines that show the reader how to analyze a problem statement, how to formulate concise goals, how to make up examples, how to develop an outline of the solution, how to finish the program, and how to test it. Because learning to design programs is about the study of principles and the acquisition of transferable skills, the text does not use an off-the-shelf industrial language but presents a tailor-made teaching language. For the same reason, it offers DrRacket, a programming environment for novices that supports playful, feedback-oriented learning. The environment grows with readers as they master the material in the book until it supports a full-fledged language for the whole spectrum of programming tasks. This second edition has been completely revised. While the book continues to teach a systematic approach to program design, the second edition introduces different design recipes for interactive programs with graphical interfaces and batch programs. It also enriches its design recipes for functions with numerous new hints. Finally, the teaching languages and their IDE now come with support for images as plain values, testing, event-driven programming, and even distributed programming.",
+                           :publisher               "The MIT Press; second edition Auflage (4. Mai 2018)",
+                           :isbn-13                 "978-0262534802",
+                           :title                   "How to Design Programs, second edition: An Introduction to Programming and Computing (Mit Press) (Englisch) Taschenbuch – 4. Mai 2018",
+                           :isbn-10                 "0262534800",
+                           :language                "Englisch",
+                           :amazon-book-image-front "https://images-na.ssl-images-amazon.com/images/I/515CMMS6DML._SX258_BO1,204,203,200_.jpg",
+                           :book-length             "792 Seiten",
+                           :authors                 ["Matthias Felleisen" "Matthew Flatt"]}
+           (load-book (:url single-book-html-03))))))
