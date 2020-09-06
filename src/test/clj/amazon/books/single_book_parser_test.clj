@@ -97,5 +97,5 @@
                            :language                "Englisch",
                            :amazon-book-image-front "https://images-na.ssl-images-amazon.com/images/I/515CMMS6DML._SX258_BO1,204,203,200_.jpg",
                            :book-length             "792 Seiten",
-                           :authors                 ["Matthias Felleisen" "Matthew Flatt"]}
+                           :authors                 ["Matthias Felleisen" "Matthew Flatt" "Shriram Krishnamurthi"]}
            (load-book (:url single-book-html-03))))))
