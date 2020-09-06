@@ -6,8 +6,6 @@
 (def test-wishlist-local "src/test/resources/test-wishlist.html")
 (def test-wishlist-url "https://www.amazon.de/hz/wishlist/ls/2Y2U31UCNA1ME")
 
-; :amazon test needs to be explicitly called in leiningen:
-; lein test :amazon
 (deftest ^:amazon can-access-amazon-wishlist?
   (is (as-> (amazon/get-wishlist-html test-wishlist-url true) html
          (and
