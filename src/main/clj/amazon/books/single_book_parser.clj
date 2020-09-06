@@ -49,15 +49,22 @@
         (first)
         (first))))
 
+(defn- authors [soup]
+  (let [authors (-> (.select soup ".author")
+                    (.select ".notFaded")
+                    (.select ".a-link-normal"))
+        each-author (-> (.select authors ".contributorNameID")
+                        (.eachText))]
+    (if (empty? each-author)
+      (.eachText authors)
+      each-author)))
+
 (defn parse-html [single-book-html]
   (let [soup (Jsoup/parse single-book-html)
         product-information (product-informations soup)
         title (->> (.select soup "#title")
                    (.text))
-        authors (-> (.select soup ".author")
-                    (.select ".notFaded")
-                    (.select ".a-link-normal")
-                    (.eachText))
+        authors (authors soup)
         amazon-book-image-front (book-image-front soup)]
     (println (-> (.select soup "#productDetailsTable")
                  (.select ".content > ul li")
