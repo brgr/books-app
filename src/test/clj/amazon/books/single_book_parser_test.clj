@@ -26,7 +26,6 @@
   {:url          "https://www.amazon.de/dp/0262534800/?coliid=I1NB2M0WEXUPTC&colid=13XXXLP6RR1X9&psc=1&ref_=lv_ov_lig_dp_it"
    :html-content (slurp "src/test/resources/amazon/single_books/03-how-to-design-programs.html")})
 
-; todo: add tests also for the direct amazon links
 (deftest single-book-parse-test
   (testing "book 01"
     (let [book-01 (parse-html (:html-content single-book-html-01))]
