@@ -1,4 +1,5 @@
-(ns amazon.books.dynamic-site-fetch)
+(ns amazon.books.dynamic-site-fetch
+  (:require [clojure.string :as str]))
 
 (use 'etaoin.api)
 
@@ -30,10 +31,24 @@
       (finally
         (quit driver)))))
 
+(defn- go-to-single-book [driver single-book-url]
+  (go driver single-book-url)
+  ;(click driver {:id :sp-cc-accept})
+  (if (visible? driver {:id :showMoreFormatsPrompt})
+    (click driver {:id :showMoreFormatsPrompt}))
+
+  (let [text-of-selected-swatch (get-element-text driver [{:id :twister}
+                                                          {:tag :div :fn/has-classes [:top-level :selected-row]}])]
+    (when (str/includes? text-of-selected-swatch "Kindle")
+      (if (visible? driver {:id :showMoreFormatsPrompt}) (click driver {:id :showMoreFormatsPrompt}))
+      (click driver [{:id :twister}
+                     {:tag :div :fn/has-classes [:top-level :unselected-row]}]))))
+
 (defn get-single-book-html [single-book-url headless?]
   (let [driver (firefox {:headless headless?})]
     (try
-      (go driver single-book-url)
+      ;(go driver single-book-url)
+      (go-to-single-book driver single-book-url)
       (let [outer-frame-html (get-source driver)
             description-frame-html (with-frame driver {:id :bookDesc_iframe}
                                                (get-source driver))]

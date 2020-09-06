@@ -13,7 +13,8 @@
              :uberwar {:env {:database-url "database"}}}
 
   :dependencies [[org.clojure/clojure "1.10.0"]
-                 [etaoin "0.3.5"]
+                 [org.clojure/data.json "1.0.0"]
+                 [etaoin "0.3.10"]
                  [com.novemberain/monger "3.1.0"]
                  [metosin/compojure-api "1.1.13"]
                  [org.jsoup/jsoup "1.13.1"]
