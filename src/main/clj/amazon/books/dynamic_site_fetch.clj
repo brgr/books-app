@@ -1,7 +1,6 @@
 (ns amazon.books.dynamic-site-fetch
-  (:require [clojure.string :as str]))
-
-(use 'etaoin.api)
+  (:require [clojure.string :as str]
+            [etaoin.api :refer :all]))
 
 ; Remember to install Geckodriver on the machine that this is run on!
 ; https://github.com/mozilla/geckodriver
@@ -24,10 +23,10 @@
   ; get-source needs to be outside of (doto ...), otherwise it is not returned
   (get-source driver))
 
-(defn get-wishlist-html [wishlist_url headless?]
+(defn get-wishlist-html [wishlist-url headless?]
   (let [driver (firefox {:headless headless?})]
     (try
-      (get-source-of-whole-wishlist driver wishlist_url)
+      (get-source-of-whole-wishlist driver wishlist-url)
       (finally
         (quit driver)))))
 
