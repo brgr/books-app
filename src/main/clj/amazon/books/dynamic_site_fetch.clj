@@ -19,7 +19,7 @@
 (defn- get-source-of-whole-wishlist [driver wishlist-url]
   (doto driver
     (go wishlist-url)
-    (wait-visible [{:id :twotabsearchtextbox}])
+    (wait-visible {:id :twotabsearchtextbox})
     (load-all-books))
   ; get-source needs to be outside of (doto ...), otherwise it is not returned
   (get-source driver))
@@ -34,14 +34,15 @@
 (defn- go-to-single-book [driver single-book-url]
   (go driver single-book-url)
   (click driver {:id :sp-cc-accept})
-  (let [text-of-selected-swatch (get-element-text driver [{:id :twister}
-                                                          {:tag :div :fn/has-classes [:top-level :selected-row]}])]
-    (when (str/includes? text-of-selected-swatch "Kindle")
-      (if (visible? driver {:id :showMoreFormatsPrompt})
-        (click driver {:id :showMoreFormatsPrompt}))
-      (if (visible? driver {:id :showMoreFormatsPrompt}) (click driver {:id :showMoreFormatsPrompt}))
-      (click driver [{:id :twister}
-                     {:tag :div :fn/has-classes [:top-level :unselected-row]}]))))
+  (if (exists? driver {:id :twister})
+    (let [text-of-selected-swatch (get-element-text driver [{:id :twister}
+                                                           {:tag :div :fn/has-classes [:top-level :selected-row]}])]
+     (when (str/includes? text-of-selected-swatch "Kindle")
+       (if (visible? driver {:id :showMoreFormatsPrompt})
+         (click driver {:id :showMoreFormatsPrompt}))
+       (if (visible? driver {:id :showMoreFormatsPrompt}) (click driver {:id :showMoreFormatsPrompt}))
+       (click driver [{:id :twister}
+                      {:tag :div :fn/has-classes [:top-level :unselected-row]}])))))
 
 (defn get-single-book-html [single-book-url headless?]
   (let [driver (firefox {:headless headless?})]
