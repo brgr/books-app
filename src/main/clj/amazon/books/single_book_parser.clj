@@ -2,7 +2,7 @@
   (:require [clojure.pprint :refer :all]
             [clojure.string :as str]
             [clojure.data.json :as json]
-            [amazon.books.dynamic-site-fetch :as amazon-fetch])
+            [amazon.books.fetch.single-book :as single-book])
   (:import [org.jsoup Jsoup]))
 
 (defn- split-information [information]
@@ -81,6 +81,6 @@
   (let [url (if (str/includes? url "amazon.de")
               url
               (str "https://amazon.de" url))
-        [outer-frame-html description-frame-html] (amazon-fetch/get-single-book-html url true)]
+        [outer-frame-html description-frame-html] (single-book/get-single-book-html url true)]
     (into (parse-html outer-frame-html)
           {:amazon.books/description (parse-description description-frame-html)})))
