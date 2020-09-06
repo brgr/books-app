@@ -6,40 +6,31 @@ tags on books, etc.
 
 ## Frontend
 
-The fronted is currently not in this project and there is no real work done on it so
-far. It will probably consist of the following components:
+The frontend consists mainly of the following:
 
 * ClojureScript
 * Reagent, a React wrapper
 * Reframe, for storing the data in a single place (sort of MVC)
 
-More on this later, when work on it is actually started.
+For more information regarding the frontend, see the Readme in the respective directory.
 
 ## Backend
 
-The backend currently consists of the following components:
+The backend currently consists mainly of the following components:
 
 * Clojure
 * MongoDB + Docker
 * Clojure libraries:
-  * `monger` for access to MongoDB
-  * `ring` for the REST api server things
-    * together with `compojure` and `compojure-api`
-  * `selenium` and `Jsoup` for getting some books from Amazon
-  
-## Deployment
-
-Currently the project is just run locally. There are multiple sites I could run this
-on (DigitalOcean, Heroku, Google App Engine, AWS, Azure). I think DigitalOcean would
-probably a good start. It would cost a fix amount of 5-15$ per month, I think,
-depending on all the things I need - but these would be fairly fix.
+* `ring` for the REST api server things
+  * together with `compojure` and `compojure-api`
 
 ## Ideas and Notes
 
 * For unit testing network stuff etc.: [mockery][1]
 * Seems to be similar to `testcontainers`: [docker-fixture][2]
 * Interesting Discussion: [What technical details should a programmer of a web application consider before making the site public?][3]
-* Write-up on unit-[testing (stubbing and mocking) databases and integration tests][4]
+* Write-up on [unit-testing (stubbing and mocking) databases and integration tests][4]
+* For parsing stuff (like e.g. the wishlist HTML from Amazon) parser combinators could eventually be used
 
 
 [1]: https://github.com/igrishaev/mockery
