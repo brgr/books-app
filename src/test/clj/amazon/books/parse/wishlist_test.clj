@@ -1,4 +1,4 @@
-(ns amazon.books.list-parser-test
+(ns amazon.books.parse.wishlist-test
   (:require [clojure.test :refer :all]
             [amazon.books.parse.wishlist :as wishlist]))
 

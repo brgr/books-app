@@ -1,4 +1,4 @@
-(ns amazon.books.parse.single-book-parser-test
+(ns amazon.books.parse.single-book-test
   (:require [clojure.test :refer :all]
             [clojure.spec.alpha :as spec]
             [amazon.books.parse.single-book :refer [load-book parse-html]]))

@@ -1,4 +1,4 @@
-(ns amazon.books.dynamic-site-fetch-test
+(ns amazon.books.fetch.wishlist-test
   (:require [clojure.test :refer :all]
             [amazon.books.fetch.wishlist :as amazon]
             [clojure.string :as str]))

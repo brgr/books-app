@@ -1,4 +1,4 @@
-(ns amazon.books.image-fetch-test
+(ns amazon.books.fetch.image-test
   (:require [clojure.test :refer :all])
   (:require [amazon.books.fetch.image :refer [get-file-name]]))
 
