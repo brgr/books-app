@@ -65,6 +65,9 @@
          book-03))))
 
 (deftest ^:amazon single-book-load-test
+  ; It seems that sometimes these tests fail. When I have found this to occur, it was when I accessed Amazon a lot
+  ; automatically. It also seamed to me that Amazon would redirect me do its frontpage (amazon.de). Could it be that
+  ; Amazon redirects there when it thinks that it is crawled?
   (testing "book 01"
     (is (= #:amazon.books {:description             "The similarities between madness and modernism are striking: defiance of convention, nihilism, extreme relativism, distortions of time, strange transformations of self, and much more. In this revised edition of a now classic work, Louis Sass, a clinical psychologist, offers a radically new vision of schizophrenia, comparing it with the works of such artists and writers as Kafka, Beckett, and Duchamp, and considering the ideas of philosophers including Nietzsche, Heidegger, Foucault, and Derrida. Here is a highly original portrait of the world of insanity, along with a provocative commentary on modernist and postmodernist culture.",
                            :publisher               "Oxford University Press; Revised Auflage (31. Oktober 2017)",
