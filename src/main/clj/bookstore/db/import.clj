@@ -1,6 +1,6 @@
-(ns bookstore.import
+(ns bookstore.db.import
   (:require [amazon.books.parse.wishlist :as wishlist]
-            [bookstore.model :as model]))
+            [bookstore.db.model :as model]))
 
 (defn import-batch [wishlist-url]
   "Blocks until all books are loaded from the wishlist. For a wishlist consisting of a few hundred elements, this

@@ -2,8 +2,8 @@
   (:require [compojure.api.sweet :refer :all]
             [schema.core :as s]
             [ring.util.http-response :refer :all]
-            [bookstore.model :as bookstore]
-            [bookstore.update]
+            [bookstore.db.model :as bookstore]
+            [bookstore.db.update]
             [amazon.books.parse.single-book :as single-book]
             [manifold.deferred :as deferred]
             [ring.middleware.cors :refer [wrap-cors]]
@@ -78,7 +78,7 @@
           :path-params [book-id :- String]
           :produces ["image/jpg"]
           (->
-            (bookstore.model/get-book-by-id book-id)
+            (bookstore.db.model/get-book-by-id book-id)
             :thumbnail
             (file-response {:root (env :thumbnails-dir)})
             (header "Content-Type" "image/jpg")))
@@ -107,7 +107,7 @@
           :return s/Any
           :query-params [book-id :- String]
           :summary "Load the thumbnail from the URL that is saved for this book's thumbnail."
-          (ok {:result (bookstore.update/load-book-thumbnail book-id)})))
+          (ok {:result (bookstore.db.update/load-book-thumbnail book-id)})))
 
       (context "/import/amazon" []
         :tags ["import"]
@@ -138,9 +138,9 @@
           :query-params [book-id :- String]
           (deferred/chain
             (deferred/future
-              (let [book (bookstore.model/get-book-by-id book-id)
+              (let [book (bookstore.db.model/get-book-by-id book-id)
                     new-book-data (single-book/load-book (book :amazon-url))]
-                (bookstore.update/update-book-from-amazon-product-page (book :_id) new-book-data)))
+                (bookstore.db.update/update-book-from-amazon-product-page (book :_id) new-book-data)))
             ok))
 
         (GET "/downloads" []

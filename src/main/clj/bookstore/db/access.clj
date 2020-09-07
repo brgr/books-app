@@ -1,8 +1,7 @@
-(ns bookstore.access
+(ns bookstore.db.access
   (:require [monger.core :as monger]
             [monger.credentials :as credentials]
             [environ.core :refer [env]]))
-
 
 ; always using default port
 (def host (env :database-url))

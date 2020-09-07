@@ -1,9 +1,8 @@
-(ns bookstore.model
+(ns bookstore.db.model
   (:require [monger.collection :as collection]
             [monger.conversion :as conversion]
-            [bookstore.access :refer [get-db books-collection stringify-id]])
-  ;(:require [validateur.validation :refer :all])
-  (:import org.bson.types.ObjectId))
+            [bookstore.db.access :refer [get-db books-collection stringify-id]])
+  (:import (org.bson.types ObjectId)))
 
 (defn insert-new-book [book]
   (let [db (get-db)]

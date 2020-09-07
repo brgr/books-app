@@ -1,10 +1,10 @@
 (ns bookstore.model-test
-  (:require [clojure.test :refer :all])
-  (:require [bookstore.model :as model]))
+  (:require [clojure.test :refer :all]
+            [bookstore.db.model :as model]))
 
 ;(use-fixtures)
 
-; todo: this works once, but if done multiple times the entry is created multiple times
+; Fixme: this works once, but if done multiple times the entry is created multiple times
 (deftest ^:integration insert-and-remove-new-book-by-amazon-id
   (model/insert-new-book {:amazon-id                     "amazon-id"
                           :title                         "Buch Sowieso"

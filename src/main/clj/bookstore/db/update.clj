@@ -1,8 +1,8 @@
-(ns bookstore.update
+(ns bookstore.db.update
   (:require [environ.core :refer [env]]
             [amazon.books.fetch.image :as image-fetch]
-            [bookstore.model :as model]
-            [bookstore.access :refer [get-db books-collection stringify-id]]
+            [bookstore.db.model :as model]
+            [bookstore.db.access :refer [get-db books-collection stringify-id]]
             [monger.collection :as collection]
             [monger.operators :refer :all]
             [clojure.string :as str])
