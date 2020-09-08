@@ -1,182 +1,36 @@
 (ns bookstore.api.server
   (:require [compojure.api.sweet :refer :all]
-            [schema.core :as s]
             [ring.util.http-response :refer :all]
-            [bookstore.db.model :as bookstore]
+            [schema.core :as s]
             [bookstore.db.update]
-            [amazon.books.parse.single-book :as single-book]
-            [manifold.deferred :as deferred]
             [ring.middleware.cors :refer [wrap-cors]]
-            [environ.core :refer [env]]))
+            [environ.core :refer [env]]
+            [bookstore.api.contexts.books :refer [books]]
+            [bookstore.api.contexts.import.amazon :refer [amazon-import]]))
 
 ; to run local server on port 3000:
 ; lein ring server
 
-;(def app
-;  (api
-;    (GET "/hello" []
-;      :query-params [name :- String]
-;      (ok {:message (str "Hello, " name)}))))
+(def root
+  (GET "/" []
+    :summary "Redirects to /api-docs"
+    (permanent-redirect "/api-docs")))
 
-(s/defschema Pizza
-  {:name                         s/Str
-   (s/optional-key :description) s/Str
-   :size                         (s/enum :L :M :S)
-   :origin                       {:country (s/enum :FI :PO)
-                                  :city    s/Str}})
-
-(s/defschema Money
-  {:amount                    s/Num
-   (s/optional-key :currency) s/Str})
-
-(s/defschema BookPrice
-  {:price                 Money
-   (s/optional-key :date) s/Str})
-
-(s/defschema Book
-  {:title                                          s/Str
-   (s/optional-key :_id)                           s/Int
-   (s/optional-key :authors)                       [s/Str]
-   (s/optional-key :description)                   s/Str
-   (s/optional-key :length)                        s/Int
-   (s/optional-key :amazon-id)                     s/Int
-   (s/optional-key :amazon-url)                    s/Str
-   (s/optional-key :amazon-thumbnail-url)          s/Str
-   (s/optional-key :amazon-date-added-to-wishlist) s/Str
-   (s/optional-key :amazon-price)                  BookPrice})
-
-(s/defschema Books [Book])
-
+(def swagger-options
+  {:ui   "/api-docs"
+   :spec "/swagger.json"
+   :data {:info     {:title       "Books API"
+                     :description "An API for retrieving and setting a (wish-)list of books"}
+          :tags     ["api" "books" "wishlist"]
+          :consumes ["application/json"]
+          :produces ["application/json"]}})
 
 (def app
   (wrap-cors
-    (api
-      {:swagger
-       {:ui   "/api-docs"
-        :spec "/swagger.json"
-        :data {:info     {:title       "Books API"
-                          :description "An API for retrieving and setting a (wish-)list of books"}
-               :tags     ["api" "books" "wishlist"]
-               :consumes ["application/json"]
-               :produces ["application/json"]}}}
-
-      (GET "/" []
-        :summary "Redirects to /api-docs"
-        (permanent-redirect "/api-docs"))
-
-      (context "/books" []
-        :tags ["books"]
-
-        (GET "/" []
-          ; todo: use a Schema to specify what is returned!
-          :return s/Any
-          :summary "returns all books that are in the DB currently"
-          (ok {:result (bookstore/all-books)}))
-
-        (GET "/:book-id/thumbnail" []
-          :summary "Fetch the thumbnail for the given book id"
-          :path-params [book-id :- String]
-          :produces ["image/jpg"]
-          (->
-            (bookstore.db.model/get-book-by-id book-id)
-            :thumbnail
-            (file-response {:root (env :thumbnails-dir)})
-            (header "Content-Type" "image/jpg")))
-
-        (POST "/book" []
-          :summary "Insert a new book"
-          ; TODO: check that book is of the correct type! (schema check)
-          :body [book s/Any]
-          (let [id (bookstore/insert-new-book book)]
-            (ok id)))
-
-        (DELETE "/book" []
-          :summary "Delete book by given ID"
-          :query-params [id :- String]
-          (let [write-result (bookstore/remove-book-by-id id)
-                count-removed-books (.getN write-result)]
-            (if (= 1 count-removed-books)
-              (ok {:id id})
-              (not-found {:id id}))))
-
-        ; TODO: Next steps:
-        ; 1. add an API method to fetch the thumbnail given a book id
-        ; 2. add a book view to the frontend, including the thumbnail
-        ; 3. maybe switch from thumbnail to main picture (this needs fetching of the main site of the book from amazon)
-        (PUT "/book/load_thumbnail" []
-          :return s/Any
-          :query-params [book-id :- String]
-          :summary "Load the thumbnail from the URL that is saved for this book's thumbnail."
-          (ok {:result (bookstore.db.update/load-book-thumbnail book-id)})))
-
-      (context "/import/amazon" []
-        :tags ["import"]
-
-        (PUT "/wishlist" []
-          :summary "Import a new amazon wishlist"
-          ;:return String
-          :query-params [url :- String]
-          ; todo: start to fetch the wishlist!
-          ;(let [id (bookstore/insert-new-wishlist-url url)]
-          ;  (do
-          ;    ;(Thread/sleep 10000)
-          ;    (ok id)))
-          (deferred/chain
-            ;(http/get
-            ;  (str "https://clojars.org/api/artifacts/" group "/" artifact)
-            ;  {:as :json
-            ;   :throw-exceptions false})
-            ;:body
-            ;:downloads
-            ; todo: use this async call to fetch the wishlist - but first check if it works (on the frontend) with Thread/sleep
-            (deferred/future (Thread/sleep 10000) (println "slept a little") "this is from wishlist")
-            (ok)))
-
-        (PUT "/book" []
-          :summary "Fully import a book from its product page on Amazon"
-          :return s/Any
-          :query-params [book-id :- String]
-          (deferred/chain
-            (deferred/future
-              (let [book (bookstore.db.model/get-book-by-id book-id)
-                    new-book-data (single-book/load-book (book :amazon-url))]
-                (bookstore.db.update/update-book-from-amazon-product-page (book :_id) new-book-data)))
-            ok))
-
-        (GET "/downloads" []
-          :summary "Async gets the clojars download count"
-          ;:path-params [group :- s/Str, artifact :- s/Str]
-          :return (s/maybe s/Int)
-          (deferred/chain
-            ;(http/get
-            ;  (str "https://clojars.org/api/artifacts/" group "/" artifact)
-            ;  {:as :json
-            ;   :throw-exceptions false})
-            ;:body
-            ;:downloads
-            ; todo: use this async call to fetch the wishlist - but first check if it works (on the frontend) with Thread/sleep
-            (deferred/future (Thread/sleep 10000) (println "slept a little") 10)
-            ok))
-        )
-
-      (context "/playground" []
-        :tags ["playground"]
-
-        (GET "/plus" []
-          :return {:result Long}
-          :query-params [x :- Long, y :- Long]
-          :summary "adds two numbers together"
-          (ok {:result (+ x y)}))
-
-        (POST "/echo" []
-          :return Pizza
-          :body [pizza Pizza]
-          :summary "echoes a Pizza"
-          (ok pizza))
-
-        (GET "/hello" []
-          :query-params [name :- String]
-          (ok {:message (str "Hello, " name)}))))
+    (api {:swagger swagger-options}
+      root
+      books
+      amazon-import)
 
     ; the following are important for AJAX to work
     :access-control-allow-origin #"http://localhost:8280"
