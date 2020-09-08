@@ -31,6 +31,10 @@
   (let [db (get-db)]
     (collection/remove-by-id db books-collection (ObjectId. id))))
 
+(defn remove-all-books []
+  (let [db (get-db)]
+    (collection/remove db books-collection)))
+
 (defn get-book-by-id [id]
   (let [db (get-db)
         book (-> (collection/find-by-id db books-collection (ObjectId. id))

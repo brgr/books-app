@@ -42,6 +42,14 @@
           (ok {:id id})
           (not-found {:id id}))))
 
+    (DELETE "/books/all" []
+      :summary "Delete all books in the database."
+      :description "This is currently not implemented in the frontend. You need to enter\n      'delete' as a parameter to go through with this."
+      :query-params [delete :- String]
+      (if (= delete "delete")
+        (let [result (bookstore/remove-all-books)]
+          (ok (str result)))))
+
     ; TODO: Next steps:
     ; 1. add an API method to fetch the thumbnail given a book id
     ; 2. add a book view to the frontend, including the thumbnail
