@@ -3,6 +3,7 @@
             [compojure.api.sweet :refer :all]
             [ring.util.http-response :refer [ok not-found header file-response]]
             [schema.core :as s]
+            [bookstore.db.update]
             [environ.core :refer [env]]))
 
 (def books

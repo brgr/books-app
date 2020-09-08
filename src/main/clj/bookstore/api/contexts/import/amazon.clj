@@ -4,6 +4,7 @@
             [schema.core :as s]
             [environ.core :refer [env]]
             [manifold.deferred :as deferred]
+            [bookstore.db.update]
             [amazon.books.parse.single-book :as single-book]))
 
 (def amazon-import

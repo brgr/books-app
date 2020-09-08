@@ -1,10 +1,7 @@
 (ns bookstore.api.server
-  (:require [compojure.api.sweet :refer :all]
-            [ring.util.http-response :refer :all]
-            [schema.core :as s]
-            [bookstore.db.update]
+  (:require [compojure.api.sweet :refer [api GET]]
+            [ring.util.http-response :refer [permanent-redirect]]
             [ring.middleware.cors :refer [wrap-cors]]
-            [environ.core :refer [env]]
             [bookstore.api.contexts.books :refer [books]]
             [bookstore.api.contexts.import.amazon :refer [amazon-import]]))
 
@@ -22,15 +19,18 @@
           :consumes ["application/json"]
           :produces ["application/json"]}})
 
-(def app
-  (wrap-cors
-    (api {:swagger swagger-options}
-      root
-      books
-      amazon-import)
+(def routes
+  (api {:swagger swagger-options}
+       root
+       books
+       amazon-import))
 
-    ; the following are important for AJAX to work
-    :access-control-allow-origin #"http://localhost:8280"
-    :access-control-allow-headers ["Origin" "X-Requested-With"
-                                   "Content-Type" "Accept"]
-    :access-control-allow-methods [:get :put :post :delete :options]))
+(def app
+  (->
+    routes
+    (wrap-cors
+     ; the following are important for AJAX to work
+     :access-control-allow-origin #"http://localhost:8280"
+     :access-control-allow-headers ["Origin" "X-Requested-With"
+                                    "Content-Type" "Accept"]
+     :access-control-allow-methods [:get :put :post :delete :options])))
