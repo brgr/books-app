@@ -4,6 +4,15 @@ A full stack implementation of a book library. Primarily a book wishlist, but
 I would be happy to include features like a "Read" state of a book, notes on books,
 tags on books, etc.
 
+## Run locally
+
+To run locally, open two terminals and in each run one of the following two make commands:
+
+```
+make dev/backend
+make frontend
+```
+
 ## Frontend
 
 The frontend consists mainly of the following:
