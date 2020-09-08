@@ -8,9 +8,6 @@
             [bookstore.api.contexts.books :refer [books]]
             [bookstore.api.contexts.import.amazon :refer [amazon-import]]))
 
-; to run local server on port 3000:
-; lein ring server
-
 (def root
   (GET "/" []
     :summary "Redirects to /api-docs"

@@ -12,6 +12,7 @@ start-backend: docker/down uberwar docker/rebuild
 
 dev/backend: docker/database ring-server
 
+# Runs a local server on port 3000
 ring-server:
 	lein ring server
 
