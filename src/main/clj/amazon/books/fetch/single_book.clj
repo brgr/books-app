@@ -4,7 +4,6 @@
 
 (defn- go-to-single-book [driver single-book-url]
   (go driver single-book-url)
-  (click driver {:id :sp-cc-accept})
   (if (exists? driver {:id :twister})
     (let [text-of-selected-swatch (get-element-text driver [{:id :twister}
                                                             {:tag :div :fn/has-classes [:top-level :selected-row]}])]
@@ -19,6 +18,8 @@
   (let [driver (firefox {:headless headless?})]
     (try
       (go-to-single-book driver single-book-url)
+      ; This wait is needed for the iframe to appear always (otherwise it fails sometimes)
+      (wait driver 1)
       (let [outer-frame-html (get-source driver)
             description-frame-html (with-frame driver {:id :bookDesc_iframe}
                                                (get-source driver))]
