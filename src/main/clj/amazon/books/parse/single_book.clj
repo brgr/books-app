@@ -80,6 +80,7 @@
   (let [url (if (str/includes? url "amazon.de")
               url
               (str "https://amazon.de" url))
-        [outer-frame-html description-frame-html] (single-book/get-single-book-html url true)]
+        [outer-frame-html description-frame-html final-url] (single-book/get-single-book-html url true)]
     (into (parse-html outer-frame-html)
-          {:amazon.books/description (parse-description description-frame-html)})))
+          {:amazon.books/description (parse-description description-frame-html)
+           :amazon.books/amazon-url final-url})))

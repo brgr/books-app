@@ -19,9 +19,13 @@
       (go-to-single-book driver single-book-url)
       ; This wait is needed for the iframe to appear always (otherwise it fails sometimes)
       (wait driver 1)
-      (let [outer-frame-html (get-source driver)
-            description-frame-html (with-frame driver {:id :bookDesc_iframe}
-                                               (get-source driver))]
-        [outer-frame-html description-frame-html])
+      (let [final-url (get-url driver)
+            outer-frame-html (get-source driver)
+            ; todo: remove this again - it is just here now for dead elements on the wishlist (do that before fetching the single book!)
+            description-frame-html (if (visible? driver {:id :bookDesc_iframe})
+                                     (with-frame driver {:id :bookDesc_iframe}
+                                                (get-source driver))
+                                     nil)]
+        [outer-frame-html description-frame-html final-url])
       (finally
         (quit driver)))))
