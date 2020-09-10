@@ -42,11 +42,16 @@
   (if-let [book-image-front (not-empty (-> (.select soup "#ebooksImgBlkFront")
                                            (.attr "src")))]
     book-image-front
-    (-> (.select soup "#imgBlkFront")
-        (.attr "data-a-dynamic-image")
-        (json/read-str)
-        (first)
-        (first))))
+    ; Fixme: This is just needed because currently Audible books are selected
+    ;  When Audible is selected, the front matter is not found. However, Audible books should not be selected in the
+    ;  first place!
+    (try (-> (.select soup "#imgBlkFront")
+             (.attr "data-a-dynamic-image")
+             (json/read-str)
+             (first)
+             (first))
+         (catch Exception e
+           nil))))
 
 
 ; Fixme: Amazon does not always include the class .contributorNameID for authors, even though it writes "Autor" next to
