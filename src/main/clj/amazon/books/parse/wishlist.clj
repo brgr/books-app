@@ -32,13 +32,13 @@
                              (.text))
         price (->> (.select wishlist-item ".itemUsedAndNewPrice")
                    (.text))]
-    {:amazon-id            id
-     :title                title
-     :author               author
-     :amazon-url           url
-     :amazon-thumbnail-url thumbnail
-     :item-added-date      item-added-date
-     :price                price}))
+    {:amazon.books/amazon-id            id
+     :amazon.books/title                title
+     ;:author               author
+     :amazon.books/amazon-url           url
+     :amazon.books/amazon-thumbnail-url thumbnail
+     :amazon.books/item-added-date      item-added-date
+     :amazon.books/price                price}))
 
 (defn load-books-from-amazon-wishlist-html [wishlist-html-content]
   (let [soup (Jsoup/parse wishlist-html-content)
