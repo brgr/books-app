@@ -4,15 +4,14 @@
 
 (defn- go-to-single-book [driver single-book-url]
   (go driver single-book-url)
-  (if (exists? driver {:id :twister})
-    (let [text-of-selected-swatch (get-element-text driver [{:id :twister}
-                                                            {:tag :div :fn/has-classes [:top-level :selected-row]}])]
-      (when (str/includes? text-of-selected-swatch "Kindle")
-        (if (visible? driver {:id :showMoreFormatsPrompt})
-          (click driver {:id :showMoreFormatsPrompt}))
-        (if (visible? driver {:id :showMoreFormatsPrompt}) (click driver {:id :showMoreFormatsPrompt}))
-        (click driver [{:id :twister}
-                       {:tag :div :fn/has-classes [:top-level :unselected-row]}])))))
+  (wait driver 1)
+  (when (visible? driver {:id :showMoreFormatsPrompt})
+    (click driver {:id :showMoreFormatsPrompt}))
+  (let [text-of-selected-swatch (get-element-text driver [{:id :twister}
+                                                          {:tag :div :fn/has-classes [:top-level :selected-row]}])]
+    (when (str/includes? text-of-selected-swatch "Kindle")
+      (click driver [{:id :twister}
+                     {:tag :div :fn/has-classes [:top-level :unselected-row]}]))))
 
 (defn get-single-book-html [single-book-url headless?]
   (let [driver (firefox {:headless headless?})]
