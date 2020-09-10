@@ -19,7 +19,12 @@
                    (.text))
         url (as-> (str "#itemName_" id) element
                   (.select wishlist-item element)
-                  (.attr element "href"))
+                  (.attr element "href")
+                  ; url is empty when there is a dead element on the wishlist (a book that was later removed from
+                  ; Amazon)
+                  (if (empty? element)
+                    nil
+                    element))
         author (->> (str "#item-byline-" id)
                     (.select wishlist-item)
                     (.text)
