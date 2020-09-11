@@ -18,7 +18,7 @@
     (try
       (go-to-single-book driver single-book-url)
       ; This wait is needed for the iframe to appear always (otherwise it fails sometimes)
-      (wait driver 1)
+      (wait driver 2)
       (let [final-url (get-url driver)
             outer-frame-html (get-source driver)
             description-frame-html (with-frame driver {:id :bookDesc_iframe}
