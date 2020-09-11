@@ -22,7 +22,7 @@
   (let [thumbnail-url (:amazon-thumbnail-url (model/get-book-by-id book-id))
         thumbnail-filename (subs thumbnail-url (+ 1 (str/last-index-of thumbnail-url "/")))]
     (when (not (empty? thumbnail-url))
-      (image-fetch/load-file-from thumbnail-url (env :thumbnails-dir))
+      (image-fetch/load-and-save-file thumbnail-url (env :thumbnails-dir))
       (-> (update-book-thumbnail book-id thumbnail-filename)
           .getN))))
 
