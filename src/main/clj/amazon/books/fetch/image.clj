@@ -14,8 +14,7 @@
                  out (io/output-stream filepath)]
        (io/copy in out))))
   ; todo: maybe remove
-  ([uri] (load-and-save-file uri "resources/test_wishlist/book_images/")))
-
+  ([uri] (load-and-save-file uri "src/main/resources/test_wishlist/book_images/")))
 
 (defn load-book-images [books directory-path]
   (->> (map :thumbnail books)
