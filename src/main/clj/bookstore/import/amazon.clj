@@ -7,7 +7,8 @@
   (let [book (if (some? (:amazon.books/amazon-url book))
                (into book (load-book (:amazon.books/amazon-url book)))
                book)]
-    ; todo: also load images
+    (when-let [image-url (not-empty (:amazon.books/amazon-book-image-front book))]
+      (load-and-save-file image-url))
     book))
 
 (defn import-wishlist [wishlist-url]
