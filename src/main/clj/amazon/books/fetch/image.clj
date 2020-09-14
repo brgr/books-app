@@ -1,10 +1,6 @@
 (ns amazon.books.fetch.image
-  (:require [clojure.string :as str]
+  (:require [bookstore.files.file-management :refer [get-file-name]]
             [clojure.java.io :as io]))
-
-(defn get-file-name [uri]
-  (let [last-slash (str/last-index-of uri "/")]
-    (subs uri (+ 1 last-slash))))
 
 (defn load-and-save-file
   ([uri output-path]

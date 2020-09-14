@@ -4,7 +4,8 @@
             [ring.util.http-response :refer [ok not-found header file-response]]
             [schema.core :as s]
             [bookstore.db.update]
-            [environ.core :refer [env]]))
+            [environ.core :refer [env]]
+            [bookstore.files.file-management :refer [get-file-name]]))
 
 (def books
   (context "/books" []
@@ -16,15 +17,15 @@
       :summary "returns all books that are in the DB currently"
       (ok {:result (bookstore/all-books)}))
 
-    (GET "/:book-id/thumbnail" []
+    (GET "/:book-id/front_matter" []
       :summary "Fetch the thumbnail for the given book id"
       :path-params [book-id :- String]
       :produces ["image/jpg"]
-      (->
-        (bookstore.db.model/get-book-by-id book-id)
-        :thumbnail
-        (file-response {:root (env :thumbnails-dir)})
-        (header "Content-Type" "image/jpg")))
+      ; fixme: handle case where there is no image! (what is happening now, in that case?)
+      (when-let [image-url (:amazon-book-image-front (bookstore.db.model/get-book-by-id book-id))]
+        (-> (get-file-name image-url)
+            (file-response {:root (:front-matter-dir env)})
+            (header "Content-Type" "image/jpg"))))
 
     (POST "/book" []
       :summary "Insert a new book"
@@ -44,18 +45,8 @@
 
     (DELETE "/books/all" []
       :summary "Delete all books in the database."
-      :description "This is currently not implemented in the frontend. You need to enter\n      'delete' as a parameter to go through with this."
+      :description "This is currently not implemented in the frontend. You need to enter 'delete' as a parameter to go through with this."
       :query-params [delete :- String]
       (if (= delete "delete")
         (let [result (bookstore/remove-all-books)]
-          (ok (str result)))))
-
-    ; TODO: Next steps:
-    ; 1. add an API method to fetch the thumbnail given a book id
-    ; 2. add a book view to the frontend, including the thumbnail
-    ; 3. maybe switch from thumbnail to main picture (this needs fetching of the main site of the book from amazon)
-    (PUT "/book/load_thumbnail" []
-      :return s/Any
-      :query-params [book-id :- String]
-      :summary "Load the thumbnail from the URL that is saved for this book's thumbnail."
-      (ok {:result (bookstore.db.update/load-book-thumbnail book-id)}))))
+          (ok (str result)))))))

@@ -37,7 +37,7 @@
      [:p
       [:a {:href (str "https://amazon.de" (book :amazon-url))}
        "Amazon Link"]]
-     [:img {:src (str "http://localhost:3000/books/" (book :_id) "/thumbnail")
+     [:img {:src (str "http://localhost:3000/books/" (book :_id) "/front_matter")
             :alt (str (book :_id))}]
      [:br]
      [:code "" (str (with-out-str (cljs.pprint/pprint book)))]]))
@@ -51,7 +51,7 @@
         ; todo: add the id to the route! (look up reitit documentation for that)
         [:div.single-book-in-list
          [:a {:href (routing/href :books.routing/book {:id (book :_id)})}
-          [:img {:src (str "http://localhost:3000/books/" (book :_id) "/thumbnail")
+          [:img {:src (str "http://localhost:3000/books/" (book :_id) "/front_matter")
                  :alt (str (book :_id))}]
           [:br]
           [:p (book :title) "  "
@@ -73,6 +73,7 @@
   (let [watched-wishlists []]                               ; todo: get from backend
     [:div.amazon-wishlists
      [:h2 "Import Amazon Wishlist"]
+     [:p {:style {:color "red"}} "Note: This feature is not yet implemented in the frontend!"]
      [:h3 "Watched Wishlists"]
      [:p "No wishlists yet"]
      [add-new-amazon-wishlist-form]]
