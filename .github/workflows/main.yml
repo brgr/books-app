@@ -1,13 +1,8 @@
 name: Build + Deploy
 #description: 'Build and deploy to my DigitalOcean droplet'
 
-# TODO: Check this site out: https://css-tricks.com/continuous-deployments-for-wordpress-using-github-actions/
-#  Seems like a good resource for how to deploy via Github Actions, using rsync!
-
-on:
-  push:
-    branches:
-      - master
+# Note: At the moment, no server is set up for deployment - it is only tested locally. Thus also the IP addresses etc.
+#  that are listed here, as well as all jobs, don't work.
 
 jobs:
   test:
