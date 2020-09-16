@@ -1,20 +1,42 @@
 
-.navbar {
-    overflow: hidden;
+div.navbar {
+    display: grid;
+    grid-template-columns: repeat(4, max-content);
+    align-items: flex-end;
+    padding: 1em 1em 1em 1em;
 }
 
-.navbar li {
-    display: block;
-    float: left;
-    padding: 14px 16px;
+.navbar div {
+    padding: 0 1em;
 }
 
-.navbar li:hover {
-    background-color: cyan;
+.navbar #title {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: darkslategray;
+    display: flex;
 }
 
-.navbar li {
-    border: 1px solid;
+.navbar #title p {
+    margin: 0 0 0 0;
+}
+
+.navbar a {
+    font-size: 1.4em;
+    padding-bottom: 0.1em;
+}
+
+.navbar a {
+    text-decoration: none;
+}
+
+.navbar a:hover,
+.navbar a:active {
+    color: darkslategray;
+}
+
+.navbar a {
+    color: lightslategray;
 }
 
 .single-book-in-list {
@@ -30,16 +52,15 @@
 }
 
 .single-book-in-list img {
-    height: 186px;
-    /* todo: uncomment the code below, once the images don't have these white borders anymore... */
-    /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
-    margin: 20px;
+    height: 20em;
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin: 5px;
 }
 
 .book-list-grid {
     display: grid;
-    gap: 10px;
-    grid-template-columns: repeat(auto-fill, minmax(20em, auto));
+    gap: 2px;
+    grid-template-columns: repeat(auto-fill, minmax(15em, auto));
     /* The following makes all rows of the same height, see here:
        https://stackoverflow.com/questions/44488357/equal-height-rows-in-css-grid-layout */
     grid-auto-rows: 1fr;

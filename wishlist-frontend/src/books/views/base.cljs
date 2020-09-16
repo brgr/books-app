@@ -4,7 +4,8 @@
 
 (defn nav []
   [:div {:class "navbar"}
-   [:ul
-    [:li [:a {:href (rfe/href :books.routing/ui)} "Homepage"]]
-    [:li [:a {:href (rfe/href :books.routing/new)} "New Book"]]
-    [:li [:a {:href (rfe/href :books.routing/import)} "Import"]]]])
+   [:div#title
+    [:p "Books \uD83D\uDCD6"]]
+   [:div [:a {:href (rfe/href :books.routing/ui)} "Homepage"]]
+   [:div [:a {:href (rfe/href :books.routing/new)} "New Book"]]
+   [:div [:a {:href (rfe/href :books.routing/import)} "Import"]]])

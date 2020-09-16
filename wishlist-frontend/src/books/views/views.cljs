@@ -45,19 +45,23 @@
 (defn list-all-books []
   (let [books @(subscribe [:all-books])]
     [:div.book-list
-     [:p (str "Count books: " (count books))]
+     ;[:p (str "Count books: " (count books))]
      [:div.book-list-grid
       (for [book books]
         ; todo: add the id to the route! (look up reitit documentation for that)
-        [:div.single-book-in-list
-         [:a {:href (routing/href :books.routing/book {:id (book :_id)})}
-          [:img {:src (str "http://localhost:3000/books/" (book :_id) "/front_matter")
-                 :alt (str (book :_id))}]
-          [:br]
-          [:p (book :title) "  "
-           [:input {:type     "button"
-                    :value    "x"
-                    :on-click #(dispatch [:remove-book-by-id book])}]]]])]]))
+        (let [image-source (str "http://localhost:3000/books/" (book :_id) "/front_matter")
+              image-alt-text (str (book :_id))]
+          ; fixme: somehow display books that have no cover
+          (when (not-empty (:amazon-book-image-front book))
+            [:div.single-book-in-list
+             [:a {:href (routing/href :books.routing/book {:id (book :_id)})}
+              [:img {:src image-source, :alt image-alt-text}]
+              [:br]
+              ;[:p (book :title) "  "
+              ; [:input {:type     "button"
+              ;          :value    "x"
+              ;          :on-click #(dispatch [:remove-book-by-id book])}]]
+              ]])))]]))
 
 (defn add-new-amazon-wishlist-form []
   (let [amazon-wishlist @(subscribe [:current-amazon-wishlist])]
@@ -81,6 +85,4 @@
 
 (defn ui []
   [:div.books-ui
-   [:h1 "Books \uD83D\uDCD6"]
-   [:h2 "All Books"]
    [list-all-books]])
