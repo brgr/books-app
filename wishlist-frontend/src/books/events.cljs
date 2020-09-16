@@ -1,19 +1,14 @@
 (ns books.events
   (:require [ajax.core :refer [GET PUT POST DELETE json-request-format raw-response-format]]
             [re-frame.core :refer [reg-event-db reg-event-fx dispatch reg-fx]]
-
             [reitit.frontend.controllers :as rfc]
-            [reitit.frontend.easy :as rfe]))
-
-; todo: make this dependent on the environment
-(def localhost "http://localhost")
-(def port "3000")
-(def url (str localhost ":" port))
+            [reitit.frontend.easy :as rfe]
+            [books.app :refer [BACKEND-URI]]))
 
 (reg-event-db
   :initialize-books
   (fn [_ _]
-    (let [_ (GET (str url "/books")
+    (let [_ (GET (str BACKEND-URI "/books")
                  {:handler       #(dispatch [:process-all-books (%1 :result)])
                   ; TODO: error handler
                   :error-handler #(do (println "error:" %1))})]
@@ -41,28 +36,28 @@
   (fn [db [_ new-book]]
     (do
       ; TODO: afterwards initiate a fetch to get all books anew
-      (POST (str url "/books/book") {:params        new-book
-                                     :format        :json
-                                     :handler       #(println "Worked fine:" %1)
-                                     :error-handler #(println "Error:" %1)})
+      (POST (str BACKEND-URI "/books/book") {:params new-book
+                                     :format         :json
+                                     :handler        #(println "Worked fine:" %1)
+                                     :error-handler  #(println "Error:" %1)})
       db)))
 
 (reg-event-db
   :remove-book-by-id
   (fn [db [_ book-to-remove]]
     (do
-      (DELETE (str url "/books/book") {:url-params      {:id (book-to-remove :_id)}
-                                       :response-format :json
-                                       :handler         #(println "Worked fine:" %1)
-                                       :error-handler   #(println "Error:" %1)})
+      (DELETE (str BACKEND-URI "/books/book") {:url-params {:id (book-to-remove :_id)}
+                                       :response-format    :json
+                                       :handler            #(println "Worked fine:" %1)
+                                       :error-handler      #(println "Error:" %1)})
       db)))
 
 (reg-event-db
   :add-new-wishlist-url
   (fn [db [_ wishlist-url]]
-    (do (PUT (str url "/import/amazon/wishlist") {:url-params    {:url wishlist-url}
-                                                  :handler       #(println "Worked fine:" %1)
-                                                  :error-handler #(println "Error:" %1)})
+    (do (PUT (str BACKEND-URI "/import/amazon/wishlist") {:url-params {:url wishlist-url}
+                                                  :handler            #(println "Worked fine:" %1)
+                                                  :error-handler      #(println "Error:" %1)})
         db)))
 
 (reg-event-db

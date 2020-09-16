@@ -13,11 +13,10 @@
                  [reagent "0.10.0"]
                  [re-frame "0.12.0"]
 
-                 [binaryage/devtools         "0.9.10"]
-                 [clj-commons/secretary      "1.2.4"]
+                 [binaryage/devtools "0.9.10"]
+                 [clj-commons/secretary "1.2.4"]
                  [metosin/reitit "0.4.2"]
-                 [day8.re-frame/tracing      "0.5.3"]
-
+                 [day8.re-frame/tracing "0.5.3"]
                  [cljs-ajax "0.8.0"]]
 
   :plugins [[lein-shadow "0.1.7"]]
@@ -29,12 +28,13 @@
                                     "resources/public/js"]
 
   :shadow-cljs {:nrepl  {:port 8777}
-
                 :builds {:client {:target     :browser
                                   :output-dir "resources/public/js"
                                   :modules    {:client {:init-fn books.entrypoint/run}}
                                   :devtools   {:http-root "resources/public"
-                                               :http-port 8280}}}}
+                                               :http-port 8280}
+                                  :dev        {:closure-defines {books.app/BACKEND-URI "http://localhost:3000"}}
+                                  :release    {:closure-defines {}}}}}
 
   :aliases {"dev-auto" ["shadow" "watch" "client"]}
 
