@@ -11,8 +11,9 @@
             [reitit.frontend.easy :as rfe]
             [reitit.coercion.spec :as rss]
 
-    ; Note: the 2 below are needed s.t. they are loaded!!
+    ; Note: these below are needed s.t. they are loaded with the entrypoint
             [books.events]
+            [books.effects]
             [books.subs]))
 
 

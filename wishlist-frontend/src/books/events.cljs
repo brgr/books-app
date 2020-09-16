@@ -2,7 +2,6 @@
   (:require [ajax.core :refer [GET PUT POST DELETE json-request-format raw-response-format]]
             [re-frame.core :refer [reg-event-db reg-event-fx dispatch reg-fx]]
             [reitit.frontend.controllers :as rfc]
-            [reitit.frontend.easy :as rfe]
             [books.app :refer [BACKEND-URI]]))
 
 (reg-event-db
@@ -84,13 +83,3 @@
   :update-in-amazon-wishlist
   (fn [db [_ path new-value]]
     (assoc-in db [:current-amazon-wishlist (first path)] new-value)))
-
-
-; todo: move to its own file
-;;; Effects ;;;
-
-;; Triggering navigation from events.
-(reg-fx
-  :navigate!
-  (fn [route]
-    (apply rfe/push-state route)))
