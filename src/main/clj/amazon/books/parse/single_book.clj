@@ -7,22 +7,22 @@
 (defn- split-information [information]
   (let [[name info & rest] (str/split information #":")
         key (cond
-              (str/includes? name "Format") :amazon.books/amazon-format
+              (str/includes? name "Format") :books.book/amazon-format
               ; It is important that ISBN is before Seitenzahl - because the name field of the ISBN contains also the
               ; text Seitenzahl, it would otherwise save it as :book-length
-              (str/includes? name "ISBN-10") :amazon.books/isbn-10
-              (str/includes? name "ISBN-13") :amazon.books/isbn-13
-              (str/includes? name "Seitenzahl") :amazon.books/book-length
-              (str/includes? name "Taschenbuch") :amazon.books/book-length
-              (str/includes? name "Gebundene Ausgabe") :amazon.books/book-length
-              (str/includes? name "Verlag") :amazon.books/publisher
-              (str/includes? name "Herausgeber") :amazon.books/publisher
-              (str/includes? name "Sprache") :amazon.books/language
+              (str/includes? name "ISBN-10") :books.book/isbn-10
+              (str/includes? name "ISBN-13") :books.book/isbn-13
+              (str/includes? name "Seitenzahl") :books.book/book-length
+              (str/includes? name "Taschenbuch") :books.book/book-length
+              (str/includes? name "Gebundene Ausgabe") :books.book/book-length
+              (str/includes? name "Verlag") :books.book/publisher
+              (str/includes? name "Herausgeber") :books.book/publisher
+              (str/includes? name "Sprache") :books.book/language
               :else nil)]
     (cond
       ; Unfortunately, Amazon has an error here, it writes e.g.: "Sprache: : Englisch" (with 2 colons!)
       (and (str/includes? name "Sprache")
-           (not (empty? rest))) {:amazon.books/language (-> (first rest) (str/trim))}
+           (not (empty? rest))) {:books.book/language (-> (first rest) (str/trim))}
       (or (nil? key) (nil? info)) nil
       :else {key (str/trim info)})))
 
@@ -72,9 +72,9 @@
                    (.text))
         authors (authors soup)
         amazon-book-image-front (book-image-front soup)]
-    (into {:amazon.books/title                   title
-           :amazon.books/authors                 authors
-           :amazon.books/amazon-book-image-front amazon-book-image-front}
+    (into {:books.book/title                   title
+           :books.book/authors                 authors
+           :books.book/amazon-book-image-front amazon-book-image-front}
           product-information)))
 
 (defn parse-description [description-frame-html]
@@ -87,5 +87,5 @@
               (str "https://amazon.de" url))
         [outer-frame-html description-frame-html final-url] (single-book/get-single-book-html url true)]
     (into (parse-html outer-frame-html)
-          {:amazon.books/description (parse-description description-frame-html)
-           :amazon.books/amazon-url final-url})))
+          {:books.book/description (parse-description description-frame-html)
+           :books.book/amazon-url final-url})))

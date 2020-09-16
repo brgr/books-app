@@ -7,10 +7,15 @@
 (def books-loaded (atom 0))
 
 (defn- load-full-book [book]
-  (let [book (if (some? (:amazon.books/amazon-url book))
-               (into book (load-book (:amazon.books/amazon-url book)))
-               book)]
-    (when-let [image-url (not-empty (:amazon.books/amazon-book-image-front book))]
+  (println (str "Fetching book " (:books.book/title book) "..."))
+  (let [book (try (if (some? (:books.book/amazon-url book))
+                    (into book (load-book (:books.book/amazon-url book)))
+                    book)
+                  (catch Exception e
+                    ; fixme: Error is currently thrown too much...
+                    (println (str "Error for book: " (:books.book/title book) "\n" e))
+                    book))]
+    (when-let [image-url (not-empty (:books.book/amazon-book-image-front book))]
       (load-and-save-file image-url (:front-matter-dir env)))
     (swap! books-loaded inc)
     book))
