@@ -3,9 +3,7 @@
             [monger.credentials :as credentials]
             [environ.core :refer [env]]))
 
-; always using default port
 (def host (env :database-url))
-;(def host "165.22.76.70")
 (def db-name "bookstore")
 (def admin-db "admin")
 (def user "root")
