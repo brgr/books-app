@@ -1,10 +1,8 @@
 name: Build + Deploy
 #description: 'Build and deploy to my DigitalOcean droplet'
 
-on:
-  push:
-    branches:
-      - github-actions-test
+# Note: At the moment, no server is set up for deployment - it is only tested locally. Thus also the IP addresses etc.
+#  that are listed here, as well as all jobs, don't work.
 
 jobs:
   test:

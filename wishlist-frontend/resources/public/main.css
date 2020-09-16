@@ -1,0 +1,58 @@
+
+div.navbar {
+    display: grid;
+    grid-template-columns: repeat(4, max-content);
+    align-items: flex-end;
+    padding: 1em 1em 1em 2.5em;
+}
+
+.navbar #title a {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: darkslategray;
+    text-decoration: none;
+    display: flex;
+    margin: 0 0.2em 0 0;
+}
+.navbar .item {
+    padding-bottom: 0.35em;
+}
+
+.navbar .item a {
+    text-decoration: none;
+    font-size: 1.05em;
+    color: lightslategray;
+    padding-left: 1em;
+}
+
+.navbar .item a:hover,
+.navbar .item a:active {
+    color: darkslategray;
+}
+
+.single-book-in-list {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    border: transparent 6px dotted;
+    padding: 1em;
+}
+
+.single-book-in-list:hover {
+    border: 6px dotted gainsboro;
+}
+
+.single-book-in-list img {
+    height: 20em;
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin: 5px;
+}
+
+.book-list-grid {
+    display: grid;
+    gap: 2px;
+    grid-template-columns: repeat(auto-fill, minmax(15em, auto));
+    /* The following makes all rows of the same height, see here:
+       https://stackoverflow.com/questions/44488357/equal-height-rows-in-css-grid-layout */
+    grid-auto-rows: 1fr;
+}

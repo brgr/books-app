@@ -1,6 +1,6 @@
-(ns amazon.books.image-fetch-test
+(ns amazon.books.fetch.image-test
   (:require [clojure.test :refer :all])
-  (:require [amazon.books.image-fetch :refer [get-file-name]]))
+  (:require [amazon.books.fetch.image :refer [get-file-name]]))
 
 (deftest get-file-name-test
   (is (= "filename.jpg"

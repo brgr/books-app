@@ -1,10 +1,8 @@
-(ns amazon.books.dynamic-site-fetch)
-
-(use 'etaoin.api)
+(ns amazon.books.fetch.wishlist
+  (:require [etaoin.api :refer :all]))
 
 ; Remember to install Geckodriver on the machine that this is run on!
 ; https://github.com/mozilla/geckodriver
-
 
 (defn- more-books-available? [driver]
   (-> (get-element-inner-html driver {:id :wishlist-page})
@@ -18,14 +16,14 @@
 (defn- get-source-of-whole-wishlist [driver wishlist-url]
   (doto driver
     (go wishlist-url)
-    (wait-visible [{:id :twotabsearchtextbox}])
+    (wait-visible {:id :twotabsearchtextbox})
     (load-all-books))
   ; get-source needs to be outside of (doto ...), otherwise it is not returned
   (get-source driver))
 
-(defn get-wishlist-html [wishlist_url headless?]
+(defn get-wishlist-html [wishlist-url headless?]
   (let [driver (firefox {:headless headless?})]
     (try
-      (get-source-of-whole-wishlist driver wishlist_url)
+      (get-source-of-whole-wishlist driver wishlist-url)
       (finally
         (quit driver)))))
