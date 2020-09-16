@@ -3,40 +3,31 @@ div.navbar {
     display: grid;
     grid-template-columns: repeat(4, max-content);
     align-items: flex-end;
-    padding: 1em 1em 1em 1em;
+    padding: 1em 1em 1em 2.5em;
 }
 
-.navbar div {
-    padding: 0 1em;
-}
-
-.navbar #title {
+.navbar #title a {
     font-size: 2.2em;
     font-weight: bold;
     color: darkslategray;
-    display: flex;
-}
-
-.navbar #title p {
-    margin: 0 0 0 0;
-}
-
-.navbar a {
-    font-size: 1.4em;
-    padding-bottom: 0.1em;
-}
-
-.navbar a {
     text-decoration: none;
+    display: flex;
+    margin: 0 0.2em 0 0;
+}
+.navbar .item {
+    padding-bottom: 0.35em;
 }
 
-.navbar a:hover,
-.navbar a:active {
-    color: darkslategray;
-}
-
-.navbar a {
+.navbar .item a {
+    text-decoration: none;
+    font-size: 1.05em;
     color: lightslategray;
+    padding-left: 1em;
+}
+
+.navbar .item a:hover,
+.navbar .item a:active {
+    color: darkslategray;
 }
 
 .single-book-in-list {
