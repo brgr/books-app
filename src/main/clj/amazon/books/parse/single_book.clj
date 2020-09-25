@@ -78,8 +78,9 @@
           product-information)))
 
 (defn parse-description [description-frame-html]
-  (let [soup (Jsoup/parse description-frame-html)]
-    (->> (.select soup "#iframeContent") (.text))))
+  (when (not-empty description-frame-html)
+    (let [soup (Jsoup/parse description-frame-html)]
+     (->> (.select soup "#iframeContent") (.text)))))
 
 (defn load-book [url]
   (let [url (if (str/includes? url "amazon.de")

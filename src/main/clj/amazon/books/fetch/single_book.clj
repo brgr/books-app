@@ -41,22 +41,30 @@
   (->> (map #(str/includes? s %) l)
        (some true?)))
 
-(defn go-to-single-book-site [driver single-book-url]
+(defn fetch-book-description [driver]
+  (wait-visible driver {:tag :iframe :id :bookDesc_iframe})
+  (with-frame driver {:id :bookDesc_iframe}
+              (get-source driver)))
+
+(defn fetch-single-book-site [driver single-book-url fetch-book-description?]
   (go driver single-book-url)
   (wait-visible driver {:tag :div :id :tmmSwatches})
   (when (not (str-contains-any? (current-format-selected driver) accepted-formats))
     (switch-book-format driver))
-  (wait-visible driver {:tag :iframe :id :bookDesc_iframe})
   (let [final-url (get-url driver)
         outer-frame-html (get-source driver)
-        description-frame-html (with-frame driver {:id :bookDesc_iframe}
-                                           (get-source driver))]
+        description-frame-html (when fetch-book-description? (fetch-book-description driver))]
     [outer-frame-html description-frame-html final-url]))
 
 (defn get-single-book-html [single-book-url headless?]
   (let [driver (firefox {:headless headless?})]
     (try
       (with-wait-timeout 30
-        (go-to-single-book-site driver single-book-url))
+        (fetch-single-book-site driver single-book-url true))
+      (catch Exception e
+        ; todo: move this exception handling further down!
+        (when (and (= (:type (ex-data e)) :etaoin/timeout)
+                   (str/includes? (:message (ex-data e)) ":bookDesc_iframe"))
+          (fetch-single-book-site driver single-book-url false)))
       (finally
         (quit driver)))))
