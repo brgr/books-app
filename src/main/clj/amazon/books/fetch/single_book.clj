@@ -41,19 +41,22 @@
   (->> (map #(str/includes? s %) l)
        (some true?)))
 
+(defn go-to-single-book-site [driver single-book-url]
+  (go driver single-book-url)
+  (wait-visible driver {:tag :div :id :tmmSwatches})
+  (when (not (str-contains-any? (current-format-selected driver) accepted-formats))
+    (switch-book-format driver))
+  (wait-visible driver {:tag :iframe :id :bookDesc_iframe})
+  (let [final-url (get-url driver)
+        outer-frame-html (get-source driver)
+        description-frame-html (with-frame driver {:id :bookDesc_iframe}
+                                           (get-source driver))]
+    [outer-frame-html description-frame-html final-url]))
+
 (defn get-single-book-html [single-book-url headless?]
   (let [driver (firefox {:headless headless?})]
     (try
-      (go driver single-book-url)
-      (wait driver 1)
-      (when (not (str-contains-any? (current-format-selected driver) accepted-formats))
-        (switch-book-format driver))
-      ; This wait is needed for the iframe to appear always (otherwise it fails sometimes)
-      (wait driver 2)
-      (let [final-url (get-url driver)
-            outer-frame-html (get-source driver)
-            description-frame-html (with-frame driver {:id :bookDesc_iframe}
-                                               (get-source driver))]
-        [outer-frame-html description-frame-html final-url])
+      (with-wait-timeout 30
+        (go-to-single-book-site driver single-book-url))
       (finally
         (quit driver)))))
