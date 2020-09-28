@@ -42,16 +42,11 @@
   (if-let [book-image-front (not-empty (-> (.select soup "#ebooksImgBlkFront")
                                            (.attr "src")))]
     book-image-front
-    ; Fixme: This is just needed because currently Audible books are selected
-    ;  When Audible is selected, the front matter is not found. However, Audible books should not be selected in the
-    ;  first place!
-    (try (-> (.select soup "#imgBlkFront")
-             (.attr "data-a-dynamic-image")
-             (json/read-str)
-             (first)
-             (first))
-         (catch Exception e
-           nil))))
+    (-> (.select soup "#imgBlkFront")
+        (.attr "data-a-dynamic-image")
+        (json/read-str)
+        (first)
+        (first))))
 
 
 ; Fixme: Amazon does not always include the class .contributorNameID for authors, even though it writes "Autor" next to
@@ -78,13 +73,23 @@
           product-information)))
 
 (defn parse-description [description-frame-html]
-  (let [soup (Jsoup/parse description-frame-html)]
-    (->> (.select soup "#iframeContent") (.text))))
+  (when (not-empty description-frame-html)
+    (let [soup (Jsoup/parse description-frame-html)]
+      (->> (.select soup "#iframeContent") (.text)))))
+
+(defn remove-reference-param [original-url]
+  (->> (str/split original-url #"\&")
+       (filter #(not (str/starts-with? % "ref_")))
+       (str/join)))
+
+(defn adjust-url [original-url]
+  (let [url-without-reference-param (remove-reference-param original-url)]
+    (if (str/includes? url-without-reference-param "amazon.de")
+      url-without-reference-param
+      (str "https://amazon.de" url-without-reference-param))))
 
 (defn load-book [url]
-  (let [url (if (str/includes? url "amazon.de")
-              url
-              (str "https://amazon.de" url))
+  (let [url (adjust-url url)
         [outer-frame-html description-frame-html final-url] (single-book/get-single-book-html url true)]
     (into (parse-html outer-frame-html)
           {:books.book/description (parse-description description-frame-html)

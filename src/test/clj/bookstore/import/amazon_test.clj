@@ -80,5 +80,3 @@
                         :amazon-url              "https://www.amazon.de/Learning-Data-Statistics-Pelican-Books/dp/0241258766/ref=tmm_pap_title_0?_encoding=UTF8&coliid=I372TIWCEA46BO&colid=2Y2U31UCNA1ME&qid=&sr=",
                         :price                   ""})
          (import-wishlist "https://www.amazon.de/hz/wishlist/ls/2Y2U31UCNA1ME"))))
-
-(import-wishlist "https://www.amazon.de/hz/wishlist/ls/13XXXLP6RR1X9/")

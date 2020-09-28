@@ -63,7 +63,7 @@
                        :language                "Englisch"}
          book-03))))
 
-(deftest ^:amazon single-book-load-test
+(deftest ^:amazon load-book-test
   ; It seems that sometimes these tests fail. When I have found this to occur, it was when I accessed Amazon a lot
   ; automatically. It also seamed to me that Amazon would redirect me do its frontpage (amazon.de). Could it be that
   ; Amazon redirects there when it thinks that it is crawled?
@@ -76,8 +76,9 @@
                          :language                "Englisch",
                          :amazon-book-image-front "https://images-na.ssl-images-amazon.com/images/I/418HwSEi9DL._SY344_BO1,204,203,200_.jpg",
                          :book-length             "556 Seiten",
-                         :authors                 ["Louis Sass"]})
-        (load-book (:url single-book-html-01))))
+                         :authors                 ["Louis Sass"],
+                         :amazon-url              "https://www.amazon.de/dp/0198779291/?coliid=IVUEOO0EISPOI&colid=13XXXLP6RR1X9&psc=1&ref_=lv_ov_lig_dp_it"}
+           (load-book (:url single-book-html-01)))))
   (testing "book 02"
     (is (= #:books.book {:description             "\"Design is a way to engage with real content, real experience,\" writes celebrated essayist Michael Bierut in this follow-up to his best-selling Seventy-Nine Short Essays on Design (2007). In more than fifty smart and accessible short pieces from the past decade, Bierut engages with a fascinating and diverse array of subjects. Essays range across design history, practice, and process; urban design and architecture; design hoaxes; pop culture; Hydrox cookies, Peggy Noonan, baseball, The Sopranos; and an inside look at his experience creating the \"forward\" logo for Hillary Clinton's 2016 presidential campaign. Other writings celebrate such legendary figures as Jerry della Femina, Alan Fletcher, Charley Harper, and his own mentor, Massimo Vignelli. Bierut's longtime work in the trenches of graphic design informs everything he writes, lending depth, insight, and humor to this important and engrossing collection.",
                          :publisher               "PRINCETON ARCHITECTURAL PR; 01 Auflage (7. November 2017)",
@@ -87,19 +88,52 @@
                          :language                "Englisch",
                          :amazon-book-image-front "https://images-na.ssl-images-amazon.com/images/I/51rj-8gPSOL._SY344_BO1,204,203,200_.jpg",
                          :book-length             "240 Seiten",
-                         :authors                 ["Michael Bierut"]})
-        (load-book (:url single-book-html-02))))
+                         :authors                 ["Michael Bierut"],
+                         :amazon-url              "https://www.amazon.de/Now-You-Other-Essays-Design/dp/1616896248/ref=tmm_hrd_swatch_0?_encoding=UTF8&qid=1599046696&sr=8-34"}
+           (load-book (:url single-book-html-02)))))
   (testing "book 03"
-    (is (= #:books.book {:description             "A completely revised edition, offering new design recipes for interactive programs and support for images as plain values, testing, event-driven programming, and even distributed programming. This introduction to programming places computer science at the core of a liberal arts education. Unlike other introductory books, it focuses on the program design process, presenting program design guidelines that show the reader how to analyze a problem statement, how to formulate concise goals, how to make up examples, how to develop an outline of the solution, how to finish the program, and how to test it. Because learning to design programs is about the study of principles and the acquisition of transferable skills, the text does not use an off-the-shelf industrial language but presents a tailor-made teaching language. For the same reason, it offers DrRacket, a programming environment for novices that supports playful, feedback-oriented learning. The environment grows with readers as they master the material in the book until it supports a full-fledged language for the whole spectrum of programming tasks. This second edition has been completely revised. While the book continues to teach a systematic approach to program design, the second edition introduces different design recipes for interactive programs with graphical interfaces and batch programs. It also enriches its design recipes for functions with numerous new hints. Finally, the teaching languages and their IDE now come with support for images as plain values, testing, event-driven programming, and even distributed programming.",
-                         :publisher               "The MIT Press; second edition Auflage (4. Mai 2018)",
-                         :isbn-13                 "978-0262534802",
-                         :title                   "How to Design Programs, second edition: An Introduction to Programming and Computing (Mit Press) (Englisch) Taschenbuch – 4. Mai 2018",
-                         :isbn-10                 "0262534800",
-                         :language                "Englisch",
-                         :amazon-book-image-front "https://images-na.ssl-images-amazon.com/images/I/515CMMS6DML._SX258_BO1,204,203,200_.jpg",
-                         :book-length             "792 Seiten",
-                         :authors                 ["Matthias Felleisen" "Matthew Flatt" "Shriram Krishnamurthi"]}
-           (load-book (:url single-book-html-03))))))
-
-; fixme: these books: (try it to see what is wrong)
-; - https://www.amazon.de/dp/0008293929/?coliid=I25Q7NKHJXZ480&colid=13XXXLP6RR1X9&psc=1&ref_=lv_ov_lig_dp_it
+    (is (= #:books.book{:description             "A completely revised edition, offering new design recipes for interactive programs and support for images as plain values, testing, event-driven programming, and even distributed programming. This introduction to programming places computer science at the core of a liberal arts education. Unlike other introductory books, it focuses on the program design process, presenting program design guidelines that show the reader how to analyze a problem statement, how to formulate concise goals, how to make up examples, how to develop an outline of the solution, how to finish the program, and how to test it. Because learning to design programs is about the study of principles and the acquisition of transferable skills, the text does not use an off-the-shelf industrial language but presents a tailor-made teaching language. For the same reason, it offers DrRacket, a programming environment for novices that supports playful, feedback-oriented learning. The environment grows with readers as they master the material in the book until it supports a full-fledged language for the whole spectrum of programming tasks. This second edition has been completely revised. While the book continues to teach a systematic approach to program design, the second edition introduces different design recipes for interactive programs with graphical interfaces and batch programs. It also enriches its design recipes for functions with numerous new hints. Finally, the teaching languages and their IDE now come with support for images as plain values, testing, event-driven programming, and even distributed programming.",
+                        :publisher               "The MIT Press; second edition Auflage (4. Mai 2018)",
+                        :isbn-13                 "978-0262534802",
+                        :title                   "How to Design Programs, second edition: An Introduction to Programming and Computing (Mit Press) (Englisch) Taschenbuch – 4. Mai 2018",
+                        :isbn-10                 "0262534800",
+                        :language                "Englisch",
+                        :amazon-book-image-front "https://images-na.ssl-images-amazon.com/images/I/51mV-w-Xa+L._SX258_BO1,204,203,200_.jpg",
+                        :book-length             "792 Seiten",
+                        :authors                 ["Matthias Felleisen" "Matthew Flatt" "Shriram Krishnamurthi"],
+                        :amazon-url              "https://www.amazon.de/dp/0262534800/?coliid=I1NB2M0WEXUPTC&colid=13XXXLP6RR1X9&psc=1&ref_=lv_ov_lig_dp_it"}
+           (load-book (:url single-book-html-03)))))
+  (testing "book 04"
+    (is (= #:books.book{:description             "A Stylist Best Book of 2020 You're free to decide your future. But how do you escape the ghosts of the past? A stunning debut novel with echoes of Yaa Gyasi's Homegoing and Sara Collins' The Confessions of Frannie Langton The pale-skinned, black-eyed baby is a bad omen. That's one thing the people on the old plantation are sure of. The other is that Miss Rue - midwife, healer, crafter of curses - will know what to do. But for once Rue doesn't know. Times have changed since her mother Miss May Belle held the power to influence the life and death of her fellow slaves. Freedom has come. The master's Big House lies in ruins. But this new world brings new dangers, and Rue's old magic may be no match for them. When sickness sweeps across her tight-knit community, Rue finds herself the focus of suspicion. What secrets does she keep amidst the charred remains of the Big House? Which spells has she conjured to threaten their children? And why is she so wary of the charismatic preacher man who promises to save them all? Rue understands fear. It has shaped her life and her mother's before her. And now she knows she must face her fears - and her ghosts - to find a new way forward for herself and her people. Conjure Women is a story of the lengths we'll go to save the ones we love, from a stunning new voice in fiction.",
+                        :publisher               "Harper Collins Publ. UK (7. April 2020)",
+                        :isbn-13                 "978-0008293925",
+                        :title                   "Conjure Women (Englisch) Taschenbuch – 7. April 2020",
+                        :isbn-10                 "0008293929",
+                        :language                "Englisch",
+                        :amazon-book-image-front "https://images-na.ssl-images-amazon.com/images/I/511r0jhgmQL._SX308_BO1,204,203,200_.jpg",
+                        :book-length             "395 Seiten",
+                        :authors                 ["Afia Atakora"],
+                        :amazon-url              "https://www.amazon.de/dp/0008293929/?coliid=I25Q7NKHJXZ480&colid=13XXXLP6RR1X9&psc=1&ref_=lv_ov_lig_dp_it"}
+           (load-book "https://www.amazon.de/dp/0008293929/?coliid=I25Q7NKHJXZ480&colid=13XXXLP6RR1X9&psc=1&ref_=lv_ov_lig_dp_it"))))
+  (testing "book 05 - a book that has no description"
+    (is (= #:books.book {:title                   "The Once and Future World: Nature As It Was, As It Is, As It Could Be (Englisch) Taschenbuch",
+                        :authors                 [],
+                        :amazon-book-image-front "https://images-na.ssl-images-amazon.com/images/I/5170mXyy9OL._SY344_BO1,204,203,200_.jpg",
+                        :isbn-10                 "0307362191",
+                        :isbn-13                 "978-0307362193",
+                        :language                "Englisch",
+                        :description             nil,
+                        :amazon-url              "https://www.amazon.de/dp/0307362191/?coliid=I2T15BNV78EMBH&colid=13XXXLP6RR1X9&psc=1&ref_=lv_vv_lig_dp_it"}
+           (load-book "/dp/0307362191/?coliid=I2T15BNV78EMBH&colid=13XXXLP6RR1X9&psc=1&ref_=lv_vv_lig_dp_it"))))
+  (testing "book 06 - another book with no description"
+    (is (= #:books.book {:description nil,
+                        :publisher "Paulsen, Essen (1. Oktober 1997)",
+                        :isbn-13 "978-8845210662",
+                        :title "Il Noma Della Rosa (Italienisch) Taschenbuch – 1. Oktober 1997",
+                        :isbn-10 "8845210669",
+                        :language "Italienisch",
+                        :amazon-book-image-front "https://images-na.ssl-images-amazon.com/images/I/41u1j5X8hAL._BO1,204,203,200_.jpg",
+                        :book-length "442 Seiten",
+                        :authors ["Umberto Eco"],
+                        :amazon-url "https://www.amazon.de/dp/8845210669/?coliid=INFBXOH0IOALY&colid=13XXXLP6RR1X9&psc=0&ref_=lv_vv_lig_dp_it"}
+           (load-book "/dp/8845210669/?coliid=INFBXOH0IOALY&colid=13XXXLP6RR1X9&psc=0&ref_=lv_vv_lig_dp_it")))))
