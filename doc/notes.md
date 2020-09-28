@@ -54,7 +54,7 @@ This helped me solve it: https://stackoverflow.com/questions/52745107/how-do-i-a
 
 ## Environments
 
-I am using `environ` [5] for putting environment-specific variables like e.g. the database URL etc. It is from the
+I am using `environ` [[5]] for putting environment-specific variables like e.g. the database URL etc. It is from the
 same creator(s) as leiningen. Also not the last part on the README from the project: It also takes into account
 environment variables, which is important on docker e.g., as I am creating an uberwar on there and this needs to
 have an environment variable set to recognize the env variables. This is why I have put that into the docker-compose
@@ -87,10 +87,13 @@ I push to until I am happy with the result of the action.
 Using Github Actions that are not directly from Github is not really safe! For a 
 discussion on this, see [here][2].
 
-### Some small notes
+### Some small notes on Github Actions
 
 - Breaking bash commands into multiple lines is not allowed:
   https://stackoverflow.com/questions/59954185/github-action-split-long-command-into-multiple-lines
+  
+## Quick Notes 
+
 - For unit testing network stuff etc.: [mockery][6]
 - Seems to be similar to `testcontainers`: [docker-fixture][7]
 - Interesting discussion: [What technical details should a programmer of a web application consider before making the site public?][8]
