@@ -5,8 +5,7 @@
 ; https://github.com/mozilla/geckodriver
 
 (defn- more-books-available? [driver]
-  (-> (get-element-inner-html driver {:id :wishlist-page})
-      (.contains "wl-see-more")))
+  (not (empty? (query-all driver {:tag :div :fn/has-class :wl-see-more}))))
 
 (defn- load-all-books [driver]
   (while (more-books-available? driver)
