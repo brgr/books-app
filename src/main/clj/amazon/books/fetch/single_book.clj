@@ -1,6 +1,7 @@
 (ns amazon.books.fetch.single-book
   (:require [clojure.string :as str]
-            [etaoin.api :refer :all]))
+            [etaoin.api :refer :all]
+            [amazon.books.fetch.scraping.driver :refer [get-driver]]))
 
 (def accepted-formats ["Broschiert" "Taschenbuch" "Gebundenes Buch"])
 
@@ -20,8 +21,6 @@
                             (recur (rest books-to-try)))))]
     (click driver [{:id :twister}
                    {:tag :span :fn/text physical-book}])))
-
-
 
 (defn- switch-book-format [driver]
   (when (visible? driver {:id :showMoreFormatsPrompt})
@@ -59,7 +58,7 @@
     [outer-frame-html description-frame-html final-url]))
 
 (defn get-single-book-html [single-book-url headless?]
-  (let [driver (firefox {:headless headless?})]
+  (let [driver (get-driver headless?)]
     (try
       (with-wait-timeout 30
         (fetch-single-book-site driver single-book-url true))

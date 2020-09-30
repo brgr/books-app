@@ -1,6 +1,8 @@
 (ns amazon.books.fetch.wishlist
-  (:require [etaoin.api :refer :all]))
+  (:require [etaoin.api :refer :all]
+            [amazon.books.fetch.scraping.driver :refer [get-driver]]))
 
+; fixme: move this comment, together with a general explanation for  the driver to some Markdown file
 ; Remember to install Geckodriver on the machine that this is run on!
 ; https://github.com/mozilla/geckodriver
 
@@ -21,7 +23,7 @@
   (get-source driver))
 
 (defn get-wishlist-html [wishlist-url headless?]
-  (let [driver (firefox {:headless headless?})]
+  (let [driver (get-driver headless?)]
     (try
       (get-source-of-whole-wishlist driver wishlist-url)
       (finally
