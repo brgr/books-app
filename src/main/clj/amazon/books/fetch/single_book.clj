@@ -33,13 +33,15 @@
       (select-physical-book driver))))
 
 (defn current-format-selected [driver]
-  (get-element-text driver [{:id :tmmSwatches}
-                            ; The following is a workaround, because otherwise "unselected" would be found as well
-                            "//li[contains(concat(' ',normalize-space(@class),' '),' selected ')]"]))
+  (try (get-element-text driver [{:id :tmmSwatches}
+                                 ; The following is a workaround, because otherwise "unselected" would be found as well
+                                 "//li[contains(concat(' ',normalize-space(@class),' '),' selected ')]"])
+       (catch Exception _
+         nil)))
 
 (defn str-contains-any? [s l]
-  (->> (map #(str/includes? s %) l)
-       (some true?)))
+  (and s (->> (map #(str/includes? s %) l)
+              (some true?))))
 
 (defn fetch-book-description [driver]
   (wait-visible driver {:tag :iframe :id :bookDesc_iframe})
