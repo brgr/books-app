@@ -43,9 +43,12 @@
               (some true?))))
 
 (defn fetch-book-description [driver]
-  (wait-visible driver {:tag :iframe :id :bookDesc_iframe})
-  (with-frame driver {:id :bookDesc_iframe}
-              (get-source driver)))
+  (try (do
+         (wait-visible driver {:tag :iframe :id :bookDesc_iframe})
+         (with-frame driver {:id :bookDesc_iframe}
+                     (get-source driver)))
+       (catch Exception _                                   ; when there is no book description it throws a timeout
+         nil)))
 
 (defn fetch-single-book-site [driver single-book-url fetch-book-description?]
   (go driver single-book-url)
@@ -62,10 +65,5 @@
     (try
       (with-wait-timeout 30
         (fetch-single-book-site driver single-book-url true))
-      (catch Exception e
-        ; todo: move this exception handling further down!
-        (when (and (= (:type (ex-data e)) :etaoin/timeout)
-                   (str/includes? (:message (ex-data e)) ":bookDesc_iframe"))
-          (fetch-single-book-site driver single-book-url false)))
       (finally
         (quit driver)))))
