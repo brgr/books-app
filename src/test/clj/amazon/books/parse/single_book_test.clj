@@ -126,14 +126,29 @@
                          :amazon-url              "https://www.amazon.de/dp/0307362191/?coliid=I2T15BNV78EMBH&colid=13XXXLP6RR1X9&psc=1"}
            (load-book "/dp/0307362191/?coliid=I2T15BNV78EMBH&colid=13XXXLP6RR1X9&psc=1&ref_=lv_vv_lig_dp_it"))))
   (testing "book 06 - another book with no description"
-    (is (= #:books.book {:description nil,
-                        :publisher "Paulsen, Essen (1. Oktober 1997)",
-                        :isbn-13 "978-8845210662",
-                        :title "Il Noma Della Rosa (Italienisch) Taschenbuch – 1. Oktober 1997",
-                        :isbn-10 "8845210669",
-                        :language "Italienisch",
-                        :amazon-book-image-front "https://images-na.ssl-images-amazon.com/images/I/41u1j5X8hAL._BO1,204,203,200_.jpg",
-                        :book-length "442 Seiten",
-                        :authors ["Umberto Eco"],
-                        :amazon-url "https://www.amazon.de/dp/8845210669/?coliid=INFBXOH0IOALY&colid=13XXXLP6RR1X9&psc=0&ref_=lv_vv_lig_dp_it"}
-           (load-book "/dp/8845210669/?coliid=INFBXOH0IOALY&colid=13XXXLP6RR1X9&psc=0&ref_=lv_vv_lig_dp_it")))))
+    (is (= #:books.book {:description             nil,
+                         :publisher               "Paulsen, Essen (1. Oktober 1997)",
+                         :isbn-13                 "978-8845210662",
+                         :title                   "Il Noma Della Rosa (Italienisch) Taschenbuch – 1. Oktober 1997",
+                         :isbn-10                 "8845210669",
+                         :language                "Italienisch",
+                         :amazon-book-image-front "https://images-na.ssl-images-amazon.com/images/I/41u1j5X8hAL._BO1,204,203,200_.jpg",
+                         :book-length             "442 Seiten",
+                         :authors                 ["Umberto Eco"],
+                         :amazon-url              "https://www.amazon.de/dp/8845210669/?coliid=INFBXOH0IOALY&colid=13XXXLP6RR1X9&psc=0"}
+           (load-book "/dp/8845210669/?coliid=INFBXOH0IOALY&colid=13XXXLP6RR1X9&psc=0&ref_=lv_vv_lig_dp_it"))))
+  (testing "book 07 - a book that has no format selected"
+    (is (= #:books.book {:description             "Complete and unabridged paperback edition.",
+                         :publisher               "Independently published (5. November 2018)",
+                         :isbn-13                 "978-1730905902",
+                         :title                   "Frankenstein (Englisch) Taschenbuch – 5. November 2018",
+                         :isbn-10                 "1730905900",
+                         :language                "Englisch",
+                         :amazon-book-image-front "https://images-na.ssl-images-amazon.com/images/I/41JZ2Rw4CKL._SX348_BO1,204,203,200_.jpg",
+                         :book-length             "102 Seiten",
+                         :authors                 ["Mary Shelley"],
+                         :amazon-url              "https://www.amazon.de/dp/1730905900/?coliid=I18J5Z4ZYH4THM&colid=13XXXLP6RR1X9&psc=0"}
+           (load-book "https://www.amazon.de/dp/1730905900/?coliid=I18J5Z4ZYH4THM&colid=13XXXLP6RR1X9&psc=0"))))
+  (testing "book 08 - a book that just shows the standard amazon header & footer, but no actual book"
+    (is (= nil
+           (load-book "https://www.amazon.de/dp/0141198893/")))))
