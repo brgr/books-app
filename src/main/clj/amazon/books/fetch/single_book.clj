@@ -32,15 +32,17 @@
       (select-physical-book driver))))
 
 (defn current-format-selected [driver]
-  (try (get-element-text driver [{:id :tmmSwatches}
-                                 ; The following is a workaround, because otherwise "unselected" would be found as well
-                                 "//li[contains(concat(' ',normalize-space(@class),' '),' selected ')]"])
-       (catch Exception _
-         nil)))
+  (try
+    (wait-visible driver {:tag :div :id :tmmSwatches})
+    (get-element-text driver [{:id :tmmSwatches}
+                              ; The following is a workaround, because otherwise "unselected" would be found as well
+                              "//li[contains(concat(' ',normalize-space(@class),' '),' selected ')]"])
+    (catch Exception _
+      nil)))
 
 (defn str-contains-any? [s l]
-  (and s (->> (map #(str/includes? s %) l)
-              (some true?))))
+  (->> (map #(str/includes? s %) l)
+       (some true?)))
 
 (defn fetch-book-description [driver]
   (try (do
@@ -50,15 +52,22 @@
        (catch Exception _                                   ; when there is no book description it throws a timeout
          nil)))
 
+(defn switch-book-format-if-needed [driver]
+  (let [selected-format (current-format-selected driver)]
+    (when (and (not-empty selected-format)
+               (not (str-contains-any? selected-format accepted-formats)))
+      (switch-book-format driver))))
+
 (defn fetch-single-book-site [driver single-book-url fetch-book-description?]
   (go driver single-book-url)
-  (wait-visible driver {:tag :div :id :tmmSwatches})
-  (when (not (str-contains-any? (current-format-selected driver) accepted-formats))
-    (switch-book-format driver))
-  (let [final-url (get-url driver)
-        outer-frame-html (get-source driver)
-        description-frame-html (when fetch-book-description? (fetch-book-description driver))]
-    [outer-frame-html description-frame-html final-url]))
+  (if (visible? driver {:tag :div :id :dp-container})
+    (let [final-url (get-url driver)
+          outer-frame-html (get-source driver)
+          description-frame-html (when fetch-book-description? (fetch-book-description driver))]
+      {:outer-frame-html outer-frame-html
+       :description-frame-html description-frame-html
+       :final-url final-url})
+    nil))
 
 (defn get-single-book-html [single-book-url headless?]
   (let [driver (get-driver headless?)]
