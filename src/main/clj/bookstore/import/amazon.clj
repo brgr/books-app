@@ -30,18 +30,19 @@
         book)
       book)))
 
-
 (defn fully-load-books [wishlist-books]
   (loop [books-to-load wishlist-books
-         loaded-books []
+         {:keys [successful faulty]} {:successful [], :faulty []}
          retry-count 0]
     (let [map-fn (if (< retry-count 3) pmap map)
           grouped-books (->> (map-fn load-full-book books-to-load)
                              (group-by :status))]
       (if (or (>= retry-count 5) (empty? (:to-retry grouped-books)))
-        (conj loaded-books (get grouped-books nil))
+        {:successful (apply conj successful (get grouped-books nil))
+         :faulty     (apply conj (:to-retry grouped-books) (apply conj faulty (:error grouped-books)))}
         (recur (:to-retry grouped-books)
-               (conj loaded-books (get grouped-books nil))
+               {:successful (apply conj successful (get grouped-books nil))
+                :faulty (apply conj faulty (:error grouped-books))}
                (+ retry-count 1))))))
 
 (defn import-wishlist [wishlist-url]
