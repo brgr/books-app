@@ -90,7 +90,6 @@
 
 (defn load-book [url]
   (let [url (adjust-url url)
-        ;[outer-frame-html description-frame-html final-url]
         book-data (single-book/get-single-book-html url true)]
     (when (not-empty book-data)
       (into (parse-html (:outer-frame-html book-data))
