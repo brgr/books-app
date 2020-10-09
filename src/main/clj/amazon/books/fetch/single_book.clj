@@ -60,6 +60,7 @@
 
 (defn fetch-single-book-site [driver single-book-url fetch-book-description?]
   (go driver single-book-url)
+  (switch-book-format-if-needed driver)
   (if (visible? driver {:tag :div :id :dp-container})
     (let [final-url (get-url driver)
           outer-frame-html (get-source driver)
