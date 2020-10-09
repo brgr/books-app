@@ -3,7 +3,7 @@
             [etaoin.api :refer :all]
             [amazon.books.fetch.scraping.driver :refer [get-driver]]))
 
-(def accepted-formats ["Broschiert" "Taschenbuch" "Gebundenes Buch"])
+(def accepted-formats ["Broschiert" "Taschenbuch" "Gebundenes Buch" "Paperback" "Hardcover"])
 
 (defn- scroll-to-when-exists [driver book-to-select]
   (try (scroll-query driver [{:id :twister}
