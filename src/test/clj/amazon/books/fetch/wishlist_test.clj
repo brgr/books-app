@@ -7,7 +7,7 @@
 (def test-wishlist-url "https://www.amazon.de/hz/wishlist/ls/2Y2U31UCNA1ME")
 
 (deftest ^:amazon can-access-amazon-wishlist?
-  (is (as-> (amazon/get-wishlist-html test-wishlist-url true) html
+  (is (as-> (amazon/get-wishlist-html test-wishlist-url) html
          (and
            (str/includes? html "Coders: The Making of a New Tribe and the Remaking of the World (English Edition)")
            (str/includes? html "Now You See It and Other Essays on Design (English Edition)")

@@ -70,8 +70,8 @@
        :final-url final-url})
     nil))
 
-(defn get-single-book-html [single-book-url headless?]
-  (let [driver (get-driver headless?)]
+(defn get-single-book-html [single-book-url]
+  (let [driver (get-driver)]
     (try
       (with-wait-timeout 30
         (fetch-single-book-site driver single-book-url true))

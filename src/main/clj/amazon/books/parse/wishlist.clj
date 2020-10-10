@@ -51,5 +51,5 @@
     (mapv book-data wishlist-items)))
 
 (defn load-books-from-amazon-wishlist-url [url]
-  (let [html (wishlist/get-wishlist-html url true)]
+  (let [html (wishlist/get-wishlist-html url)]
     (load-books-from-amazon-wishlist-html html)))

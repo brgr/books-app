@@ -6,5 +6,5 @@
 
 (deftest go-to-single-book-test
   (testing "change book format to something that is not Kindle"
-    (let [[_ _ final-url] (get-single-book-html kindle-url true)]
+    (let [[_ _ final-url] (get-single-book-html kindle-url)]
       (is (not= kindle-url final-url)))))

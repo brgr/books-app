@@ -22,12 +22,12 @@
         (filter #(complement (str/includes? % preference)) $)
         (clojure.string/join $)))
 
-(defn get-driver [headless?]
+(defn get-driver []
   (->> (slurp prefs-file-template)
        (spit profile-prefs-file))
   (remove-preference "useragent")
   (add-preference "general.useragent.override" (rand-nth user-agents))
-  (firefox {:headless     headless?
+  (firefox {:headless     (= "true" (env :headless-scraping))
             :size         [1400 920]
             ; Note that we use another browser here (not the main installation of firefox)
             ; This other Firefox installation has the "useragent-switcher" profile set per default, which is then

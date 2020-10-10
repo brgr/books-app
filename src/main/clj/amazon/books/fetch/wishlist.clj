@@ -22,8 +22,8 @@
   ; get-source needs to be outside of (doto ...), otherwise it is not returned
   (get-source driver))
 
-(defn get-wishlist-html [wishlist-url headless?]
-  (let [driver (get-driver headless?)]
+(defn get-wishlist-html [wishlist-url]
+  (let [driver (get-driver)]
     (try
       (get-source-of-whole-wishlist driver wishlist-url)
       (finally
