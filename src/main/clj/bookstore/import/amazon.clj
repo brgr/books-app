@@ -31,24 +31,25 @@
       book)))
 
 (defn fully-load-books [wishlist-books]
-  (loop [books-to-load wishlist-books
-         {:keys [successful faulty]} {:successful [], :faulty []}
-         retry-count 0]
-    (let [map-fn (if (< retry-count 3) pmap map)
-          grouped-books (->> (map-fn load-full-book books-to-load)
-                             (group-by :status))]
-      (if (or (>= retry-count 5) (empty? (:to-retry grouped-books)))
-        {:successful (apply conj successful (get grouped-books nil))
-         :faulty     (apply conj (:to-retry grouped-books) (apply conj faulty (:error grouped-books)))}
-        (recur (:to-retry grouped-books)
-               {:successful (apply conj successful (get grouped-books nil))
-                :faulty (apply conj faulty (:error grouped-books))}
-               (+ retry-count 1))))))
+  (let [loaded-books (loop [books-to-load wishlist-books
+                            {:keys [successful faulty]} {:successful [], :faulty []}
+                            retry-count 0]
+                       (let [map-fn (if (< retry-count 3) pmap map)
+                             grouped-books (->> (map-fn load-full-book books-to-load)
+                                                (group-by :status))]
+                         (if (or (>= retry-count 5) (empty? (:to-retry grouped-books)))
+                           {:successful (apply conj successful (get grouped-books nil))
+                            :faulty     (apply conj (:to-retry grouped-books) (apply conj faulty (:error grouped-books)))}
+                           (do
+                             (Thread/sleep (+ 10000 (rand 10000)))
+                             (recur (:to-retry grouped-books)
+                                    {:successful (apply conj successful (get grouped-books nil))
+                                     :faulty     (apply conj faulty (:error grouped-books))}
+                                    (+ retry-count 1))))))]
+    (reset! books-loaded 0)
+    loaded-books))
 
 (defn import-wishlist [wishlist-url]
-  "Imports into the database the whole wishlist, including the wishlist URL itself, all the book data of the wishlist
-  (sourced from their respective Amazon site), as well as all the front matters of the respective books."
   (let [wishlist-books (load-books-from-amazon-wishlist-url wishlist-url)
         fully-loaded-books (fully-load-books wishlist-books)]
-    (reset! books-loaded 0)
     fully-loaded-books))
