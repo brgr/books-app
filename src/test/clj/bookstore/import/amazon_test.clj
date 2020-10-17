@@ -80,3 +80,16 @@
                         :amazon-url              "https://www.amazon.de/Learning-Data-Statistics-Pelican-Books/dp/0241258766/ref=tmm_pap_title_0?_encoding=UTF8&coliid=I372TIWCEA46BO&colid=2Y2U31UCNA1ME&qid=&sr=",
                         :price                   ""})
          (import-wishlist "https://www.amazon.de/hz/wishlist/ls/2Y2U31UCNA1ME"))))
+
+(comment
+  ; This is the big wishlist. It should have at least 513 elements.
+  (def elements-of-big-wishlist
+    (load-books-from-amazon-wishlist-url "https://www.amazon.de/hz/wishlist/ls/13XXXLP6RR1X9"))
+
+  ; In the following, we only load a few of the books
+  (def loaded-books
+    (fully-load-books (take 200 elements-of-big-wishlist)))
+
+
+  (-> loaded-books :successful count)
+  (-> loaded-books :faulty count))
