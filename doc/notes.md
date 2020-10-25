@@ -102,6 +102,8 @@ discussion on this, see [here][2].
   - maybe use rsync, see [[10]]
 - For web scraping:
   - I think these articles are for higher scale, but they definitely contain some useful information [[11]][[12]]
+- I should have a better look at reframe [[13]] and best practices for it.
+  - In general, there are some things that are implemented in its example app, TodoMVC [[14]], that I could use.
 
 [1]: https://unix.stackexchange.com/questions/90853/how-can-i-run-ssh-add-automatically-without-a-password-prompt
 [2]: https://stackoverflow.com/questions/57916983/github-actions-are-there-security-concerns-using-an-external-action-in-a-workfl
@@ -115,3 +117,5 @@ discussion on this, see [here][2].
 [10]: https://css-tricks.com/continuous-deployments-for-wordpress-using-github-actions/
 [11]: https://dev.to/iankerins/how-to-scrape-amazon-at-scale-with-python-scrapy-and-never-get-banned-44cm
 [12]: https://blog.hartleybrody.com/scrape-amazon/
+[13]: https://github.com/day8/re-frame
+[14]: https://github.com/day8/re-frame/tree/master/examples/todomvc
