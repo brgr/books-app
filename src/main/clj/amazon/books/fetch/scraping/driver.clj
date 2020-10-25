@@ -9,6 +9,7 @@
                      (str/split #"\n")))
 
 (def prefs-file-template (env :firefox-profile-prefs-template-file))
+; fixme: make this more dynamic, see issue #6
 (def profile-prefs-file (str (env :firefox-profile-directory) "prefs.js"))
 
 (defn add-preference [preference value]
