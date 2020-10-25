@@ -1,12 +1,9 @@
 (ns amazon.books.fetch.wishlist
-  (:require [etaoin.api :refer :all]))
-
-; Remember to install Geckodriver on the machine that this is run on!
-; https://github.com/mozilla/geckodriver
+  (:require [etaoin.api :refer :all]
+            [amazon.books.fetch.scraping.driver :refer [get-driver]]))
 
 (defn- more-books-available? [driver]
-  (-> (get-element-inner-html driver {:id :wishlist-page})
-      (.contains "wl-see-more")))
+  (not (empty? (query-all driver {:tag :div :fn/has-class :wl-see-more}))))
 
 (defn- load-all-books [driver]
   (while (more-books-available? driver)
@@ -21,8 +18,8 @@
   ; get-source needs to be outside of (doto ...), otherwise it is not returned
   (get-source driver))
 
-(defn get-wishlist-html [wishlist-url headless?]
-  (let [driver (firefox {:headless headless?})]
+(defn get-wishlist-html [wishlist-url]
+  (let [driver (get-driver)]
     (try
       (get-source-of-whole-wishlist driver wishlist-url)
       (finally

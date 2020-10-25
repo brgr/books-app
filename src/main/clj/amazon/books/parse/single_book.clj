@@ -80,7 +80,7 @@
 (defn remove-reference-param [original-url]
   (->> (str/split original-url #"\&")
        (filter #(not (str/starts-with? % "ref_")))
-       (str/join)))
+       (str/join "&")))
 
 (defn adjust-url [original-url]
   (let [url-without-reference-param (remove-reference-param original-url)]
@@ -90,7 +90,8 @@
 
 (defn load-book [url]
   (let [url (adjust-url url)
-        [outer-frame-html description-frame-html final-url] (single-book/get-single-book-html url true)]
-    (into (parse-html outer-frame-html)
-          {:books.book/description (parse-description description-frame-html)
-           :books.book/amazon-url final-url})))
+        book-data (single-book/get-single-book-html url)]
+    (when (not-empty book-data)
+      (into (parse-html (:outer-frame-html book-data))
+            {:books.book/description (parse-description (:description-frame-html book-data))
+             :books.book/amazon-url  (:final-url book-data)}))))
