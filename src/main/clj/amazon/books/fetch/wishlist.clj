@@ -2,10 +2,6 @@
   (:require [etaoin.api :refer :all]
             [amazon.books.fetch.scraping.driver :refer [get-driver]]))
 
-; fixme: move this comment, together with a general explanation for  the driver to some Markdown file
-; Remember to install Geckodriver on the machine that this is run on!
-; https://github.com/mozilla/geckodriver
-
 (defn- more-books-available? [driver]
   (not (empty? (query-all driver {:tag :div :fn/has-class :wl-see-more}))))
 

@@ -3,7 +3,7 @@
         :thumbnails-dir   "src/main/resources/public/img/thumbnails/"
         :front-matter-dir "src/main/resources/public/img/front_matter/"
 
-        :headless-scraping "false"
+        :headless-scraping "true"
 
         :user-agents-file "src/main/resources/useragents.txt"
         ; the following need to be set up like this on the machine the code is running on

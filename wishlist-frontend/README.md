@@ -29,10 +29,11 @@ Generally, watch in the Makefile for how to start the frontend, backend etc.
 
 ## Notes
 
-- I should have a better look at reframe [[3]] and best practices for it.
-  - In general, there are some things that are implemented in its example app, TodoMVC [[4]], that I could use.
+- For the scraping to work, Firefox and geckodriver [[3]] need to be installed
+  Furthermore, firefox needs to be linked as `firefox-gecko` (see `profiles.clj`, where it can be also changed to just
+  `firefox`). This is because if Firefox is the main browser that is used on the system that this is run on, it would
+  not work well, because the settings of firefox are changed every run to change the user agent.
 
 [1]: https://github.com/metosin/reitit
 [2]: https://github.com/metosin/reitit/blob/master/examples/frontend-re-frame/src/cljs/frontend_re_frame/core.cljs
-[3]: https://github.com/day8/re-frame
-[4]: https://github.com/day8/re-frame/tree/master/examples/todomvc
+[3]: https://github.com/mozilla/geckodriver
