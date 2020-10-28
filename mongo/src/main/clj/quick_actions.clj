@@ -14,7 +14,7 @@
 (comment
 
   (def faulty-books
-    (read-string (slurp "mongo/resources/books_from_wishlist_faulty.clj")))
+    (read-string (slurp "mongo/src/main/resources/books_from_wishlist_faulty.clj")))
 
   (count faulty-books)
   (def books-to-retry
@@ -51,12 +51,18 @@
          (map #(subs % (+ 1 (clojure.string/last-index-of % "/"))))
          set))
 
-  (map #(clojure.java.io/copy %1 %2)
-    (->> images-from-loaded-books
-         (map #(clojure.java.io/file (str "src/main/resources/public/img/front_matter/" %))))
-    (->> images-from-loaded-books
-         (map #(clojure.java.io/file (str "mongo/src/main/resources/front_matters/" %)))))
-  ; todo: they are added now - use Git LFS to add them to git
+  (defn copy-images-to-resources-dir []
+    (map #(clojure.java.io/copy %1 %2)
+         (->> images-from-loaded-books
+              (map #(clojure.java.io/file (str "src/main/resources/public/img/front_matter/" %))))
+         (->> images-from-loaded-books
+              (map #(clojure.java.io/file (str "mongo/src/main/resources/front_matters/" %))))))
+
+  ; remove all copied images
+  (->> images-from-loaded-books
+       (map #(str "src/main/resources/public/img/front_matter/" %))
+       (map clojure.java.io/file)
+       (map clojure.java.io/delete-file))
 
   (def all-loaded-images
     (->> (file-seq (clojure.java.io/file "src/main/resources/public/img/front_matter"))
@@ -64,6 +70,16 @@
          (map str)
          (map #(subs % (+ 1 (clojure.string/last-index-of % "/"))))
          set))
+  (count all-loaded-images)
+
+  (def fine-but-faulty-book-front-matters
+    (->> faulty-books-that-actually-worked
+         (map :books.book/amazon-book-image-front)
+         set
+         count))
+
+  (->> (clojure.set/difference fine-but-faulty-book-front-matters all-loaded-images)
+       count)
 
   (->> (clojure.set/difference all-loaded-images images-from-loaded-books)
        count)
