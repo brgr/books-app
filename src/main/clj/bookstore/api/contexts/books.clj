@@ -24,7 +24,8 @@
       ; fixme: handle case where there is no image! (what is happening now, in that case?)
       (when-let [image-url (:amazon-book-image-front (bookstore.db.model/get-book-by-id book-id))]
         (-> (get-file-name image-url)
-            (file-response {:root (:front-matter-dir env)})
+            (file-response {:root (:front-matter-dir env)
+                            :allow-symlinks? true})
             (header "Content-Type" "image/jpg"))))
 
     (POST "/book" []
