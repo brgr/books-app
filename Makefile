@@ -10,9 +10,16 @@ frontend:
 start-backend: docker/down uberwar docker/rebuild
 	docker-compose -f $(docker-compose-file) up -d
 
-dev/backend: docker/database ring-server
+dev/setup-images:
+	mkdir -p public/img/thumbnails || true
+	mkdir -p public/img/front_matters || true
+	ln -srf mongo/src/main/resources/front_matters/*.jpg public/img/front_matters/
+
+dev/backend: docker/database dev/setup-images ring-server
 
 # Runs a local server on port 3000
+# This has the advantage of updating changes made to it in real-time, while Docker would need to be restarted all the
+# time.
 ring-server:
 	lein ring server
 
