@@ -1,7 +1,9 @@
+# Vendored files and directories are excluded from language statistics.
+#
 # For more information, see:
 # https://github.com/github/linguist#vendored-code
 
-mongo/src/main/resources/* linguist-vendored
-src/main/resources/* linguist-vendored
-src/test/resources/* linguist-vendored
-public/* linguist-vendored
+- mongo/src/main/resources/*
+- src/main/resources/*
+- src/test/resources/*
+- public/*
