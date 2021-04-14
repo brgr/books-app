@@ -61,8 +61,11 @@
                            coercion/coerce-response-middleware
                            coercion/coerce-request-middleware
                            multipart/multipart-middleware
-                           [wrap-cors :access-control-allow-origin [#".*"]
-                            :access-control-allow-methods [:get :put :post :patch :delete]]]}})
+                           [wrap-cors
+                            :access-control-allow-origin ["http://localhost:8280"]
+                            :access-control-allow-headers ["Origin" "X-Requested-With"
+                                                           "Content-Type" "Accept"]
+                            :access-control-allow-methods [:get :put :post :delete :options]]]}})
 
     (ring/routes
       (swagger-ui/create-swagger-ui-handler
