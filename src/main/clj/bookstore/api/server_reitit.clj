@@ -12,6 +12,8 @@
             [reitit.ring.middleware.multipart :as multipart]
             [reitit.ring.middleware.parameters :as parameters]
             [reitit.ring.coercion :as coercion]
+
+            [bookstore.api.contexts.books :refer [books]]
             ))
 
 
@@ -26,11 +28,13 @@
     (ring/router
       [["/ping" {:get ping-handler}]
 
+       books
+
        ["/swagger.json"
         {:get {:no-doc  true
                :swagger {:basePath "/"
-                         :info     {:title       "my-api"
-                                    :description "with reitit-ring"}}
+                         :info     {:title       "Books API"
+                                    :description "API for managing meta-data on books"}}
                :handler (swagger/create-swagger-handler)}}]]
 
       ; ["/math"
