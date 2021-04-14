@@ -1,11 +1,11 @@
 (ns bookstore.api.server-reitit
   (:require [environ.core :as env]
             [reitit.ring :as ring]
-            [reitit.coercion.spec]
+            [reitit.coercion.schema]
             [reitit.swagger :as swagger]
-            [ring.adapter.jetty :as jetty]
+            [ring.middleware.cors :refer [wrap-cors]]
             [reitit.swagger-ui :as swagger-ui]
-    ;[schema.core :as s]
+            [schema.core]
             [muuntaja.core :as m]
             [reitit.ring.middleware.muuntaja :as muuntaja]
             [reitit.ring.middleware.exception :as exception]
@@ -24,9 +24,7 @@
 (def app
   (ring/ring-handler
     (ring/router
-      [["/ping" {:get    ping-handler
-                 ;:no-doc true
-                 }]
+      [["/ping" {:get ping-handler}]
 
        ["/swagger.json"
         {:get {:no-doc  true
@@ -34,7 +32,6 @@
                          :info     {:title       "my-api"
                                     :description "with reitit-ring"}}
                :handler (swagger/create-swagger-handler)}}]]
-      ;["/api-docs/*" {:get (swagger-ui/create-swagger-ui-handler)}]
 
       ; ["/math"
       ;  {:swagger {:tags ["math"]}}
@@ -53,52 +50,22 @@
       ;  ;                       {:status 200
       ;  ;                        :body   {:total (+ x y)}})}}]]]
       ;
-      {:data {:coercion   reitit.coercion.spec/coercion
+      {:data {:coercion   reitit.coercion.schema/coercion
               :muuntaja   m/instance
-              :middleware [;; query-params & form-params
-                           parameters/parameters-middleware
-                           ;; content-negotiation
+              ; todo: I am not sure which of these are actually needed... look them up, maybe I can remove some
+              :middleware [parameters/parameters-middleware
                            muuntaja/format-negotiate-middleware
-                           ;; encoding response body
                            muuntaja/format-response-middleware
-                           ;; exception handling
                            exception/exception-middleware
-                           ;; decoding request body
                            muuntaja/format-request-middleware
-                           ;; coercing response bodys
                            coercion/coerce-response-middleware
-                           ;; coercing request parameters
                            coercion/coerce-request-middleware
-                           ;; multipart
-                           multipart/multipart-middleware]}})
-
-    ; FIXME:
-    ; This generally works, but swagger-ui does not. Somehow, when starting, it directly redirects to /api-docs -
-    ; even though this is never specifid in server_reitit!! I don't understand why it does this...
-    ; Furthermore, the config options (also :root etc, not only :config ...) below somehow don't work as expected...
+                           multipart/multipart-middleware
+                           [wrap-cors :access-control-allow-origin [#".*"]
+                            :access-control-allow-methods [:get :put :post :patch :delete]]]}})
 
     (ring/routes
       (swagger-ui/create-swagger-ui-handler
-        ; fixme: why does it not work if the path is set to "/"
-        {
-         ;:root "/"
-         :path "/"
-         ;:basePath "/"
-         ;:url       "/swagger.json"
-         ;:config    {
-         ;            :configUrl "/swagger.json"
-         ;            :url              "/swagger.json"
-         ;            :validatorUrl     nil
-         ;            :operationsSorter nil}
-         ;:responses {200 {:schema s/Any}}
-         })
+        {:path "/"})
       (ring/create-default-handler
-        {:not-found (constantly {:status 404 :body "Not found"})}))
-    )
-  )
-
-
-;(defn -main []
-  ;(migrate)
-  ;(jetty/run-jetty #'app {:port  3000
-  ;                        :join? false}))
+        {:not-found (constantly {:status 404 :body "Not found"})}))))
