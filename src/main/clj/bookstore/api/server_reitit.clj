@@ -17,9 +17,7 @@
             [reitit.ring.coercion :as coercion]
             [ring.adapter.jetty :as jetty]
 
-            [bookstore.api.contexts.books :refer [books]]
-            ))
-
+            [bookstore.api.contexts.books :refer [books]]))
 
 (defn ping-handler [_]
   {:status  200
@@ -27,36 +25,19 @@
    :no-doc  true
    :swagger {:tags ["files"]}})
 
-(spec/def ::title string?)
-(spec/def ::book-request (spec/keys :req-un [::title]))
-(spec/def ::xy string?)
-(spec/def ::book-response (spec/keys :req-un [::xy]))
-
 (def app
   (ring/ring-handler
     (ring/router
       [["/ping" {:get ping-handler}]
 
-       ;books
+       books
 
        ["/swagger.json"
         {:get {:no-doc  true
                :swagger {:basePath "/"
                          :info     {:title       "Books API"
                                     :description "API for managing meta-data on books"}}
-               :handler (swagger/create-swagger-handler)}}]
-
-
-       ["/book"
-        {:post {:summary    "Insert a new book"
-                :parameters {:body ::book-request}
-                :responses  {200 {:body ::book-response}}
-                :handler    (fn [{{{:keys [title]} :body} :parameters}]
-                              (println "title" title)
-                              {:status 200
-                               :body   {:xy title}})
-                }}]
-       ]
+               :handler (swagger/create-swagger-handler)}}]]
 
       ; TODO: Slowly move books + amazon-import API calls from using compojure-api to reitit
       ; Note that the calls below are just here for reference, they can be removed after migration
@@ -122,25 +103,8 @@
                                                                 ;"Cookie"
                                                                 ;"Pragma"
                                                                 ;]
-                                 :access-control-allow-methods [:get :put :post :delete :options]]]}}
-      )
+                                 :access-control-allow-methods [:get :put :post :delete :options]]]}})
     
-;    "POST /book HTTP/1.1
-;Host: localhost:3000
-;User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0
-;Accept: application/json
-;Accept-Language: en-US,en;q=0.5
-;Accept-Encoding: gzip, deflate
-;Referer: http://localhost:3000/index.html
-;Content-Type: application/json
-;Origin: http://localhost:3000
-;Content-Length: 23
-;DNT: 1
-;Connection: keep-alive
-;Cookie: JSESSIONID=E7EW8PFON8EAAV7aliAtFuvnKgi9XCeZ8UIkw7it
-;Pragma: no-cache
-;Cache-Control: no-cache"
-
     (ring/routes
       (swagger-ui/create-swagger-ui-handler
         {:path "/"
@@ -149,14 +113,6 @@
       (ring/create-default-handler
         ;{:not-found (constantly {:status 404 :body "Not found"})}
         ))))
-
-; TODO:
-; Unfortunately, it doesn't work like this.
-; My proposal: Create it completely anew, just slightly copying some stuff
-; This time, try it out with Luminus:
-; https://luminusweb.com/docs/services.html
-; With that, I should be able to have it set up like here (for reitit) in 2-3 hours,
-; hopefully. That will likely be less time than troubleshooting here.
 
 (comment
   (def server (jetty/run-jetty #'app {:port  3000
