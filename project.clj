@@ -8,7 +8,8 @@
                  "mongo/src/main/clj"]
   :test-paths ["src/test/clj"]
   :resource-paths ["src/main/resources"
-                   "mongo/src/main/resources"]
+                   "mongo/src/main/resources"
+                   "public"]
   :dev {:resource-paths ["src/test/resources"]}
 
   :profiles {:dev [:project/dev :profiles/dev]

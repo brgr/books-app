@@ -2,9 +2,10 @@
   (:require [bookstore.db.model :as bookstore]
             [schema.core :as s]
             [bookstore.db.update]
+            [clojure.java.io :as io]
     ;[ring.util.http-response :refer [
-    ;ok not-found
-    ;header file-response]]
+    ;                                 ok not-found
+    ;                                 header file-response]]
             [environ.core :refer [env]]
             [bookstore.files.file-management :refer [get-file-name]]))
 
@@ -30,33 +31,25 @@
                              {:status 200
                               :body   inserted-book}))}}]
 
+    ; todo : change the underscore to a dash
+    ["/:book-id/front_matter"
+     {:get {:summary    "Given a book id, returns a jpg picture of its front matter"
+            :parameters {:query {:book-id s/Str}}
+            :swagger    {:produces ["image/jpg"]}
+            ; fixme: handle case where there is no image! (what is happening now, in that case?)
+            :handler    (fn [{{{:keys [book-id]} :query} :parameters}]
+                          {:status  200
+                           :headers {"Content-Type" "image/png"}
+                           :body    (when-let [image-url (:amazon-book-image-front (bookstore.db.model/get-book-by-id book-id))]
+                                      (io/input-stream
+                                        (io/resource (str (:front-matter-dir env) (get-file-name image-url)))))})}}]
+
     ]
-
-   ;["/:book-id/front_matter"
-   ; {:get {:summary ""
-   ;        :handler (fn [{{{:keys [book-id]} :query} :parameters}]
-   ;                   (when-let [image-url (:amazon-book-image-front (bookstore.db.model/get-book-by-id book-id))]
-   ;                     (-> (get-file-name image-url)
-   ;                         (file-response {:root (:front-matter-dir env)
-   ;                                         :allow-symlinks? true})
-   ;                         (header "Content-Type" "image/jpg"))))}}
-
    ]
 
-  ; TODO: Migrate other calls to Reitit as well (just as the 1st call was done, above)
 
-  ;(GET "/:book-id/front_matter" []
-  ;  :summary "Fetch the thumbnail for the given book id"
-  ;  :path-params [book-id :- String]
-  ;  :produces ["image/jpg"]
-  ;  ; fixme: handle case where there is no image! (what is happening now, in that case?)
-  ;  (when-let [image-url (:amazon-book-image-front (bookstore.db.model/get-book-by-id book-id))]
-  ;    (-> (get-file-name image-url)
-  ;        (file-response {:root (:front-matter-dir env)
-  ;                        :allow-symlinks? true})
-  ;        (header "Content-Type" "image/jpg"))))
+  ; TODO: Migrate other calls below to Reitit as well
 
-  ;
 
   ;
   ;(DELETE "/book" []
