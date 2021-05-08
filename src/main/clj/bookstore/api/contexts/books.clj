@@ -2,9 +2,9 @@
   (:require [bookstore.db.model :as bookstore]
             [schema.core :as s]
             [bookstore.db.update]
-            ;[ring.util.http-response :refer [
-                                             ;ok not-found
-                                             ;header file-response]]
+    ;[ring.util.http-response :refer [
+    ;ok not-found
+    ;header file-response]]
             [environ.core :refer [env]]
             [bookstore.files.file-management :refer [get-file-name]]))
 
@@ -23,21 +23,13 @@
 
     ["/book"
      {:post {:summary    "Insert a new book"
-             :parameters {:body s/Any}
+             :parameters {:body s/Any}                      ; todo: check that book is of correct type!
              ;:responses  {200 {:body s/Any}} ; is this correct like this?
-             :handler    (fn [{{{:keys [title]} :body} :parameters}]
-                           ; TODO: Now that this generally works, move the concrete call to here (see commented code below)
-                           (println "title" title)
-                           {:status 200
-                            :body   {:xy title}})
-             }}]
+             :handler    (fn [{{book :body} :parameters}]
+                           (let [id (bookstore/insert-new-book book)]
+                             {:status 200
+                              :body   id}))}}]
 
-    ;(POST "/book" []
-    ;  :summary "Insert a new book"
-    ;  ; TODO: check that book is of the correct type! (schema check)
-    ;  :body [book s/Any]
-    ;  (let [id (bookstore/insert-new-book book)]
-    ;    (ok id)))
 
     ]
 
@@ -49,7 +41,6 @@
    ;                         (file-response {:root (:front-matter-dir env)
    ;                                         :allow-symlinks? true})
    ;                         (header "Content-Type" "image/jpg"))))}}
-
 
    ]
 
