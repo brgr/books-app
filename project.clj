@@ -30,7 +30,7 @@
   :plugins [[lein-ring "0.12.5"]
             [lein-environ "1.1.0"]]
 
-  :ring {:handler bookstore.api.server-reitit/app}
+  :ring {:handler bookstore.api.routes/app}
 
   :repl-options {:init-ns amazon-wishlist.core}
 

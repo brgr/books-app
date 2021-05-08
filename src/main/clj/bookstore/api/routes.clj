@@ -1,4 +1,4 @@
-(ns bookstore.api.server-reitit
+(ns bookstore.api.routes
   (:require
     [reitit.ring :as ring]
     [reitit.dev.pretty]
@@ -66,8 +66,7 @@
          :config {:validatorUrl     nil
                   :operationsSorter "alpha"}})
       (ring/create-default-handler
-        ;{:not-found (constantly {:status 404 :body "Not found"})}
-        ))))
+        {:not-found (constantly {:status 404 :body "Not found"})}))))
 
 (comment
   (def server (jetty/run-jetty #'app {:port  3000
