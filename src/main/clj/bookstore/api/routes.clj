@@ -1,8 +1,8 @@
 (ns bookstore.api.routes
   (:require
     [reitit.ring :as ring]
-    [bookstore.api.contexts.import.amazon :refer [amazon-import-routes]]
-    [bookstore.api.contexts.books :refer [book-routes]]
+    [bookstore.api.routes.import.amazon :refer [amazon-import-routes]]
+    [bookstore.api.routes.books :refer [book-routes]]
     [bookstore.api.swagger :refer [swagger-json-route
                                    swagger-ui-handler]]
     [bookstore.api.reitit-options :refer [reitit-options]]))

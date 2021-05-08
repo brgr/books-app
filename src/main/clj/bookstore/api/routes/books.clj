@@ -1,4 +1,4 @@
-(ns bookstore.api.contexts.books
+(ns bookstore.api.routes.books
   (:require [bookstore.db.model :as bookstore]
             [schema.core :as s]
             [bookstore.db.update]

@@ -1,4 +1,4 @@
-(ns bookstore.api.contexts.import.amazon
+(ns bookstore.api.routes.import.amazon
   (:require
     [schema.core :as s]
     [bookstore.db.model :refer [insert-new-books]]
