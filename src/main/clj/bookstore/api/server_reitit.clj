@@ -16,17 +16,10 @@
 
             [bookstore.api.contexts.books :refer [books]]))
 
-(defn ping-handler [_]
-  {:status  200
-   :body    "ok"
-   :no-doc  true
-   :swagger {:tags ["files"]}})
-
 (def app
   (ring/ring-handler
     (ring/router
-      [["/ping" {:get ping-handler}]
-
+      [
        books
 
        ["/swagger.json"
