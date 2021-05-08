@@ -1,7 +1,7 @@
 {:dev
  {:env {:database-url     "0.0.0.0"
-        :thumbnails-dir   "public/img/thumbnails/"
-        :front-matter-dir "public/img/front_matters/"
+        :thumbnails-dir   "img/thumbnails/"
+        :front-matter-dir "img/front_matters/"
 
         :headless-scraping "true"
 
