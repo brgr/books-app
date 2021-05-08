@@ -13,8 +13,8 @@
     [reitit.ring.middleware.parameters :as parameters]
     [reitit.ring.coercion :as coercion]
     [ring.adapter.jetty :as jetty]
-
-    [bookstore.api.contexts.books :as book-context]))
+    [bookstore.api.contexts.import.amazon :refer [amazon-import-routes]]
+    [bookstore.api.contexts.books :refer [book-routes]]))
 
 (def swagger-json
   ["/swagger.json"
@@ -27,7 +27,8 @@
 (def app
   (ring/ring-handler
     (ring/router
-      [book-context/book-routes
+      [book-routes
+       amazon-import-routes
        swagger-json]
 
       {;;:reitit.middleware/transform dev/print-request-diffs ;; pretty diffs

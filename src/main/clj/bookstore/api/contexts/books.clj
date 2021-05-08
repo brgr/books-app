@@ -37,7 +37,6 @@
                 :handler    (fn [{{{:keys [book-id]} :query} :parameters}]
                               (let [write-result (bookstore/remove-book-by-id book-id)
                                     count-removed-books (.getN write-result)]
-                                (println "write result:" write-result)
                                 (if (= 1 count-removed-books)
                                   {:status 200
                                    :body   {:id book-id}}
