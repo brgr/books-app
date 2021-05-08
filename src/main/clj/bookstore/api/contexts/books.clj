@@ -1,18 +1,12 @@
 (ns bookstore.api.contexts.books
   (:require [bookstore.db.model :as bookstore]
-            [clojure.spec.alpha :as spec]
-            ;[schema.core :as s]
+            [schema.core :as s]
             [bookstore.db.update]
             ;[ring.util.http-response :refer [
                                              ;ok not-found
                                              ;header file-response]]
             [environ.core :refer [env]]
             [bookstore.files.file-management :refer [get-file-name]]))
-
-(spec/def ::title string?)
-(spec/def ::book-request (spec/keys :req-un [::title]))
-(spec/def ::xy string?)
-(spec/def ::book-response (spec/keys :req-un [::xy]))
 
 (def books
   ["/books"
@@ -29,8 +23,8 @@
 
     ["/book"
      {:post {:summary    "Insert a new book"
-             :parameters {:body ::book-request}
-             :responses  {200 {:body ::book-response}}
+             :parameters {:body s/Any}
+             ;:responses  {200 {:body s/Any}} ; is this correct like this?
              :handler    (fn [{{{:keys [title]} :body} :parameters}]
                            ; TODO: Now that this generally works, move the concrete call to here (see commented code below)
                            (println "title" title)

@@ -1,14 +1,11 @@
 (ns bookstore.api.server-reitit
   (:require [environ.core :as env]
             [reitit.ring :as ring]
-            [reitit.spec]
             [reitit.dev.pretty]
-            [reitit.coercion.spec]
+            [reitit.coercion.schema]
             [reitit.swagger :as swagger]
             [ring.middleware.cors :refer [wrap-cors]]
             [reitit.swagger-ui :as swagger-ui]
-            ;[schema.core]
-            [clojure.spec.alpha :as spec]
             [muuntaja.core :as m]
             [reitit.ring.middleware.muuntaja :as muuntaja]
             [reitit.ring.middleware.exception :as exception]
@@ -63,7 +60,7 @@
        ;;:validate spec/validate ;; enable spec validation for route data
        ;;:reitit.spec/wrap spell/closed ;; strict top-level validation
        :exception reitit.dev.pretty/exception
-       :data      {:coercion   reitit.coercion.spec/coercion
+       :data      {:coercion   reitit.coercion.schema/coercion
                    :muuntaja   m/instance
                    :middleware [;; swagger feature
                                 swagger/swagger-feature
