@@ -1,7 +1,6 @@
 (ns bookstore.api.routes
   (:require
     [reitit.ring :as ring]
-    [ring.adapter.jetty :as jetty]
     [bookstore.api.contexts.import.amazon :refer [amazon-import-routes]]
     [bookstore.api.contexts.books :refer [book-routes]]
     [bookstore.api.swagger :refer [swagger-json-route
@@ -23,12 +22,3 @@
     (ring/routes
       swagger-ui-handler
       default-404-handler)))
-
-
-(comment
-  (def server (jetty/run-jetty #'app {:port  3000
-                                      :join? false}))
-
-  (app {:request-method :post, :uri "/books/book"})
-
-  )
