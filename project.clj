@@ -20,7 +20,6 @@
                  [etaoin "0.3.10"]
                  [com.novemberain/monger "3.1.0"]
                  [metosin/reitit "0.5.13"]
-                 [ring/ring-jetty-adapter "1.9.3"]
                  [metosin/muuntaja "0.6.7"]
                  [org.jsoup/jsoup "1.13.1"]
                  [manifold "0.1.8"]
