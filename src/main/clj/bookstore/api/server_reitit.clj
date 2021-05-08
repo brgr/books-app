@@ -14,20 +14,21 @@
     [reitit.ring.coercion :as coercion]
     [ring.adapter.jetty :as jetty]
 
-    [bookstore.api.contexts.books :refer [books]]))
+    [bookstore.api.contexts.books :as book-context]))
+
+(def swagger-json
+  ["/swagger.json"
+   {:get {:no-doc  true
+          :swagger {:basePath "/"
+                    :info     {:title       "Books API"
+                               :description "API for managing meta-data on books"}}
+          :handler (swagger/create-swagger-handler)}}])
 
 (def app
   (ring/ring-handler
     (ring/router
-      [
-       books
-
-       ["/swagger.json"
-        {:get {:no-doc  true
-               :swagger {:basePath "/"
-                         :info     {:title       "Books API"
-                                    :description "API for managing meta-data on books"}}
-               :handler (swagger/create-swagger-handler)}}]]
+      [book-context/book-routes
+       swagger-json]
 
       {;;:reitit.middleware/transform dev/print-request-diffs ;; pretty diffs
        ;;:validate spec/validate ;; enable spec validation for route data

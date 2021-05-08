@@ -6,7 +6,7 @@
             [environ.core :refer [env]]
             [bookstore.files.file-management :refer [get-file-name]]))
 
-(def books
+(def book-routes
   [["/books"
     ; todo: use a Schema to specify what is returned!
     {:swagger {:tags ["books"]}}
