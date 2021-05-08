@@ -3,26 +3,23 @@
             [schema.core :as s]
             [bookstore.db.update]
             [clojure.java.io :as io]
-    ;[ring.util.http-response :refer [
-    ;                                 ok not-found
-    ;                                 header file-response]]
             [environ.core :refer [env]]
             [bookstore.files.file-management :refer [get-file-name]]))
 
 (def books
-  [
-   ["/books"
+  [["/books"
     ; todo: use a Schema to specify what is returned!
-    {:swagger {:tags ["books"]}
-     :get {:summary "Returns all books that are in the DB currently"
-           :status  200
-           ;:no-doc true
-           :handler (fn [_] {:status 200
-                             :body   (bookstore/all-books)})}}]
+    {:swagger {:tags ["books"]}}
+
+    ["/"
+     {:get {:summary "Returns all books that are in the DB currently"
+            :status  200
+            ;:no-doc true
+            :handler (fn [_] {:status 200
+                              :body   (bookstore/all-books)})}}]]
 
    ["/book"
-    {:swagger {:tags ["book"]}
-     }
+    {:swagger {:tags ["book"]}}
 
     ["/"
      {:post {:summary    "Insert a new book"
@@ -32,9 +29,7 @@
                            (let [inserted-book (bookstore/insert-new-book book)]
                              {:status 200
                               :body   inserted-book}))}}]
-
     ["/:book-id"
-
      ["/"
       {:delete {:summary    "Given a books id, delete this book from the database"
                 :parameters {:query {:book-id s/Str}}
@@ -48,7 +43,6 @@
                                    :body   {:id book-id}}
                                   {:status 404
                                    :body   {:id book-id}})))}}]
-
      ["/front-matter"
       {:get {:summary    "Given a book id, returns a jpg picture of its front matter"
              :parameters {:query {:book-id s/Str}}
@@ -59,18 +53,4 @@
                             :headers {"Content-Type" "image/png"}
                             :body    (when-let [image-url (:amazon-book-image-front (bookstore.db.model/get-book-by-id book-id))]
                                        (io/input-stream
-                                         (io/resource (str (:front-matter-dir env) (get-file-name image-url)))))})}}]
-     ]
-    ]
-   ]
-
-  ;
-  ;(DELETE "/books/all" []
-  ;  :summary "Delete all books in the database."
-  ;  :description "This is currently not implemented in the frontend. You need to enter 'delete' as a parameter to go through with this."
-  ;  :query-params [delete :- String]
-  ;  (if (= delete "delete")
-  ;    (let [result (bookstore/remove-all-books)]
-  ;      (ok (str result)))))
-  ;)
-  )
+                                         (io/resource (str (:front-matter-dir env) (get-file-name image-url)))))})}}]]]])
