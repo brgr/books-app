@@ -26,10 +26,9 @@
              :parameters {:body s/Any}                      ; todo: check that book is of correct type!
              ;:responses  {200 {:body s/Any}} ; is this correct like this?
              :handler    (fn [{{book :body} :parameters}]
-                           (let [id (bookstore/insert-new-book book)]
+                           (let [inserted-book (bookstore/insert-new-book book)]
                              {:status 200
-                              :body   id}))}}]
-
+                              :body   inserted-book}))}}]
 
     ]
 
