@@ -1,5 +1,7 @@
-(ns bookstore.api.contexts.reitit-options
+(ns bookstore.api.reitit-options
   (:require
+    [reitit.dev.pretty]
+    [reitit.coercion.schema]
     [reitit.swagger :as swagger]
     [muuntaja.core :as m]
     [reitit.ring.middleware.muuntaja :as muuntaja]
@@ -35,6 +37,5 @@
                             ;; multipart
                             multipart/multipart-middleware
                             [wrap-cors
-                             ; Note: The whole problem was because the following string is a regex - not a string!
                              :access-control-allow-origin [#"http://localhost:8280"]
                              :access-control-allow-methods [:get :put :post :delete :options]]]}})

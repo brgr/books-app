@@ -1,38 +1,29 @@
 (ns bookstore.api.routes
   (:require
     [reitit.ring :as ring]
-    [reitit.dev.pretty]
-    [reitit.coercion.schema]
-    [reitit.swagger :as swagger]
-    [reitit.swagger-ui :as swagger-ui]
     [ring.adapter.jetty :as jetty]
     [bookstore.api.contexts.import.amazon :refer [amazon-import-routes]]
     [bookstore.api.contexts.books :refer [book-routes]]
-    [bookstore.api.contexts.reitit-options :refer [reitit-options]]))
-
-(def swagger-json
-  ["/swagger.json"
-   {:get {:no-doc  true
-          :swagger {:basePath "/"
-                    :info     {:title       "Books API"
-                               :description "API for managing meta-data on books"}}
-          :handler (swagger/create-swagger-handler)}}])
+    [bookstore.api.swagger :refer [swagger-json-route
+                                   swagger-ui-handler]]
+    [bookstore.api.reitit-options :refer [reitit-options]]))
 
 (def routes
   [book-routes
    amazon-import-routes
-   swagger-json])
+   swagger-json-route])
+
+(def default-404-handler
+  (ring/create-default-handler
+    {:not-found (constantly {:status 404 :body "Not found"})}))
 
 (def app
   (ring/ring-handler
     (ring/router routes reitit-options)
     (ring/routes
-      (swagger-ui/create-swagger-ui-handler
-        {:path   "/"
-         :config {:validatorUrl     nil
-                  :operationsSorter "alpha"}})
-      (ring/create-default-handler
-        {:not-found (constantly {:status 404 :body "Not found"})}))))
+      swagger-ui-handler
+      default-404-handler)))
+
 
 (comment
   (def server (jetty/run-jetty #'app {:port  3000
