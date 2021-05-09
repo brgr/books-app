@@ -1,6 +1,9 @@
 (ns amazon.search.amazon-search
-  (:import [org.jsoup Jsoup]
-           (java.net URL)))
+  (:require
+    [amazon.search.parse.authors :refer [get-authors-from-metadata-below-title]])
+  (:import
+    [org.jsoup Jsoup]
+    (java.net URL)))
 
 (def url "https://www.amazon.de/s?k=the+beauty+of+everyday+things")
 
@@ -29,9 +32,4 @@
 
 (as-> (map #(.text %) metadata-below-title) data
       (clojure.string/join " " data)
-      (clojure.string/split data #"\|")
-      (map clojure.string/trim data)
-      (filter #(clojure.string/starts-with? % "von ") data)
-      (first data)
-      (subs data 4)
-      (clojure.string/split data #" und "))
+      #_(get-authors-from-metadata-below-title data))
