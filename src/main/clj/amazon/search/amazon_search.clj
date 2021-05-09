@@ -21,8 +21,17 @@
 (-> (.select first-item "h2 span")
     (.text))
 
-; todo: right now, this gives a list - out of that list I'd need to filter out the authors!
-(-> (.select first-item "div.a-section > h2")
-    (.parents)
-    (first)
-    (.select "div.a-color-secondary > div > span"))
+; with the next 2: get authors
+(def metadata-below-title (-> (.select first-item "div.a-section > h2")
+                              (.parents)
+                              (first)
+                              (.select "div.a-color-secondary > div > span")))
+
+(as-> (map #(.text %) metadata-below-title) data
+      (clojure.string/join " " data)
+      (clojure.string/split data #"\|")
+      (map clojure.string/trim data)
+      (filter #(clojure.string/starts-with? % "von ") data)
+      (first data)
+      (subs data 4)
+      (clojure.string/split data #" und "))
