@@ -39,7 +39,9 @@
   (as-> (.select search-result "div.a-section > h2") data
         (.parents data)
         (first data)
-        (.select data "div.a-color-secondary > div > span")
+        (.select data "div.a-color-secondary > div.a-row")
+        (first data)
+        (.children data)
         (map #(.text %) data)
         (clojure.string/join " " data)))
 
@@ -56,6 +58,5 @@
   (map parse-search-result search-results))
 
 (get-search-results (get-results html))
-; todo: manually check the results; compare with results on the rendered HTML!
-; problems:
-; 1. when author is a link
+; todo: It seems to me that these results are fine. Make it work for all searches + check e.g. search "book"
+; todo: also check what happens when there is no author
