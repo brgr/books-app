@@ -4,19 +4,17 @@
     [schema.core :as s])
   (:import
     [org.jsoup Jsoup]
-    (java.net URL)
+    (java.net URL URLEncoder)
     (org.jsoup.select Elements)
     (org.jsoup.nodes Document Element)))
 
-(def url "https://www.amazon.de/s?k=the+beauty+of+everyday+things")
-
-(def html (Jsoup/parse (URL. url) 5000))
+(defn build-amazon-search-url
+  [search]
+  (str "https://www.amazon.de/s?k=" (URLEncoder/encode search "UTF-8")))
 
 (s/defn get-results :- Elements
   [soup :- Document]
   (.select soup "div.s-result-item[data-component-type=s-search-result]"))
-
-(get-results html)
 
 (s/defn get-thumbnail-url :- String
   [search-result :- Element]
@@ -45,7 +43,13 @@
         (map #(.text %) data)
         (clojure.string/join " " data)))
 
-(s/defn parse-search-result
+(def SearchResult
+  {:title            String
+   :product-url-slug String
+   :thumbnail-url    String
+   :authors          [String]})
+
+(s/defn parse-search-result :- String
   [search-result :- Element]
   {:title            (get-title search-result)
    :product-url-slug (get-product-url-slug search-result)
@@ -53,10 +57,19 @@
    :authors          (-> (get-metadata-below-title search-result)
                          (get-authors-from-metadata-below-title))})
 
-(s/defn get-search-results
+(s/defn parse-search-results :- [SearchResult]
   [search-results :- Elements]
   (map parse-search-result search-results))
 
-(get-search-results (get-results html))
-; todo: It seems to me that these results are fine. Make it work for all searches + check e.g. search "book"
-; todo: also check what happens when there is no author
+(s/defn find-results :- [SearchResult]
+  [soup :- Jsoup]
+  (-> (get-results soup)
+      (parse-search-results)))
+
+(s/defn search-amazon :- [SearchResult]
+  [search :- String]
+  (let [search-url (URL. (build-amazon-search-url search))
+        timeout 5000]
+    (find-results (Jsoup/parse search-url timeout))))
+
+; todo: check what happens when there is no author
