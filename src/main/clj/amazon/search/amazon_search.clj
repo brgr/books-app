@@ -22,10 +22,23 @@
   (-> (get-results soup)
       (parse-search-results)))
 
+(defn- starts-url-slug-strangely?
+  [search-result]
+  (clojure.string/starts-with? (:product-url-slug search-result) "/gp/slredirect/picassoRedirect.html"))
+
+(s/defn filter-shady-results :- [SearchResult]
+  "Filters strange results out. It seems that Amazon gives these out on purpose, but I'm not sure."
+  [original-search-results :- [SearchResult]]
+  (filter #(not (starts-url-slug-strangely? %)) original-search-results))
+
 (s/defn search-amazon :- [SearchResult]
+  "Returns mostly all search results without really much filtering. I.e., not only books are returned, but all kind of
+   products. Often times, products that are not books will have no authors."
   [search :- String]
   (let [search-url (URL. (build-amazon-search-url search))
         timeout 5000]
-    (find-results (Jsoup/parse search-url timeout))))
+    (-> (find-results (Jsoup/parse search-url timeout))
+        (filter-shady-results))))
 
-; todo: check what happens when there is no author
+(comment
+  (search-amazon "Moby Dick"))
