@@ -2,6 +2,7 @@
   (:require
     [amazon.search.parse.authors :refer [get-authors-from-metadata-below-title]]
     [amazon.search.parse.search-result :refer [SearchResult parse-search-results]]
+    [amazon.search.filter.filter-search-result :refer [filter-shady-results]]
     [schema.core :as s])
   (:import
     [org.jsoup Jsoup]
@@ -21,15 +22,6 @@
   [soup :- Jsoup]
   (-> (get-results soup)
       (parse-search-results)))
-
-(defn- starts-url-slug-strangely?
-  [search-result]
-  (clojure.string/starts-with? (:product-url-slug search-result) "/gp/slredirect/picassoRedirect.html"))
-
-(s/defn filter-shady-results :- [SearchResult]
-  "Filters strange results out. It seems that Amazon gives these out on purpose, but I'm not sure."
-  [original-search-results :- [SearchResult]]
-  (filter #(not (starts-url-slug-strangely? %)) original-search-results))
 
 (s/defn search-amazon :- [SearchResult]
   "Returns mostly all search results without really much filtering. I.e., not only books are returned, but all kind of
