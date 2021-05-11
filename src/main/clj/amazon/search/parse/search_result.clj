@@ -7,31 +7,36 @@
     (org.jsoup.nodes Element)))
 
 (s/defn get-thumbnail-url :- String
-        [search-result :- Element]
-        (-> (.select search-result "img")
-            (first)
-            (.attr "src")))
+  [search-result :- Element]
+  (-> (.select search-result "img")
+      (first)
+      (.attr "src")))
 
 (s/defn get-product-url-slug :- String
-        [search-result :- Element]
-        (-> (.select search-result "h2 > a")
-            (.attr "href")))
+  [search-result :- Element]
+  (-> (.select search-result "h2 > a")
+      (.attr "href")))
 
 (s/defn get-title :- String
-        [search-result :- Element]
-        (-> (.select search-result "h2 span")
-            (.text)))
+  [search-result :- Element]
+  (-> (.select search-result "h2 span")
+      (.text)))
+
+(defn- contains-whole-title-also-subtitles?
+  [whole-title-container]
+  (= 1 (.children whole-title-container)))
 
 (s/defn get-metadata-below-title :- String
-        [search-result :- Element]
-        (as-> (.select search-result "div.a-section > h2") data
-              (.parents data)
-              (first data)
-              (.select data "div.a-color-secondary > div.a-row")
-              (first data)
-              (.children data)
-              (map #(.text %) data)
-              (clojure.string/join " " data)))
+  [search-result :- Element]
+  (let [whole-title-container (as-> (.select search-result "div.a-section > h2") data
+                                    (.parents data)
+                                    (first data))]
+    (if (contains-whole-title-also-subtitles? whole-title-container)
+      (as-> (.select whole-title-container "div.a-color-secondary > div.a-row") data
+            (first data)
+            (.children data)
+            (map #(.text %) data)
+            (clojure.string/join " " data)))))
 
 (def SearchResult
   {:title            String
