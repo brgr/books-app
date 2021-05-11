@@ -24,7 +24,8 @@
 
 (defn- contains-whole-title-also-subtitles?
   [whole-title-container]
-  (> (count (.children whole-title-container)) 1))
+  (and (> (count (.children whole-title-container)) 1)
+       (pos? (count (.select whole-title-container "div.a-color-secondary > div.a-row")))))
 
 (s/defn get-metadata-below-title :- String
   [search-result :- Element]

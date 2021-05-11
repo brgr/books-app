@@ -31,6 +31,3 @@
         timeout 5000]
     (-> (find-results (Jsoup/parse search-url timeout))
         (filter-shady-results))))
-
-(comment
-  (search-amazon "Moby Dick"))
