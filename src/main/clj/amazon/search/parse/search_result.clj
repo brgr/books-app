@@ -24,7 +24,7 @@
 
 (defn- contains-whole-title-also-subtitles?
   [whole-title-container]
-  (= 1 (.children whole-title-container)))
+  (> (count (.children whole-title-container)) 1))
 
 (s/defn get-metadata-below-title :- String
   [search-result :- Element]
