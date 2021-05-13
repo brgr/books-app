@@ -32,3 +32,10 @@ The backend currently consists mainly of the following components:
 * Clojure libraries:
 * `ring` for the REST api server things
   * together with `compojure` and `compojure-api`
+
+## Web Scraping
+
+- For the scraping to work, Firefox and geckodriver [[3]] need to be installed Furthermore, firefox needs to be linked
+  as `firefox-gecko` (see `profiles.clj`, where it can be also changed to just
+  `firefox`). This is because if Firefox is the main browser that is used on the system that this is run on, it would
+  not work well, because the settings of firefox are changed every run to change the user agent.
