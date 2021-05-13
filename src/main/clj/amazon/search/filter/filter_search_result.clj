@@ -4,6 +4,9 @@
     [schema.core :as s]))
 
 (defn- starts-url-slug-strangely?
+  "This url slug sometimes appears in the HTML document, but the respective results never appear visibly when
+  performing the search on amazon. Furthermore, when looking at them more deeply, they are almost always unrelated to
+  the actual search, but seem to have to do with the user performing the search. Maybe they are advertisement?"
   [search-result]
   (clojure.string/starts-with? (:product-url-slug search-result) "/gp/slredirect/picassoRedirect.html"))
 
