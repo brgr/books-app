@@ -2,6 +2,7 @@
   (:require
     [reitit.ring :as ring]
     [bookstore.api.routes.import.amazon :refer [amazon-import-routes]]
+    [bookstore.api.routes.search.amazon :refer [amazon-search-routes]]
     [bookstore.api.routes.books :refer [book-management-routes]]
     [bookstore.api.swagger :refer [swagger-json-route
                                    swagger-ui-handler]]
@@ -10,6 +11,7 @@
 (def routes
   [book-management-routes
    amazon-import-routes
+   amazon-search-routes
    swagger-json-route])
 
 (def default-404-handler
