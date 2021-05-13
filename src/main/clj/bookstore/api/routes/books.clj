@@ -14,7 +14,6 @@
    ["/"
     {:get {:summary "Returns all books that are in the DB currently"
            :status  200
-           ;:no-doc true
            :handler (fn [_] {:status 200
                              :body   (bookstore/all-books)})}}]])
 

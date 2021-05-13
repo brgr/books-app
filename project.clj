@@ -24,10 +24,13 @@
                  [org.jsoup/jsoup "1.13.1"]
                  [manifold "0.1.8"]
                  [ring-cors "0.1.13"]
-                 [environ "1.1.0"]]
+                 [environ "1.1.0"]
+                 [hashp "0.2.1"]]
 
   :plugins [[lein-ring "0.12.5"]
             [lein-environ "1.1.0"]]
+
+  :injections [(require 'hashp.core)]
 
   :ring {:handler bookstore.api.routes/app}
 
