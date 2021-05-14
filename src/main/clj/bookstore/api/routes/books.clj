@@ -9,13 +9,12 @@
 (def books-routes
   ["/books"
    ; todo: use a Schema to specify what is returned!
-   {:swagger {:tags ["books"]}}
-
-   ["/"
-    {:get {:summary "Returns all books that are in the DB currently"
-           :status  200
-           :handler (fn [_] {:status 200
-                             :body   (bookstore/all-books)})}}]])
+   {:swagger {:tags ["books"]}
+    :get     {:summary "Returns all books that are in the DB currently"
+              :status  200
+              :handler (fn [_]
+                         {:status 200
+                          :body   (bookstore/all-books)})}}])
 
 (def book-routes
   ["/book"
