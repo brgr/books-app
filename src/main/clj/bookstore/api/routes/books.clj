@@ -20,7 +20,7 @@
   ["/book"
    {:swagger {:tags ["book"]}}
 
-   ["/"
+   [""
     {:post {:summary    "Insert a new book"
             :parameters {:body s/Any}                       ; todo: check that book is of correct type!
             ;:responses  {200 {:body s/Any}} ; is this correct like this?
@@ -29,7 +29,7 @@
                             {:status 200
                              :body   inserted-book}))}}]
    ["/:book-id"
-    ["/"
+    [""
      {:delete {:summary    "Given a books id, delete this book from the database"
                :parameters {:path {:book-id s/Str}}
                ;:responses  {200 {:body s/Any}} ; is this correct like this?
