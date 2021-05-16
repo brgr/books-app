@@ -49,7 +49,7 @@
      [:div.book-list-grid
       (for [book books]
         ; todo: add the id to the route! (look up reitit documentation for that)
-        (let [image-source (str "http://localhost:3000/books/" (book :_id) "/front_matter")
+        (let [image-source (str "http://localhost:3000/book/" (book :_id) "/front-matter")
               image-alt-text (str (book :_id))]
           ; fixme: somehow display books that have no cover
           (when (not-empty (:amazon-book-image-front book))
@@ -80,8 +80,7 @@
      [:p {:style {:color "red"}} "Note: This feature is not yet implemented in the frontend!"]
      [:h3 "Watched Wishlists"]
      [:p "No wishlists yet"]
-     [add-new-amazon-wishlist-form]]
-    ))
+     [add-new-amazon-wishlist-form]]))
 
 (defn ui []
   [:div.books-ui
