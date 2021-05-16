@@ -14,7 +14,7 @@
               :status  200
               :handler (fn [_]
                          {:status 200
-                          :body   (bookstore/all-books)})}}])
+                          :body   {:result (bookstore/all-books)}})}}])
 
 (def book-routes
   ["/book"
