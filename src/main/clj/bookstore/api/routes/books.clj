@@ -31,9 +31,9 @@
    ["/:book-id"
     ["/"
      {:delete {:summary    "Given a books id, delete this book from the database"
-               :parameters {:query {:book-id s/Str}}
+               :parameters {:path {:book-id s/Str}}
                ;:responses  {200 {:body s/Any}} ; is this correct like this?
-               :handler    (fn [{{{:keys [book-id]} :query} :parameters}]
+               :handler    (fn [{{{:keys [book-id]} :path} :parameters}]
                              (let [write-result (bookstore/remove-book-by-id book-id)
                                    count-removed-books (.getN write-result)]
                                (if (= 1 count-removed-books)
@@ -43,10 +43,10 @@
                                   :body   {:id book-id}})))}}]
     ["/front-matter"
      {:get {:summary    "Given a book id, returns a jpg picture of its front matter"
-            :parameters {:query {:book-id s/Str}}
+            :parameters {:path {:book-id s/Str}}
             :swagger    {:produces ["image/jpg"]}
             ; fixme: handle case where there is no image! (what is happening now, in that case?)
-            :handler    (fn [{{{:keys [book-id]} :query} :parameters}]
+            :handler    (fn [{{{:keys [book-id]} :path} :parameters}]
                           {:status  200
                            :headers {"Content-Type" "image/png"}
                            :body    (when-let [image-url (:amazon-book-image-front (bookstore.db.model/get-book-by-id book-id))]
