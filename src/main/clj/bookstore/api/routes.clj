@@ -27,4 +27,4 @@
       default-404-handler)))
 
 (def app
-  (wrap-cors app))
+  (wrap-cors app-routes))
