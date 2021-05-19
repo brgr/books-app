@@ -50,7 +50,7 @@ the headers for all, not just for some single requests.
 
 This helped me solve it: https://stackoverflow.com/questions/52745107/how-do-i-add-cors-to-a-compojure-api-app
 
-Update 08 May 2021:
+* Update 08 May 2021:
 
 This section was generally created much earlier, for `compojure-api` still. I am currently in the process of migrating
 that library to `reitit`. In that process I had a problem indirectly related to CORS that I want to document:
@@ -59,6 +59,23 @@ In `reitit`, the allowed origins are now *regexes* - instead of simple strings a
 realize this. Most of the time (especially in swagger), I would then get an error that was saying something of a
 `java.lang.ClassCastException` after executing an API call. I could have never really guessed that this was related to
 this, as it was always only happening after sending the API call.
+
+* Update 19 May 2021:
+
+I have now recently had further problems with CORS. Or, actually, CORS has never even worked correctly, and I just
+have not seen that because I never really tried it. So far (with the update from 08 May) I only got the code to
+"compile" (well, it actually always kind of compiled but just swagger didn't run correctly - what I mean is that
+the effective function of CORS was never tested after fixing that error).
+
+Now, I have finally tested the calls on the frontend and quickly saw that I still have errors with CORS. I have
+summarized everything [here][15]. What didn't work was basically `reitit`: The framework doesn't really support
+CORS (yet - see [this issue on GitHub for more info][16]).
+
+There is a workaround, which I found through googling for Luminus instead of reitit (even though the workaround
+basically is about reitit). This workaround [can be found in this StackOverflow question][17], and it is basically
+what I am doing now (Except some Luminus-specific stuff that is also in this answer, and that I have stripped away
+from my solution. I think that is fine)
+
 
 ## Environments
 
@@ -138,3 +155,9 @@ Using Github Actions that are not directly from Github is not really safe! For a
 [13]: https://github.com/day8/re-frame
 
 [14]: https://github.com/day8/re-frame/tree/master/examples/todomvc
+
+[15]: https://gitlab.com/berger_/books-app/-/issues/14#note_575263100
+
+[16]: https://github.com/metosin/reitit/issues/236#issuecomment-838301789
+
+[17]: https://stackoverflow.com/questions/56783213/rest-api-cors-error-when-trying-to-access-it-from-a-web-application
