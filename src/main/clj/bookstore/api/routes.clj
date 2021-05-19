@@ -1,13 +1,12 @@
 (ns bookstore.api.routes
   (:require
     [reitit.ring :as ring]
-    [ring.middleware.cors :as cors]
     [bookstore.api.routes.import.amazon :refer [amazon-import-routes]]
     [bookstore.api.routes.search.amazon :refer [amazon-search-routes]]
     [bookstore.api.routes.books :refer [book-management-routes]]
     [bookstore.api.swagger :refer [swagger-json-route
                                    swagger-ui-handler]]
-    [bookstore.api.reitit-options :refer [reitit-options]]
+    [bookstore.api.config.reitit-options :refer [reitit-options]]
     [bookstore.api.config.cors :refer [wrap-cors]]))
 
 (def routes

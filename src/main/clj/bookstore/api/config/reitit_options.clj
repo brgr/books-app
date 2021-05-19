@@ -1,4 +1,4 @@
-(ns bookstore.api.reitit-options
+(ns bookstore.api.config.reitit-options
   (:require
     [reitit.dev.pretty]
     [reitit.coercion.schema]
