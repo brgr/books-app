@@ -31,7 +31,12 @@
 (defn router-component [{:keys [router]}]
   (let [current-route @(subscribe [:current-route])]
     [:div
-     [base-view/nav {:router router :current-route current-route}]
+     [:div.top-bar
+      [base-view/nav {:router router :current-route current-route}]
+      [:div.search
+       [:input.searchTerm {:type "text" :placeholder "What are you looking for?"}]
+       [:button.searchButton {:type "submit"}
+        [:i.fa.fa-search]]]]
      (when current-route
        [(-> current-route :data :view)])]))
 

@@ -1,9 +1,22 @@
 
+:root {
+    --main-search-bar-border-color: bisque;
+}
+
+
+div.top-bar {
+    width: 100%;
+    margin: auto;
+    height: 6em;
+    padding: 1em 1em 1em 1em;
+}
+
 div.navbar {
     display: grid;
-    grid-template-columns: repeat(4, max-content);
+    grid-template-columns: repeat(5, max-content);
     align-items: flex-end;
-    padding: 1em 1em 1em 2.5em;
+    float: left;
+    width: 20%;
 }
 
 .navbar #title a {
@@ -55,4 +68,40 @@ div.navbar {
     /* The following makes all rows of the same height, see here:
        https://stackoverflow.com/questions/44488357/equal-height-rows-in-css-grid-layout */
     grid-auto-rows: 1fr;
+}
+
+
+.search {
+    position: relative;
+    display: flex;
+    justify-self: flex-end;
+    float: right;
+    width: 50%;
+}
+
+.searchTerm {
+    width: 100%;
+    border: 3px solid var(--main-search-bar-border-color);
+    border-right: none;
+    padding: 5px;
+    height: 20px;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    color: #9DBFAF;
+}
+
+.searchTerm:focus{
+    color: var(--main-search-bar-border-color);
+}
+
+.searchButton {
+    width: 40px;
+    height: 36px;
+    border: 1px solid var(--main-search-bar-border-color);
+    background: var(--main-search-bar-border-color);
+    text-align: center;
+    color: #fff;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    font-size: 20px;
 }
