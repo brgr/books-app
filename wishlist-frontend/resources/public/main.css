@@ -1,6 +1,6 @@
 
 :root {
-    --main-search-bar-border-color: bisque;
+    --main-search-bar-border-color: blanchedalmond;
 }
 
 
@@ -74,7 +74,8 @@ div.navbar {
 .search {
     position: relative;
     display: flex;
-    justify-self: flex-end;
+    padding-right: 3em;
+    bottom: -0.5em;
     float: right;
     width: 50%;
 }
@@ -91,6 +92,7 @@ div.navbar {
 }
 
 .searchTerm:focus{
+    /* todo: this color is not good here.. */
     color: var(--main-search-bar-border-color);
 }
 
