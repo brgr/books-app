@@ -1,8 +1,11 @@
 
 :root {
-    --main-search-bar-border-color: blanchedalmond;
-}
+    --main-text-color: darkslategray;
 
+    --main-search-bar-border-color: blanchedalmond;
+    --main-search-bar-background-color: #f8f8f8;
+
+}
 
 div.top-bar {
     width: 100%;
@@ -27,6 +30,7 @@ div.navbar {
     display: flex;
     margin: 0 0.2em 0 0;
 }
+
 .navbar .item {
     padding-bottom: 0.35em;
 }
@@ -70,37 +74,55 @@ div.navbar {
     grid-auto-rows: 1fr;
 }
 
+/*
+TODO: First inspiration for search bar:
+ https://dribbble.com/shots/15103908-Source-Find-Products/attachments/6836716?mode=media
+*/
 
-.search {
-    position: relative;
+.search-outer-container {
     display: flex;
-    padding-right: 3em;
-    bottom: -0.5em;
-    float: right;
-    width: 50%;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-inner-container {
+    width: 30em;
+    border-style: solid;
+    border-radius: 0.5em;
+    border-color: var(--main-search-bar-background-color);
+    background-color: var(--main-search-bar-background-color);
+    display: flex;
 }
 
 .searchTerm {
-    width: 100%;
-    border: 3px solid var(--main-search-bar-border-color);
-    border-right: none;
+    /*width: 88%;*/
+    flex-grow: 100;
+    /*border: 3px solid var(--main-search-bar-border-color);*/
+    background: var(--main-search-bar-background-color);
+    border: none;
     padding: 5px;
     height: 20px;
-    border-radius: 5px 0 0 5px;
+    /*border-radius: 5px 0 0 5px;*/
+    /*outline: none;*/
+    color: var(--main-text-color);
+    -webkit-appearance: none;
+    -moz-appearance: none;
     outline: none;
-    color: #9DBFAF;
+    appearance: none;
+    box-shadow: none;
 }
 
-.searchTerm:focus{
+.searchTerm:focus {
     /* todo: this color is not good here.. */
     color: var(--main-search-bar-border-color);
 }
 
 .searchButton {
-    width: 40px;
+    width: 2em;
+    float: right;
     height: 36px;
     border: 1px solid var(--main-search-bar-border-color);
-    background: var(--main-search-bar-border-color);
+    /*background: var(--main-search-bar-border-color);*/
     text-align: center;
     color: #fff;
     border-radius: 0 5px 5px 0;

@@ -33,10 +33,12 @@
     [:div
      [:div.top-bar
       [base-view/nav {:router router :current-route current-route}]
-      [:div.search
-       [:input.searchTerm {:type "text" :placeholder "What are you looking for?"}]
-       [:button.searchButton {:type "submit"}
-        [:i.fa.fa-search]]]]
+      [:div.search-outer-container
+       [:div.search-inner-container
+        [:input.searchTerm {:type "text"
+                            :placeholder "What are you looking for?"}]
+        [:button.searchButton {:type "submit"}
+         [:i.fa.fa-search]]]]]
      (when current-route
        [(-> current-route :data :view)])]))
 
