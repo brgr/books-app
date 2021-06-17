@@ -3,7 +3,7 @@
     --main-text-color: darkslategray;
 
     --main-search-bar-border-color: blanchedalmond;
-    --main-search-bar-background-color: #f8f8f8;
+    --main-search-bar-background-color: #efefef;
 
 }
 
@@ -86,6 +86,7 @@ TODO: First inspiration for search bar:
 }
 
 .search-inner-container {
+    margin-top: 0.2em;
     width: 30em;
     border-style: solid;
     border-radius: 0.5em;
@@ -95,15 +96,12 @@ TODO: First inspiration for search bar:
 }
 
 .searchTerm {
-    /*width: 88%;*/
     flex-grow: 100;
-    /*border: 3px solid var(--main-search-bar-border-color);*/
+    font-size: 1.1rem;
     background: var(--main-search-bar-background-color);
     border: none;
-    padding: 5px;
-    height: 20px;
-    /*border-radius: 5px 0 0 5px;*/
-    /*outline: none;*/
+    padding: 0.1em 0.1em 0.1em 0.5em;
+    height: 2em;
     color: var(--main-text-color);
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -113,19 +111,29 @@ TODO: First inspiration for search bar:
 }
 
 .searchTerm:focus {
-    /* todo: this color is not good here.. */
-    color: var(--main-search-bar-border-color);
+    color: var(--main-text-color);
 }
 
 .searchButton {
     width: 2em;
     float: right;
-    height: 36px;
-    border: 1px solid var(--main-search-bar-border-color);
-    /*background: var(--main-search-bar-border-color);*/
+    background: none;
     text-align: center;
-    color: #fff;
-    border-radius: 0 5px 5px 0;
+    color: var(--main-text-color);
     cursor: pointer;
-    font-size: 20px;
+    font-size: 1.5rem;
+
+    /* These are needed because we are using a symbol that is like a search symbol, but "standing up". With these,
+       we turn it s.t. it actually gets to be a search symbol. */
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+
+    border: none;
+}
+
+.searchButton:hover {
+    /* FIXME: Does this color really fit here? */
+    color: cornflowerblue;
 }

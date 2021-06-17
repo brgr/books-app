@@ -38,7 +38,7 @@
         [:input.searchTerm {:type "text"
                             :placeholder "What are you looking for?"}]
         [:button.searchButton {:type "submit"}
-         [:i.fa.fa-search]]]]]
+         "⚲"]]]]
      (when current-route
        [(-> current-route :data :view)])]))
 
