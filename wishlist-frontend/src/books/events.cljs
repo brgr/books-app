@@ -67,6 +67,13 @@
   (fn [db [_ all-books]]
     (assoc db :all-books all-books)))
 
+; todo: It works now! I think now I need to save the images in the backend, then I can just display them :-)
+(reg-event-db
+  :process-search
+  (fn [db [_ search-results]]
+    (println "search results:" search-results)
+    (assoc db :books-search-results search-results)))
+
 (reg-event-db
   :edit-single-book
   (fn [db [_ new-single-book]]
@@ -76,6 +83,23 @@
   :update-current-book-id
   (fn [db [_ new-current-book-id]]
     (assoc db :current-book-id new-current-book-id)))
+
+(reg-event-db
+  :trigger-search
+  (fn [db [_ _]]
+    (GET (str BACKEND-URI "/search/amazon?search-text=" (:current-search db))
+         (println "sent:" (str BACKEND-URI "/search/amazon?search-text=" (:current-search db)))
+         {:response-format :json
+          :keywords?       true
+          :handler         (fn [response]
+                             (dispatch [:process-search (response :result)]))
+          ; TODO: error handler
+          :error-handler   #(do (println "error:" %1))})))
+
+(reg-event-db
+  :update-current-search
+  (fn [db [_ new-current-search]]
+    (assoc db :current-search new-current-search)))
 
 (reg-event-db
   :update-in-single-book

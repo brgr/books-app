@@ -82,6 +82,10 @@
      [:p "No wishlists yet"]
      [add-new-amazon-wishlist-form]]))
 
+; TODO: Display the results (I think I need to load the book images first for that - or maybe we use the Amazon ones for now?)
+(defn search-amazon-results []
+  [:div.search-amazon [:p "Hello"]])
+
 (defn ui []
   [:div.books-ui
    [list-all-books]])

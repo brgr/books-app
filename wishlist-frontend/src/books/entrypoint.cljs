@@ -1,20 +1,21 @@
 (ns books.entrypoint
-  (:require [reagent.dom :as dom]
-            [re-frame.core :as reframe]
-            [re-frame.core :refer [subscribe dispatch]]
+  (:require
+    [reagent.dom :as dom]
+    [re-frame.core :as reframe]
+    [re-frame.core :refer [subscribe dispatch]]
 
-            [books.views.views :as views]
-            [books.views.base :as base-view]
-            [books.routing :as routing]
+    [books.views.views :as views]
+    [books.views.base :as base-view]
+    [books.routing :as routing]
 
-            [reitit.frontend :as rf]
-            [reitit.frontend.easy :as rfe]
-            [reitit.coercion.spec :as rss]
+    [reitit.frontend :as rf]
+    [reitit.frontend.easy :as rfe]
+    [reitit.coercion.spec :as rss]
 
     ; Note: these below are needed s.t. they are loaded with the entrypoint
-            [books.events]
-            [books.effects]
-            [books.subs]))
+    [books.events]
+    [books.effects]
+    [books.subs]))
 
 
 (defn on-navigate [new-match]
@@ -35,9 +36,13 @@
       [base-view/nav {:router router :current-route current-route}]
       [:div.search-outer-container
        [:div.search-inner-container
-        [:input.searchTerm {:type "text"
-                            :placeholder "What are you looking for?"}]
-        [:button.searchButton {:type "submit"}
+        [:input.searchTerm {:type        "text"
+                            :on-change   #(dispatch [:update-current-search (-> % .-target .-value)])
+                            :placeholder "Search..."}]
+        [:button.searchButton {:type "submit"
+                               :on-click #(let [current-search @(subscribe [:current-search])]
+                                            (js/console.log "current search: " current-search)
+                                            (dispatch [:trigger-search]))}
          "⚲"]]]]
      (when current-route
        [(-> current-route :data :view)])]))
