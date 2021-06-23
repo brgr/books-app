@@ -62,20 +62,27 @@ this, as it was always only happening after sending the API call.
 
 * Update 19 May 2021:
 
-I have now recently had further problems with CORS. Or, actually, CORS has never even worked correctly, and I just
-have not seen that because I never really tried it. So far (with the update from 08 May) I only got the code to
-"compile" (well, it actually always kind of compiled but just swagger didn't run correctly - what I mean is that
-the effective function of CORS was never tested after fixing that error).
+I have now recently had further problems with CORS. Or, actually, CORS has never even worked correctly, and I just have
+not seen that because I never really tried it. So far (with the update from 08 May) I only got the code to
+"compile" (well, it actually always kind of compiled but just swagger didn't run correctly - what I mean is that the
+effective function of CORS was never tested after fixing that error).
 
 Now, I have finally tested the calls on the frontend and quickly saw that I still have errors with CORS. I have
-summarized everything [here][15]. What didn't work was basically `reitit`: The framework doesn't really support
-CORS (yet - see [this issue on GitHub for more info][16]).
+summarized everything [here][15]. What didn't work was basically `reitit`: The framework doesn't really support CORS (
+yet - see [this issue on GitHub for more info][16]).
 
 There is a workaround, which I found through googling for Luminus instead of reitit (even though the workaround
-basically is about reitit). This workaround [can be found in this StackOverflow question][17], and it is basically
-what I am doing now (Except some Luminus-specific stuff that is also in this answer, and that I have stripped away
-from my solution. I think that is fine)
+basically is about reitit). This workaround [can be found in this StackOverflow question][17], and it is basically what
+I am doing now (Except some Luminus-specific stuff that is also in this answer, and that I have stripped away from my
+solution. I think that is fine)
 
+## Frontend
+
+### What is it with this hash key (#) in the URL?
+
+In the app URL, the `#` [comes from Reitit][19]. Normally, the hash key always means that we go to the relevant id in
+the HTML document. However, in reitit, the URL starts with `#/...`, i.e., with a slash directly after the hash key.
+Therefore, this is used to mark the routes for the SPA.
 
 ## Environments
 
@@ -114,7 +121,7 @@ Using Github Actions that are not directly from Github is not really safe! For a
 - Breaking bash commands into multiple lines is not allowed:
   https://stackoverflow.com/questions/59954185/github-action-split-long-command-into-multiple-lines
 
-## Quick Notes
+# Quick Notes
 
 - For unit testing network stuff etc.: [mockery][6]
 - Seems to be similar to `testcontainers`: [docker-fixture][7]
@@ -127,6 +134,17 @@ Using Github Actions that are not directly from Github is not really safe! For a
     - I think these articles are for higher scale, but they definitely contain some useful information [[11]][[12]]
 - I should have a better look at reframe [[13]] and best practices for it.
     - In general, there are some things that are implemented in its example app, TodoMVC [[14]], that I could use.
+
+# Notes for Later
+
+These notes are meant for later, meaning that I'm currently not at the point that these notes are very useful to me, but
+it is very likely that they are useful later.
+
+## Pagination in Databases
+
+Pagination should not be done with `limit` in databases. Instead, there are better ways to do it, read more on
+it [here][18].
+
 
 [1]: https://unix.stackexchange.com/questions/90853/how-can-i-run-ssh-add-automatically-without-a-password-prompt
 
@@ -161,3 +179,7 @@ Using Github Actions that are not directly from Github is not really safe! For a
 [16]: https://github.com/metosin/reitit/issues/236#issuecomment-838301789
 
 [17]: https://stackoverflow.com/questions/56783213/rest-api-cors-error-when-trying-to-access-it-from-a-web-application
+
+[18]: https://use-the-index-luke.com/no-offset
+
+[19]: https://cljdoc.org/d/metosin/reitit/0.5.12/doc/frontend/browser-integration#fragment-router
