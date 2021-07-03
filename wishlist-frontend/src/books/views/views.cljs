@@ -82,35 +82,23 @@
      [:p "No wishlists yet"]
      [add-new-amazon-wishlist-form]]))
 
-(defn list-search-result-books []
+(defn search-amazon-results []
   (let [search-results @(subscribe [:books-search-results])]
     (println "books search results:" search-results)
     (js/console.log search-results)
     (cljs.pprint/pprint search-results)
-    [:div.book-list
-     ;[:p (str "Count books: " (count books))]
-     [:div.book-list-grid
-      (for [book search-results]
-        #_[:p (:title book)]
-        (let [image-source (:thumbnail-url book)]
-          ; fixme: somehow display books that have no cover
-          [:div.single-book-in-list
-           [:a {:href (routing/href :books.routing/book {:id (book :_id)})}
-            [:img {:src image-source}]
-            [:br]
-            ;[:p (book :title) "  "
-            ; [:input {:type     "button"
-            ;          :value    "x"
-            ;          :on-click #(dispatch [:remove-book-by-id book])}]]
-            ]]))]]))
-
-(defn search-amazon-results []
-  (js/console.log "Displaying search results...")
-  (let [search-results-books []  #_@(subscribe [:all-books])]
-    (println "found following books:" search-results-books)
     [:div.search-amazon
-     [:p "Hello"]
-     [list-search-result-books]]))
+     [:div.book-list
+      ;[:p (str "Count books: " (count books))]
+      [:div.book-list-grid
+       (for [book search-results]
+         #_[:p (:title book)]
+         (let [image-source (:thumbnail-url book)]
+           ; fixme: somehow display books that have no cover
+           [:div.single-book-in-list
+            [:a {:href (routing/href :books.routing/book {:id (book :_id)})}
+             [:img {:src image-source}]
+             [:br]]]))]]]))
 
 (defn ui []
   [:div.books-ui
