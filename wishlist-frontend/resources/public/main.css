@@ -110,13 +110,16 @@ div.navbar {
 }
 
 .searchButton {
-    width: 2em;
+    width: 1em;
+    margin-top: -0.2em;
     float: right;
     background: none;
     text-align: center;
     color: var(--main-text-color);
     cursor: pointer;
-    font-size: 1.5rem;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 2.5rem;
 
     /* These are needed because we are using a symbol that is like a search symbol, but "standing up". With these,
        we turn it s.t. it actually gets to be a search symbol. */
