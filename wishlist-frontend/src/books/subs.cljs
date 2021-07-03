@@ -14,3 +14,4 @@
 (reg-sub-from-db :current-route)
 (reg-sub-from-db :current-book-id)
 (reg-sub-from-db :current-search)
+(reg-sub-from-db :books-search-results)

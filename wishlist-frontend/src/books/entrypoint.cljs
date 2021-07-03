@@ -40,10 +40,14 @@
                             :on-change   #(dispatch [:update-current-search (-> % .-target .-value)])
                             :placeholder "Search..."}]
         [:button.searchButton {:type "submit"
-                               :on-click #(let [current-search @(subscribe [:current-search])]
+                               ; todo: make button click work!
+                               #_#_:on-click #(let [current-search @(subscribe [:current-search])]
                                             (js/console.log "current search: " current-search)
                                             (dispatch [:trigger-search]))}
-         "⚲"]]]]
+         [:a {:href (rfe/href
+                      :books.routing/search-amazon
+                      {:search-text @(subscribe [:current-search])})}
+          "⚲"]]]]]
      (when current-route
        [(-> current-route :data :view)])]))
 

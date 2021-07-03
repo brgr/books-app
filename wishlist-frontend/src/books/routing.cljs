@@ -14,7 +14,9 @@
      :link-text   "Search Amazon"
      :controllers [{:parameters {:query [:search-text]}
                     :start      (fn [{:keys [query]}]
-                                  (js/console.log "query: " (:search-text query)))}]}]
+                                  (js/console.log "query:" query)
+                                  (js/console.log "search-text: " (:search-text query))
+                                  (dispatch [:trigger-search (:search-text query)]))}]}]
    ["/book/:id"
     {:name        ::book
      :view        views/single-book-view
