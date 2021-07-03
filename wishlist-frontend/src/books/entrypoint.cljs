@@ -30,21 +30,11 @@
             :coercion    rss/coercion}}))
 
 (defn router-component [{:keys [router]}]
-  (let [current-route @(subscribe [:current-route])
-        current-search @(subscribe [:current-search])]
+  (let [current-route @(subscribe [:current-route])]
     [:div
      [:div.top-bar
       [base-view/nav {:router router :current-route current-route}]
-      [:div.search-outer-container
-       [:div.search-inner-container
-        [:input.searchTerm {:type        "text"
-                            :on-change   #(dispatch [:update-current-search (-> % .-target .-value)])
-                            :placeholder "Search..."}]
-        [:a.searchButton {:href (rfe/href
-                                  :books.routing/search-amazon
-                                  nil
-                                  {:search-text current-search})}
-         "⚲"]]]]
+      [base-view/search-bar]]
      (when current-route
        [(-> current-route :data :view)])]))
 
