@@ -84,9 +84,30 @@ In the app URL, the `#` [comes from Reitit][19]. Normally, the hash key always m
 the HTML document. However, in reitit, the URL starts with `#/...`, i.e., with a slash directly after the hash key.
 Therefore, this is used to mark the routes for the SPA.
 
+### Handling Forms in Reitit
+
+Because of the afore-mentioned hash key in the URL, we can't get HTML forms to work with URLs (because HTML forms don't
+allow hash keys in the URL - they will be simply removed when actually clicking on the submit button).
+
+This is a problem for which I have not found a great solution. One idea would be to use pre-built libraries for forms in
+reagent. I have found several of those, but I didn't have a deeper look at any of them. In my opinion, at this point in
+time it makes more sense for me to work around this myself.
+
+The thing for which I had this problem right now was the search bar: It has an input field, and a search button. When I
+click the search button, I want the search to occur. I want the same to happen when I click *Enter* in the input field.
+When I say *the search occurs* I actually mean multiple things now:
+
+- the search is triggered in the backend; the frontend is waiting for the results,
+- the frontend route (browser URL) is changed, displaying the search route as well as the search text, and
+- the search results are updated on the frontend as soon as they're available by the backend.
+
+I have now solved it like this: When Enter is clicked, or the search button is pressed, the frontend goes to the search
+URL in the browser. When this is called, an event `:trigger-search` is called, which triggers the backend search and
+waits for the results. (Note that this event should actually be an effect! I am working on this...)
+
 ## Environments
 
-I am using `environ` [[5]] for putting environment-specific variables like e.g. the database URL etc. It is from the
+I am using `environ` [[5]] for putting environment-specific variables like e.g., the database URL etc. It is from the
 same creator(s) as leiningen. Also not the last part on the README from the project: It also takes into account
 environment variables, which is important on docker e.g., as I am creating an uberwar on there and this needs to have an
 environment variable set to recognize the env variables. This is why I have put that into the docker-compose file.
