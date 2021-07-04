@@ -36,6 +36,4 @@
                                   :dev        {:closure-defines {books.app/BACKEND-URI "http://localhost:3000"}}
                                   :release    {:closure-defines {}}}}}
 
-  :aliases {"dev-auto" ["shadow" "watch" "client"]}
-
-  :repl-options {:init-ns books.entrypoint})
+  :aliases {"dev-auto" ["shadow" "watch" "client"]})
