@@ -44,6 +44,7 @@
 
 (defn list-all-books []
   (let [books @(subscribe [:all-books])]
+    (println "books:" books)
     [:div.book-list
      ;[:p (str "Count books: " (count books))]
      [:div.book-list-grid

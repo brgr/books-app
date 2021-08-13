@@ -1,6 +1,7 @@
 (ns amazon.books.fetch.scraping.driver
   (:require [etaoin.api :refer [chrome firefox-headless firefox go with-driver get-source quit get-logs]]
             [clojure.string :as str]
+            [etaoin.api :refer :all]
             [environ.core :refer [env]]))
 
 ; The useragents were originally taken from this site: (only the Browser user agents)
@@ -34,3 +35,12 @@
             ; This other Firefox installation has the "useragent-switcher" profile set per default, which is then
             ; everytime updated
             :capabilities {:browserName (env :firefox-browser-name)}}))
+
+(defn get-generic-html [url]
+  (let [driver (get-driver)]
+    (try
+      (with-wait-timeout 30
+        (go driver url)
+        (get-source driver))
+      (finally
+        (quit driver)))))

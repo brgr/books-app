@@ -65,6 +65,7 @@
 (reg-event-db
   :process-all-books
   (fn [db [_ all-books]]
+    (println "processing books:" all-books)
     (assoc db :all-books all-books)))
 
 (reg-event-db
@@ -82,6 +83,7 @@
   :update-current-book-id
   (fn [db [_ new-current-book-id]]
     (assoc db :current-book-id new-current-book-id)))
+
 
 (reg-event-db
   :trigger-search

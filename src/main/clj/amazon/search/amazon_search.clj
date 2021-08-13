@@ -3,6 +3,7 @@
     [amazon.search.parse.authors :refer [get-authors-from-metadata-below-title]]
     [amazon.search.parse.search-result :refer [SearchResult parse-search-results]]
     [amazon.search.filter.filter-search-result :refer [filter-shady-results]]
+    [amazon.books.fetch.scraping.driver :refer [get-generic-html]]
     [schema.core :as s])
   (:import
     [org.jsoup Jsoup]
@@ -27,7 +28,8 @@
   "Returns mostly all search results without really much filtering. I.e., not only books are returned, but all kind of
    products. Often times, products that are not books will have no authors."
   [search :- String]
-  (let [search-url (URL. (build-amazon-search-url search))
-        timeout 5000]
-    (-> (find-results (Jsoup/parse search-url timeout))
-        (filter-shady-results))))
+  (let [search-url (build-amazon-search-url search)]
+    (-> (get-generic-html search-url)
+        (Jsoup/parse)
+        (find-results)
+        filter-shady-results)))
