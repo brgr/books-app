@@ -9,15 +9,22 @@
    [:div.item [:a {:href (rfe/href :books.routing/new)} "add"]]
    [:div.item [:a {:href (rfe/href :books.routing/import)} "import"]]])
 
-(defn text-input [keys on-change-trigger on-enter-trigger on-enter-sub]
+(defn text-input
+  "A function that will display a generic text input field (<input />), but thereby catching 'Enter' and performing a
+  given action when that is clicked.
+  The keys are the normal keys, as given to hiccup :input, with two special cases:
+   - :on-change - gets a function which gets passed the whole text of the input as the first parameter
+   - :on-enter  - gets a function which is called when 'Enter' is pressed, without any parameters
+
+   Note that as for the keys of the :input, :on-change and :on-key-press will get overwritten by this function, if
+   they are given in the keys parameter."
+  [keys]
   [:input
    (merge
      {:type         "text"
-      :on-change    (fn [e]
-                      (dispatch [on-change-trigger (-> e .-target .-value)]))
-      :on-key-press (fn [e]
-                      (when (= (.-key e) "Enter")
-                        (on-enter-trigger @(subscribe [on-enter-sub]))))}
+      :on-change    #((:on-change keys) (-> % .-target .-value))
+      :on-key-press #(when (= (.-key %) "Enter")
+                       ((:on-enter keys)))}
      (dissoc keys :on-change :on-enter :on-key-press))])
 
 (defn search-bar []
@@ -25,24 +32,13 @@
     [:div.search-outer-container
      [:div.search-inner-container
       (text-input
-        {:class             "searchTerm"
-         ;:on-enter          #(do
-         ;                      (println "Current search: " %1)
-         ;                      (rfe/push-state
-         ;                        :books.routing/search-amazon
-         ;                        nil
-         ;                        {:search-text %1}))
-         :on-change-trigger :update-current-search
-         ;:on-change   #(dispatch [:update-current-search (-> % .-target .-value)])
-         :placeholder       "Search..."}
-        :update-current-search
-        #(do
-           (println "Current search: " %1)
-           (rfe/push-state
-             :books.routing/search-amazon
-             nil
-             {:search-text %1}))
-        :current-search)
+        {:class       "searchTerm"
+         :on-change   (fn [text] (dispatch [:update-current-search text]))
+         :on-enter    (fn [] (rfe/push-state
+                               :books.routing/search-amazon
+                               nil
+                               {:search-text @(subscribe [:current-search])}))
+         :placeholder "Search..."})
       [:a.searchButton
        {:href (rfe/href
                 :books.routing/search-amazon
