@@ -9,34 +9,40 @@
    [:div.item [:a {:href (rfe/href :books.routing/new)} "add"]]
    [:div.item [:a {:href (rfe/href :books.routing/import)} "import"]]])
 
-(defn text-input [keys]
+(defn text-input [keys on-change-trigger on-enter-trigger on-enter-sub]
   [:input
    (merge
      {:type         "text"
+      :on-change    (fn [e]
+                      (dispatch [on-change-trigger (-> e .-target .-value)]))
       :on-key-press (fn [e]
-                      (println "Key:" (.-key e))
-                      (if (= (.-key e) "Enter")
-                        (do
-                          (println "enter:" (:on-enter keys))
-                          ; todo: why is current search always nil?
-                          (apply (:on-enter keys) [@(subscribe [:current-search])]))
-                        (:on-change keys)))}
-     (dissoc keys :on-change :on-enter))])
+                      (when (= (.-key e) "Enter")
+                        (on-enter-trigger @(subscribe [on-enter-sub]))))}
+     (dissoc keys :on-change :on-enter :on-key-press))])
 
 (defn search-bar []
   (let [current-search @(subscribe [:current-search])]
     [:div.search-outer-container
      [:div.search-inner-container
       (text-input
-        {:class       "searchTerm"
-         :on-enter    #(do
-                         (println "Current search: " %1)
-                         (rfe/push-state
-                           :books.routing/search-amazon
-                           nil
-                           {:search-text %1}))
-         :on-change   #(dispatch [:update-current-search (-> % .-target .-value)])
-         :placeholder "Search..."})
+        {:class             "searchTerm"
+         ;:on-enter          #(do
+         ;                      (println "Current search: " %1)
+         ;                      (rfe/push-state
+         ;                        :books.routing/search-amazon
+         ;                        nil
+         ;                        {:search-text %1}))
+         :on-change-trigger :update-current-search
+         ;:on-change   #(dispatch [:update-current-search (-> % .-target .-value)])
+         :placeholder       "Search..."}
+        :update-current-search
+        #(do
+           (println "Current search: " %1)
+           (rfe/push-state
+             :books.routing/search-amazon
+             nil
+             {:search-text %1}))
+        :current-search)
       [:a.searchButton
        {:href (rfe/href
                 :books.routing/search-amazon
