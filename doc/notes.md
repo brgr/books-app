@@ -50,7 +50,7 @@ the headers for all, not just for some single requests.
 
 This helped me solve it: https://stackoverflow.com/questions/52745107/how-do-i-add-cors-to-a-compojure-api-app
 
-Update 08 May 2021:
+* Update 08 May 2021:
 
 This section was generally created much earlier, for `compojure-api` still. I am currently in the process of migrating
 that library to `reitit`. In that process I had a problem indirectly related to CORS that I want to document:
@@ -60,9 +60,82 @@ realize this. Most of the time (especially in swagger), I would then get an erro
 `java.lang.ClassCastException` after executing an API call. I could have never really guessed that this was related to
 this, as it was always only happening after sending the API call.
 
+* Update 19 May 2021:
+
+I have now recently had further problems with CORS. Or, actually, CORS has never even worked correctly, and I just have
+not seen that because I never really tried it. So far (with the update from 08 May) I only got the code to
+"compile" (well, it actually always kind of compiled but just swagger didn't run correctly - what I mean is that the
+effective function of CORS was never tested after fixing that error).
+
+Now, I have finally tested the calls on the frontend and quickly saw that I still have errors with CORS. I have
+summarized everything [here][15]. What didn't work was basically `reitit`: The framework doesn't really support CORS (
+yet - see [this issue on GitHub for more info][16]).
+
+There is a workaround, which I found through googling for Luminus instead of reitit (even though the workaround
+basically is about reitit). This workaround [can be found in this StackOverflow question][17], and it is basically what
+I am doing now (Except some Luminus-specific stuff that is also in this answer, and that I have stripped away from my
+solution. I think that is fine)
+
+## Frontend
+
+### What is it with this hash key (#) in the URL?
+
+In the app URL, the `#` [comes from Reitit][19]. Normally, the hash key always means that we go to the relevant id in
+the HTML document. However, in reitit, the URL starts with `#/...`, i.e., with a slash directly after the hash key.
+Therefore, this is used to mark the routes for the SPA.
+
+### Handling Forms in Reitit
+
+Because of the afore-mentioned hash key in the URL, we can't get HTML forms to work with URLs (because HTML forms don't
+allow hash keys in the URL - they will be simply removed when actually clicking on the submit button).
+
+This is a problem for which I have not found a great solution. One idea would be to use pre-built libraries for forms in
+reagent. I have found several of those, but I didn't have a deeper look at any of them. In my opinion, at this point in
+time it makes more sense for me to work around this myself.
+
+The thing for which I had this problem right now was the search bar: It has an input field, and a search button. When I
+click the search button, I want the search to occur. I want the same to happen when I click *Enter* in the input field.
+When I say *the search occurs* I actually mean multiple things now:
+
+- the search is triggered in the backend; the frontend is waiting for the results,
+- the frontend route (browser URL) is changed, displaying the search route as well as the search text, and
+- the search results are updated on the frontend as soon as they're available by the backend.
+
+I have now solved it like this: When Enter is clicked, or the search button is pressed, the frontend goes to the search
+URL in the browser. When this is called, an event `:trigger-search` is called, which triggers the backend search and
+waits for the results. (Note that this event should actually be an effect! I am working on this...)
+
+### Using a cljs REPL
+
+Using a REPL with cljs is not very straight-forward, but once one knows how to do it, it's not hard.
+
+Generally, there are two main ways, one being `figwheel`, the other being `shadow-cljs`. I think these two are very
+often the tools to do general stuff on the frontend (e.g., hot reloading), and I am actually not sure how/if they 
+play together. I think (!) they are mostly complimentary: You either use the first or the latter, not both.
+
+I, for one, use `shadow-cljs`. With that it is not too hard to start and use a REPL with Cursive. I have found a good
+step-by-step guide [here][20]. I will summarize it here again, for how to start it in my IntelliJ with Cursive:
+
+1. Run the frontend (Run `Dev Frontend` in IntelliJ, which runs `lein do clean, shadow watch client` from the 
+   Makefile)
+2. This will start the nREPL at port 8777. This port is also saved at `.shadow-cljs/nrepl.port`. That file is used
+   by Cursive when looking for the REPL.
+3. Run the run-config `cljs REPL` in my IntelliJ
+4. When the REPL starts, it will be noted as a `clj` REPL. Don't change it in the dropdown menu!
+   Instead, enter this in the REPL: 
+   
+   ```clojure
+   (shadow/repl :client)
+   ```
+   
+   This will automatically change it to a `cljs` REPL. Now we can load stuff from our files into the REPL.
+
+   **NOTE:** If an error is appearing, make sure that the HTTP server is loaded in a browser somewhere. Otherwise the
+   REPL cannot work!
+
 ## Environments
 
-I am using `environ` [[5]] for putting environment-specific variables like e.g. the database URL etc. It is from the
+I am using `environ` [[5]] for putting environment-specific variables like e.g., the database URL etc. It is from the
 same creator(s) as leiningen. Also not the last part on the README from the project: It also takes into account
 environment variables, which is important on docker e.g., as I am creating an uberwar on there and this needs to have an
 environment variable set to recognize the env variables. This is why I have put that into the docker-compose file.
@@ -97,7 +170,7 @@ Using Github Actions that are not directly from Github is not really safe! For a
 - Breaking bash commands into multiple lines is not allowed:
   https://stackoverflow.com/questions/59954185/github-action-split-long-command-into-multiple-lines
 
-## Quick Notes
+# Quick Notes
 
 - For unit testing network stuff etc.: [mockery][6]
 - Seems to be similar to `testcontainers`: [docker-fixture][7]
@@ -110,6 +183,17 @@ Using Github Actions that are not directly from Github is not really safe! For a
     - I think these articles are for higher scale, but they definitely contain some useful information [[11]][[12]]
 - I should have a better look at reframe [[13]] and best practices for it.
     - In general, there are some things that are implemented in its example app, TodoMVC [[14]], that I could use.
+
+# Notes for Later
+
+These notes are meant for later, meaning that I'm currently not at the point that these notes are very useful to me, but
+it is very likely that they are useful later.
+
+## Pagination in Databases
+
+Pagination should not be done with `limit` in databases. Instead, there are better ways to do it, read more on
+it [here][18].
+
 
 [1]: https://unix.stackexchange.com/questions/90853/how-can-i-run-ssh-add-automatically-without-a-password-prompt
 
@@ -138,3 +222,15 @@ Using Github Actions that are not directly from Github is not really safe! For a
 [13]: https://github.com/day8/re-frame
 
 [14]: https://github.com/day8/re-frame/tree/master/examples/todomvc
+
+[15]: https://gitlab.com/berger_/books-app/-/issues/14#note_575263100
+
+[16]: https://github.com/metosin/reitit/issues/236#issuecomment-838301789
+
+[17]: https://stackoverflow.com/questions/56783213/rest-api-cors-error-when-trying-to-access-it-from-a-web-application
+
+[18]: https://use-the-index-luke.com/no-offset
+
+[19]: https://cljdoc.org/d/metosin/reitit/0.5.12/doc/frontend/browser-integration#fragment-router
+
+[20]: https://gist.github.com/akovantsev/44e2a0e10908785d1f40d3d3bcfff574

@@ -1,9 +1,25 @@
 
+:root {
+    --main-text-color: darkslategray;
+
+    --main-search-bar-border-color: blanchedalmond;
+    --main-search-bar-background-color: #efefef;
+
+}
+
+div.top-bar {
+    width: 100%;
+    margin: auto;
+    height: 6em;
+    padding: 1em 1em 1em 1em;
+}
+
 div.navbar {
     display: grid;
-    grid-template-columns: repeat(4, max-content);
+    grid-template-columns: repeat(5, max-content);
     align-items: flex-end;
-    padding: 1em 1em 1em 2.5em;
+    float: left;
+    width: 20%;
 }
 
 .navbar #title a {
@@ -14,6 +30,7 @@ div.navbar {
     display: flex;
     margin: 0 0.2em 0 0;
 }
+
 .navbar .item {
     padding-bottom: 0.35em;
 }
@@ -55,4 +72,66 @@ div.navbar {
     /* The following makes all rows of the same height, see here:
        https://stackoverflow.com/questions/44488357/equal-height-rows-in-css-grid-layout */
     grid-auto-rows: 1fr;
+}
+
+.search-outer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-inner-container {
+    margin-top: 0.2em;
+    width: 30em;
+    border-style: solid;
+    border-radius: 0.5em;
+    border-color: var(--main-search-bar-background-color);
+    background-color: var(--main-search-bar-background-color);
+    display: flex;
+}
+
+.searchTerm {
+    flex-grow: 100;
+    font-size: 1.1rem;
+    background: var(--main-search-bar-background-color);
+    border: none;
+    padding: 0.1em 0.1em 0.1em 0.5em;
+    height: 2em;
+    color: var(--main-text-color);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    appearance: none;
+    box-shadow: none;
+}
+
+.searchTerm:focus {
+    color: var(--main-text-color);
+}
+
+.searchButton {
+    width: 1em;
+    margin-top: -0.2em;
+    float: right;
+    background: none;
+    text-align: center;
+    color: var(--main-text-color);
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 2.5rem;
+
+    /* These are needed because we are using a symbol that is like a search symbol, but "standing up". With these,
+       we turn it s.t. it actually gets to be a search symbol. */
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+
+    border: none;
+}
+
+.searchButton:hover {
+    /* FIXME: Does this color really fit here? */
+    color: cornflowerblue;
 }

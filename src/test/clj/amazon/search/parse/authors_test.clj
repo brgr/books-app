@@ -4,4 +4,5 @@
 
 (deftest get-authors-from-metadata-below-title-test
   (assert (= ["Soetsu Yanagi" "Michael Brase"]
-             (get-authors-from-metadata-below-title "Englisch Ausgabe  |  von Soetsu Yanagi und Michael Brase  |  8. Oktober 2019"))))
+             (get-authors-from-metadata-below-title
+               "Englisch Ausgabe  |  von Soetsu Yanagi und Michael Brase  |  8. Oktober 2019"))))

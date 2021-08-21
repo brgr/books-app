@@ -11,13 +11,11 @@
 
 (def amazon-search-routes
   ["/search/amazon"
-   {:swagger {:tags ["search"]}}
-
-   ["/"
-    {:get {:summary    "Search products on amazon.de"
-           :swagger    {:description search-amazon-description}
-           :parameters {:query {:search-text s/Str}}
-           :responses  {200 {:body {:result [SearchResult]}}}
-           :handler    (fn [{{{:keys [search-text]} :query} :parameters}]
-                         {:status 200
-                          :body   {:result (search-amazon search-text)}})}}]])
+   {:swagger {:tags ["search"]}
+    :get {:summary    "Search products on amazon.de"
+          :swagger    {:description search-amazon-description}
+          :parameters {:query {:search-text s/Str}}
+          :responses  {200 {:body {:result [SearchResult]}}}
+          :handler    (fn [{{{:keys [search-text]} :query} :parameters}]
+                        {:status 200
+                         :body   {:result (search-amazon search-text)}})}}])

@@ -6,7 +6,8 @@
     [bookstore.api.routes.books :refer [book-management-routes]]
     [bookstore.api.swagger :refer [swagger-json-route
                                    swagger-ui-handler]]
-    [bookstore.api.reitit-options :refer [reitit-options]]))
+    [bookstore.api.config.reitit-options :refer [reitit-options]]
+    [bookstore.api.config.cors :refer [wrap-cors]]))
 
 (def routes
   [book-management-routes
@@ -18,9 +19,12 @@
   (ring/create-default-handler
     {:not-found (constantly {:status 404 :body "Not found"})}))
 
-(def app
+(def app-routes
   (ring/ring-handler
     (ring/router routes reitit-options)
     (ring/routes
       swagger-ui-handler
       default-404-handler)))
+
+(def app
+  (wrap-cors app-routes))

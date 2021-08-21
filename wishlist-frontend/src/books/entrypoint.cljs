@@ -1,20 +1,21 @@
 (ns books.entrypoint
-  (:require [reagent.dom :as dom]
-            [re-frame.core :as reframe]
-            [re-frame.core :refer [subscribe dispatch]]
+  (:require
+    [reagent.dom :as dom]
+    [re-frame.core :as reframe]
+    [re-frame.core :refer [subscribe dispatch]]
 
-            [books.views.views :as views]
-            [books.views.base :as base-view]
-            [books.routing :as routing]
+    [books.views.views :as views]
+    [books.views.base :as base-view]
+    [books.routing :as routing]
 
-            [reitit.frontend :as rf]
-            [reitit.frontend.easy :as rfe]
-            [reitit.coercion.spec :as rss]
+    [reitit.frontend :as rf]
+    [reitit.frontend.easy :as rfe]
+    [reitit.coercion.spec :as rss]
 
     ; Note: these below are needed s.t. they are loaded with the entrypoint
-            [books.events]
-            [books.effects]
-            [books.subs]))
+    [books.events]
+    [books.effects]
+    [books.subs]))
 
 
 (defn on-navigate [new-match]
@@ -31,7 +32,9 @@
 (defn router-component [{:keys [router]}]
   (let [current-route @(subscribe [:current-route])]
     [:div
-     [base-view/nav {:router router :current-route current-route}]
+     [:div.top-bar
+      [base-view/nav {:router router :current-route current-route}]
+      [base-view/search-bar]]
      (when current-route
        [(-> current-route :data :view)])]))
 
