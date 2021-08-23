@@ -14,6 +14,14 @@ Open projects in general, that are nicely done.
   fully on donations. [Here][3] is a nice list of how many donations the author gets and how it is spent. [Here][4] is
   a blog article by the author of the software, on why Lichess will always be free and [here][5] is the HN discussion
   on that.
+
+## Projects Where People Work Mostly Alone on Them
+
+And make money.
+
+- Lichess (see above)
+- pinboard.in
+- Cursive IDE
   
 ## UI
 
