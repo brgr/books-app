@@ -1,7 +1,9 @@
 (ns bookstore.db.model
-  (:require [monger.collection :as collection]
-            [monger.conversion :as conversion]
-            [bookstore.db.access :refer [get-db books-collection stringify-id]])
+  (:require
+    [monger.collection :as collection]
+    [monger.conversion :as conversion]
+    [monger.query :refer [with-collection find]]
+    [bookstore.db.access :refer [get-db books-collection stringify-id]])
   (:import (org.bson.types ObjectId)))
 
 (defn insert-new-book [book]
@@ -13,7 +15,7 @@
   (let [db (get-db)]
     (collection/insert-batch db books-collection books)))
 
- (defn insert-new-wishlist-url [url]
+(defn insert-new-wishlist-url [url]
   (let [db (get-db)]
     (-> (collection/insert-and-return db "wishlists" {:url url})
         (stringify-id))))
@@ -22,6 +24,13 @@
   (let [db (get-db)
         all-entries (collection/find-maps db books-collection)]
     (map stringify-id all-entries)))
+
+(defn first-n-books [n]
+  (let [db (get-db)
+        first-n-books (with-collection db books-collection
+                        (monger.query/find {})
+                        (monger.query/limit n))]
+    (map stringify-id first-n-books)))
 
 (defn remove-book-with-amazon-id [amazon-id]
   (let [db (get-db)]

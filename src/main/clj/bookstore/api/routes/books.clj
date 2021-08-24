@@ -8,13 +8,15 @@
 
 (def books-routes
   ["/books"
-   ; todo: use a Schema to specify what is returned!
+   ; Todo: use a Schema to specify what is returned!
+   ; Fixme: As a workaround, only loads the first 30 books instead of all books, s.t. the frontend is loaded faster
+   ;  This should be fixed with real pagination (BOOKS-9)
    {:swagger {:tags ["books"]}
-    :get     {:summary "Returns all books that are in the DB currently"
+    :get     {:summary "Returns the first 30 books that are in the DB currently"
               :status  200
               :handler (fn [_]
                          {:status 200
-                          :body   {:result (bookstore/all-books)}})}}])
+                          :body   {:result (bookstore/first-n-books 30)}})}}])
 
 (def book-routes
   ["/book"
