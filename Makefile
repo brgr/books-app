@@ -1,5 +1,6 @@
 
-docker-compose-file = ./wishlist-docker/docker-compose.yml
+docker-directory = ./docker
+docker-compose-file = $(docker-directory)/docker-compose.yml
 
 
 # Note: The && here is important, otherwise it won't execute in that directory (the Makefile does not keep track of its
@@ -35,8 +36,8 @@ docker/down:
 uberwar:
 	rm target/*-standalone.war || true
 	lein ring uberwar
-	mv -f target/*-standalone.war wishlist-docker/resources/
-	ln -sf -t target/ wishlist-docker/resources/*-standalone.war
+	mv -f target/*-standalone.war $(docker-directory)/resources/
+	ln -sf -t target/ $(docker-directory)/resources/*-standalone.war
 
 clean:
 	# Remove all images that are not associated with a container

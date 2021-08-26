@@ -14,11 +14,11 @@ jobs:
       - name: Run tests (lein test)
         run: lein test
       - name: Start MongoDB in a docker container
-        run: docker-compose -f wishlist-docker/docker-compose.yml up -d
+        run: docker-compose -f docker/docker-compose.yml up -d
       - name: Run integration tests (lein test :integration)
         run: lein test :integration
       - name: Shut down docker containers
-        run: docker-compose -f wishlist-docker/docker-compose.yml down
+        run: docker-compose -f docker/docker-compose.yml down
 
   build:
     name: Build
