@@ -110,24 +110,23 @@ waits for the results. (Note that this event should actually be an effect! I am 
 Using a REPL with cljs is not very straight-forward, but once one knows how to do it, it's not hard.
 
 Generally, there are two main ways, one being `figwheel`, the other being `shadow-cljs`. I think these two are very
-often the tools to do general stuff on the frontend (e.g., hot reloading), and I am actually not sure how/if they 
-play together. I think (!) they are mostly complimentary: You either use the first or the latter, not both.
+often the tools to do general stuff on the frontend (e.g., hot reloading), and I am actually not sure how/if they play
+together. I think (!) they are mostly complimentary: You either use the first or the latter, not both.
 
 I, for one, use `shadow-cljs`. With that it is not too hard to start and use a REPL with Cursive. I have found a good
 step-by-step guide [here][20]. I will summarize it here again, for how to start it in my IntelliJ with Cursive:
 
-1. Run the frontend (Run `Dev Frontend` in IntelliJ, which runs `lein do clean, shadow watch client` from the 
-   Makefile)
-2. This will start the nREPL at port 8777. This port is also saved at `.shadow-cljs/nrepl.port`. That file is used
-   by Cursive when looking for the REPL.
+1. Run the frontend (Run `Dev Frontend` in IntelliJ, which runs `lein do clean, shadow watch client` from the Makefile)
+2. This will start the nREPL at port 8777. This port is also saved at `.shadow-cljs/nrepl.port`. That file is used by
+   Cursive when looking for the REPL.
 3. Run the run-config `cljs REPL` in my IntelliJ
 4. When the REPL starts, it will be noted as a `clj` REPL. Don't change it in the dropdown menu!
-   Instead, enter this in the REPL: 
-   
+   Instead, enter this in the REPL:
+
    ```clojure
    (shadow/repl :client)
    ```
-   
+
    This will automatically change it to a `cljs` REPL. Now we can load stuff from our files into the REPL.
 
    **NOTE:** If an error is appearing, make sure that the HTTP server is loaded in a browser somewhere. Otherwise the
@@ -135,10 +134,16 @@ step-by-step guide [here][20]. I will summarize it here again, for how to start 
 
 ## Environments
 
-I am using `environ` [[5]] for putting environment-specific variables like e.g., the database URL etc. It is from the
+~~I am using `environ` [[5]] for putting environment-specific variables like e.g., the database URL etc. It is from the
 same creator(s) as leiningen. Also not the last part on the README from the project: It also takes into account
 environment variables, which is important on docker e.g., as I am creating an uberwar on there and this needs to have an
-environment variable set to recognize the env variables. This is why I have put that into the docker-compose file.
+environment variable set to recognize the env variables. This is why I have put that into the docker-compose file.~~
+
+Update August 2021:
+
+I will switch to use the `cprop` library together with `mount`, mainly because it's used by Luminus and therefore also
+has some very good explanations on it. The general documentation from Luminus can be found [here][21]. They explain 
+pretty well why the directory structure etc. exists like it does.
 
 ## SSH Key: With or without passphrase?
 
@@ -234,3 +239,5 @@ it [here][18].
 [19]: https://cljdoc.org/d/metosin/reitit/0.5.12/doc/frontend/browser-integration#fragment-router
 
 [20]: https://gist.github.com/akovantsev/44e2a0e10908785d1f40d3d3bcfff574
+
+[21]: https://luminusweb.com/docs/environment.html

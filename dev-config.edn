@@ -1,0 +1,22 @@
+;; WARNING
+;; The dev-config.edn file is used for local environment variables, such as database credentials.
+;; This file is listed in .gitignore and will be excluded from version control by Git.
+
+{:dev                                 true
+ :port                                3000
+ ;; when :nrepl-port is set the application starts the nREPL server on load
+ ;:nrepl-port 7000
+
+ :database-url                        "jdbc:postgresql://localhost:5432/books_dev?user=pguser&password=3ZmW9M38mX8AQGqBP"
+ :thumbnails-dir                      "public/img/thumbnails/"
+ :front-matter-dir                    "public/img/front_matters/"
+
+ :headless-scraping                   "true"
+
+ :user-agents-file                    "src/main/resources/useragents.txt"
+ ; the following need to be set up like this on the machine the code is running on
+ :firefox-profile-prefs-template-file "src/main/resources/prefs-template.js"
+ :firefox-profile-directory           "/home/dominik/.mozilla/firefox/djhmwgxs.useragent-switcher/"
+ ; this is just a normal firefox browser, but since it is a separate installation it was renamed
+ :firefox-browser-name                "firefox-gecko"
+ }
