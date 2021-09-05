@@ -15,11 +15,6 @@
 
 (add-tap (bound-fn* clojure.pprint/pprint))
 
-; TODO:
-; It seems to work now! :-)
-; Now I need to change the DB URL back to mongo DB again and export all books from there :)
-; ... Or do I have them saved already in some .clj file?
-
 (defn restart-db
   "Restarts database."
   []
