@@ -63,7 +63,7 @@ create table books (
 --;;
 create table authors (
     id serial primary key,
-    full_name text not null,
+    full_name text not null unique,
     alternate_names text[]
 );
 --;;
@@ -82,7 +82,7 @@ create table books_authors (
 --;;
 create table publishers (
     id serial primary key,
-    full_name text not null,
+    full_name text not null unique,
     -- For example: full_name = Penguin, alternate_names = {Penguin Books, Penguin Science, ...}
     -- Note that I won't distinguish sub-publishers (e.g. Penguin Science) for now
     alternate_names text[]
