@@ -64,6 +64,11 @@ create table books (
     -- simply text
     weight text,
 
+    -- For now, we will just store one price: it's in EUR and in cents.
+    -- Most probably the price will come from Amazon; or it will be the cheapest price. Let's see in the future
+    -- how we will handle this then
+    price int,
+
     -- For example, "1st ed.", "2000 edition"
     edition_name text,
     number_of_pages integer,
@@ -83,6 +88,8 @@ create table books (
     notes text,
     added timestamp,
     last_modified timestamp
+
+    -- todo: price
 );
 --;;
 
