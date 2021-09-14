@@ -88,8 +88,6 @@ create table books (
     notes text,
     added timestamp,
     last_modified timestamp
-
-    -- todo: price
 );
 --;;
 
