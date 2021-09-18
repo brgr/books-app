@@ -500,7 +500,7 @@
               :language                "Englisch",
               :amazon-id               "I15HCJ7WSZYE5C",
               :amazon-book-image-front "https://m.media-amazon.com/images/I/41vZOzm8+aL._SY346_.jpg",
-              :book-length             "1616896248",
+              :book-length             nil,
               :authors                 ["Michael Bierut"],
               :amazon-url              "https://www.amazon.de/dp/B07P89NHMP/?coliid=I15HCJ7WSZYE5C&colid=13XXXLP6RR1X9&psc=0",
               :price                   ""}
@@ -3767,7 +3767,7 @@
               :language                "Deutsch",
               :amazon-id               "I3RW2EZPAPJ7LE",
               :amazon-book-image-front "https://m.media-amazon.com/images/I/51pgHNOIqZL._SY346_.jpg",
-              :book-length             "3150193761",
+              :book-length             nil,
               :authors                 ["Konrad Ott"],
               :amazon-url              "https://www.amazon.de/dp/B01BFJF5E0/?coliid=I3RW2EZPAPJ7LE&colid=13XXXLP6RR1X9&psc=0",
               :price                   ""}
