@@ -144,7 +144,34 @@
 
   "Let's first find them in our files..."
 
-  
+  (def frontcovers-path
+    "mongo/src/main/resources/front_matters/")
+
+  (def effective-frontcover-img-names
+    (->> (rest (file-seq (clojure.java.io/file frontcovers-path)))
+         (map str)
+         (map #(subs % (+ 1 (str/last-index-of % "/"))))))
+
+  (def frontcover-img-names
+    (->> (map :books.book/amazon-book-image-front old-books)
+         (filter some?)
+         (map #(subs % (+ 1 (str/last-index-of % "/"))))))
+
+
+  (clojure.set/difference (set frontcover-img-names)
+                          (set effective-frontcover-img-names))
+  ; --> They are exactly the same!
+
+  ; Now do we also have the thumbnails somewhere?
+
+  ;; Let's first get all thumbnail IMG names...
+
+  (->> (map :books.book/amazon-thumbnail-url old-books)
+       (map #(subs % (+ 1 (str/last-index-of % "/")))))
+  ;; --> It seems that they are not saved... I cannot find them here
+  ;; ==> Therefore, let's just keep the front covers for now
+  ;; ==> We will need to think how we will save that from amazon in the future
+  ;; ==> But this problem exists not only in regard to thumbnails, also e.g. ASIN
 
   )
 
