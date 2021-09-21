@@ -186,8 +186,23 @@
            (map #(update % :books.book/item-added-date str))
            (map #(update % :books.book/publish-date str)))))
 
-  )
+  "Now, let's actually rename the images!"
 
+  (-> frontcovers-path)
+
+  (def ready-books
+    (read-string (slurp "mongo/src/main/resources/books_template_postgres_ready.clj")))
+
+
+  (->> ready-books
+       (map #(let [source (str frontcovers-path (:books.book/amazon-book-image-front %))
+                   target (str frontcovers-path (:books.book/cover-id %) "_front.jpg")]
+               ;(println % "\n---\n" source "\n---\n" target)
+               (when ((comp not nil?) (:books.book/amazon-book-image-front %))
+                 (println source target)
+                 (sh "git" "mv" "-f" source target)))))
+
+  )
 
 (def ready-books
   (read-string (slurp "mongo/src/main/resources/books_template_postgres_ready.clj")))
