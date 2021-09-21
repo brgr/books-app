@@ -4,7 +4,7 @@
             [clojure.spec.alpha :as s])
   (:import (java.time LocalDate)
            (java.time.format DateTimeFormatter)
-           (java.util Locale)))
+           (java.util Locale UUID)))
 
 (s/def :books.book/title string?)
 (s/def :books.book/language (s/nilable string?))
@@ -118,8 +118,8 @@
     (subs publisher-and-variation 0 (str/index-of publisher-and-variation ";"))
     publisher-and-variation))
 
-(def ready-books
-  ; todo: currently, only UUID change is missing
+(def almost-ready-books
+  ; here, only UUID change is missing
   (->> old-books
        (map #(update % :books.book/price update-price))
        (map #(update % :books.book/book-length update-book-length))
@@ -135,9 +135,9 @@
        (map #(assoc % :books.book/variation (get-book-variation (get-publisher-and-variation (:books.book/publisher %)))))
        (map #(update % :books.book/publisher (comp get-publisher-and-variation get-publisher)))))
 
-(map (partial s/valid? :books.book/book) ready-books)
+(map (partial s/valid? :books.book/book) almost-ready-books)
 
-(s/explain :books.book/book (first ready-books))
+(s/explain :books.book/book (first almost-ready-books))
 
 (comment
   "Let's change the IMG files for *front covers* + *thumbnails* to use the same UUID for a given book!"
@@ -173,5 +173,22 @@
   ;; ==> We will need to think how we will save that from amazon in the future
   ;; ==> But this problem exists not only in regard to thumbnails, also e.g. ASIN
 
+
+  (defn assoc-uuids
+    "Attention! This will generate new UUIDs on every call! We will need to save them somewhere, e.g. on the disk"
+    [books]
+    (map #(assoc % :books.book/cover-id (str (UUID/randomUUID))) books))
+
+  (spit
+    "mongo/src/main/resources/books_template_postgres_ready.clj"
+    (vec
+      (->> (assoc-uuids almost-ready-books)
+           (map #(update % :books.book/item-added-date str))
+           (map #(update % :books.book/publish-date str)))))
+
   )
+
+
+(def ready-books
+  (read-string (slurp "mongo/src/main/resources/books_template_postgres_ready.clj")))
 
