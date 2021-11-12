@@ -86,7 +86,7 @@ create table books (
 
     description text,
     notes text,
-    added timestamp,
+    added timestamp not null,
     last_modified timestamp
 );
 --;;
