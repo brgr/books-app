@@ -64,3 +64,13 @@ SELECT author_id, publisher_id, book_id, book_author_id, book_publisher_id
 FROM inserted_author, inserted_publisher, inserted_book,
      inserted_book_author_connection, inserted_book_publisher_connection;
 
+-- TODO: As for what is next:
+--
+-- The above CTE works in general, but as can be seen in the author notes, that one especially still needs fixing.
+-- Another problem is that IntelliJ doesn't work perfectly with CTEs, unfortunately.
+-- For this, I think it is best to break the CTE down into multile statements instead, i.e. 5 in total (add authors,
+-- add publisher, add book, connect book and authors, connect book and publisher). These should then all be called
+-- from a single transaction - which is of course in CLJ code.
+-- Connecting these things in CLJ code will simply make everything much easier!
+-- Note: If I don't want to rewrite everything immediately, I could also first just start with separating only
+-- authors, which I think is the most complex statement in this CTE here.
