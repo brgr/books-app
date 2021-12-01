@@ -63,17 +63,9 @@
      :number_of_pages     number_of_pages, :physical_dimensions physical_dimensions, :physical_format physical_format, :publish_country publish_country, :publish_date publish_date, :publish_date_precision publish_date_precision,
      :description         description, :notes notes, :added added, :last_modified last_modified}))
 
-(defn create-book-with-author!
-  [title added author]
-  (db/create-book-with-author!
-    {:author_full_name author
-     :added            added
-     :title            title}))
-
 (comment
 
-  ; fixme: See the thing below for how this works! (see in the sql script file)
-  ; --> strip down the SQL statement (maybe create a small new one) and test it with that!
+  ; This works now! :-)
   (create-full-book!
     {:author_full_name       "Jemand",
      :publisher_full_name    "asdf",
@@ -97,8 +89,4 @@
      :notes                  nil,
      :added                  (LocalDateTime/now),
      :last_modified          nil})
-
-  (create-book-with-author!
-    "Mein Buch"
-    (LocalDateTime/now)
-    "Mein Autor"))
+  )
