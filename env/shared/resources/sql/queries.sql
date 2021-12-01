@@ -28,10 +28,6 @@ insert into books_publishers (fk_book, fk_publisher) values (:book_id, :publishe
 -- :doc Link a book with an author
 insert into books_authors (fk_book, fk_author) values (:book_id, :author_id);
 
-
---- ### ---
--- Let's try it with a CTE (Common Table Expression), i.e. with WITH:
-
 -- :name create-full-book! :! :n
 -- :doc Creates a book together with its authors and publishers
 with inserted_author as (
