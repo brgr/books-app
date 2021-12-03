@@ -1,10 +1,14 @@
 
--- :name create-author! :i! :raw
+-- :name create-author! :insert :raw
 -- :doc Create a new author with its full name
--- TODO: We should actually insert only if it doesn't exist in alternative_names either!
-insert into authors (full_name) values (:full_name) on conflict do nothing;
+INSERT INTO authors (full_name)
+SELECT :full_name
+WHERE NOT EXISTS (
+    SELECT id FROM authors
+    WHERE full_name = :full_name OR :full_name = ANY(alternate_names)
+);
 
--- :name create-publisher! :! :n
+-- :name create-publisher! :insert :raw
 -- :doc Create a new publisher with its full name
 insert into publishers (full_name) values (:full_name);
 
@@ -53,15 +57,15 @@ with inserted_author as (
     returning id as book_id
 ), inserted_book_author_connection as (
     insert into books_authors (fk_book, fk_author)
-    SELECT book_id, author_id FROM inserted_book, inserted_author
+    select book_id, author_id from inserted_book, inserted_author
     returning id as book_author_id
 ), inserted_book_publisher_connection as (
     insert into books_publishers (fk_book, fk_publisher)
-    SELECT book_id, publisher_id FROM inserted_book, inserted_publisher
+    select book_id, publisher_id from inserted_book, inserted_publisher
     returning id as book_publisher_id
 )
-SELECT author_id, publisher_id, book_id, book_author_id, book_publisher_id
-FROM inserted_author, inserted_publisher, inserted_book,
+select author_id, publisher_id, book_id, book_author_id, book_publisher_id
+from inserted_author, inserted_publisher, inserted_book,
      inserted_book_author_connection, inserted_book_publisher_connection;
 
 -- TODO: As for what is next:
