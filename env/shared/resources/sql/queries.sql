@@ -8,17 +8,34 @@ WHERE NOT EXISTS (
     WHERE full_name = :full_name OR :full_name = ANY(alternate_names)
 );
 
+-- :name get-author-by-name :? :1
+-- :doc Retrieves an author by its name
+SELECT * FROM authors
+WHERE :full_name = full_name
+   OR :full_name = ANY(alternate_names);
+
 -- :name create-publisher! :insert :raw
 -- :doc Create a new publisher with its full name
-insert into publishers (full_name) values (:full_name);
+INSERT INTO publishers (full_name)
+SELECT :full_name
+WHERE NOT EXISTS (
+    SELECT id FROM publishers
+    WHERE full_name = :full_name OR :full_name = ANY(alternate_names)
+);
 
--- :name create-book! :! :n
+-- :name get-publisher-by-name :? :1
+-- :doc Retrieves a publisher by its name
+SELECT * FROM publishers
+WHERE :full_name = full_name
+   OR :full_name = ANY(alternate_names);
+
+-- :name create-book! :insert :raw
 -- :doc Creates a book, to be exact, a specific variation of a book
-insert into books (
+INSERT INTO books (
     title, subtitle, asin, isbn_10, isbn_13, language, cover_image_id, weight, price, edition_name, number_of_pages,
     physical_dimensions, physical_format, publish_country, publish_date, publish_date_precision, description, notes,
     added, last_modified
-) values (
+) VALUES (
     :title, :subtitle, :asin, :isbn_10, :isbn_13, :language, :cover_image_id, :weight, :price, :edition_name,
     :number_of_pages, :physical_dimensions, :physical_format, :publish_country, :publish_date, :publish_date_precision,
     :description, :notes, :added, :last_modified
@@ -26,46 +43,46 @@ insert into books (
 
 -- :name create-book-publisher! :! :n
 -- :doc Link a book with a publisher
-insert into books_publishers (fk_book, fk_publisher) values (:book_id, :publisher_id);
+INSERT INTO books_publishers (fk_book, fk_publisher) VALUES (:book_id, :publisher_id);
 
 -- :name create-book-author! :! :n
 -- :doc Link a book with an author
-insert into books_authors (fk_book, fk_author) values (:book_id, :author_id);
+INSERT INTO books_authors (fk_book, fk_author) VALUES (:book_id, :author_id);
 
 -- :name create-full-book! :! :n
 -- :doc Creates a book together with its authors and publishers
-with inserted_author as (
+WITH inserted_author AS (
     -- TODO: I think currently this doesn't allow multiple authors
     -- TODO: This doesn't check in alternative_names for existence (SAME for publishers)
-    insert into authors (full_name) values (:author_full_name)
+    INSERT INTO authors (full_name) VALUES (:author_full_name)
     -- TODO: IntelliJ won't allow this. Is this not valid syntax? (Try it once even if IntelliJ will highlight it if uncommented)
 --    on conflict do nothing
-    returning id as author_id
-), inserted_publisher as (
-    insert into publishers (full_name) values (:publisher_full_name)
+    RETURNING id AS author_id
+), inserted_publisher AS (
+    INSERT INTO publishers (full_name) VALUES (:publisher_full_name)
 --    on conflict do nothing
-    returning id as publisher_id
-), inserted_book as (
-    insert into books (
+    RETURNING id AS publisher_id
+), inserted_book AS (
+    INSERT INTO books (
     title, subtitle, asin, isbn_10, isbn_13, language, cover_image_id, weight, price, edition_name, number_of_pages,
     physical_dimensions, physical_format, publish_country, publish_date, publish_date_precision, description, notes,
     added, last_modified
-    ) values (
+    ) VALUES (
     :title, :subtitle, :asin, :isbn_10, :isbn_13, :language, :cover_image_id, :weight, :price, :edition_name,
     :number_of_pages, :physical_dimensions, :physical_format, :publish_country, :publish_date, :publish_date_precision,
     :description, :notes, :added, :last_modified)
-    returning id as book_id
-), inserted_book_author_connection as (
-    insert into books_authors (fk_book, fk_author)
-    select book_id, author_id from inserted_book, inserted_author
-    returning id as book_author_id
-), inserted_book_publisher_connection as (
-    insert into books_publishers (fk_book, fk_publisher)
-    select book_id, publisher_id from inserted_book, inserted_publisher
-    returning id as book_publisher_id
+    RETURNING id AS book_id
+), inserted_book_author_connection AS (
+    INSERT INTO books_authors (fk_book, fk_author)
+    SELECT book_id, author_id FROM inserted_book, inserted_author
+    RETURNING id AS book_author_id
+), inserted_book_publisher_connection AS (
+    INSERT INTO books_publishers (fk_book, fk_publisher)
+    SELECT book_id, publisher_id FROM inserted_book, inserted_publisher
+    RETURNING id AS book_publisher_id
 )
-select author_id, publisher_id, book_id, book_author_id, book_publisher_id
-from inserted_author, inserted_publisher, inserted_book,
+SELECT author_id, publisher_id, book_id, book_author_id, book_publisher_id
+FROM inserted_author, inserted_publisher, inserted_book,
      inserted_book_author_connection, inserted_book_publisher_connection;
 
 -- TODO: As for what is next:

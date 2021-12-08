@@ -11,7 +11,32 @@
   [full-name]
   (db/create-publisher! {:full_name full-name}))
 
-(defn create-book!
+(defn create-book! [book]
+  "Merges the given book with an empty book. Note that the empty book has however neither :title nor :added given,
+   as these are needed to be given by the user of this call."
+  (db/create-book!
+    (merge
+      {:subtitle               nil
+       :asin                   nil
+       :isbn_10                nil
+       :isbn_13                nil
+       :language               nil
+       :cover_image_id         nil
+       :weight                 nil
+       :price                  nil
+       :edition_name           nil
+       :number_of_pages        nil
+       :physical_dimensions    nil
+       :physical_format        nil
+       :publish_country        nil
+       :publish_date           nil
+       :publish_date_precision nil
+       :description            nil
+       :notes                  nil
+       :last_modified          nil}
+      book)))
+
+#_(defn create-book!
   [title subtitle asin isbn-10 isbn-13 language cover-image-id weight price edition-name number-of-pages
    physical-dimensions physical-format publish-country publish-date publish-date-precision description notes added
    last-modified]
@@ -89,4 +114,24 @@
      :notes                  nil,
      :added                  (LocalDateTime/now),
      :last_modified          nil})
+
+  ; TODO:
+  ; This transaction works; Now, let's clean it up!
+  (conman.core/with-transaction [db/*db* {}]
+    (let [author-name "Autor6"
+          publisher-name "Publisher1"
+          added-author (first (create-author! author-name))
+          added-publisher (first (create-publisher! publisher-name))
+          author-data (or added-author (db/get-author-by-name {:full_name author-name}))
+          publisher-data (or added-publisher (db/get-publisher-by-name {:full_name publisher-name}))
+          added-book (first (create-book! {:title "Book3", :added (LocalDateTime/now)}))]
+      (println "Author id: " (:id author-data)
+               "\nPublisher id:" (:id publisher-data)
+               "\nBook:" added-book
+               "\nBook id:" (:id added-book))
+      (db/create-book-publisher! {:book_id (:id added-book), :publisher_id (:id publisher-data)})
+      (db/create-book-author! {:book_id (:id added-book), :author_id (:id author-data)})
+      (println "Author:" author-data
+               "\nPublisher:" publisher-data
+               "\nBook:" added-book)))
   )
