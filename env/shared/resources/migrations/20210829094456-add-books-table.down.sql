@@ -1,11 +1,9 @@
-drop table books_publishers;
+drop table books_authors;
+--;;
+drop table books;
 --;;
 drop table publishers;
 --;;
-drop table books_authors;
---;;
 drop table authors;
---;;
-drop table books;
 --;;
 drop table date_precision;
