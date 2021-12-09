@@ -39,6 +39,7 @@
     db/create-book!
     (merge
       {:subtitle               nil
+       :fk-publisher           nil
        :asin                   nil
        :isbn-10                nil
        :isbn-13                nil

@@ -34,11 +34,11 @@ WHERE :full_name = full_name
 INSERT INTO books (
     title, subtitle, asin, isbn_10, isbn_13, language, cover_image_id, weight, price, edition_name, number_of_pages,
     physical_dimensions, physical_format, publish_country, publish_date, publish_date_precision, description, notes,
-    added, last_modified
+    added, last_modified, fk_publisher
 ) VALUES (
     :title, :subtitle, :asin, :isbn_10, :isbn_13, :language, :cover_image_id, :weight, :price, :edition_name,
     :number_of_pages, :physical_dimensions, :physical_format, :publish_country, :publish_date, :publish_date_precision,
-    :description, :notes, :added, :last_modified
+    :description, :notes, :added, :last_modified, :fk_publisher
 );
 
 -- :name create-book-author! :! :n
