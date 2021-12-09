@@ -41,10 +41,6 @@ INSERT INTO books (
     :description, :notes, :added, :last_modified
 );
 
--- :name create-book-publisher! :! :n
--- :doc Link a book with a publisher
-INSERT INTO books_publishers (fk_book, fk_publisher) VALUES (:book_id, :publisher_id);
-
 -- :name create-book-author! :! :n
 -- :doc Link a book with an author
 INSERT INTO books_authors (fk_book, fk_author) VALUES (:book_id, :author_id);
