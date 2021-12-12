@@ -25,21 +25,29 @@
   [full-name]
   (db/create-author! {:full_name full-name}))
 
+(defn get-author-by-name
+  [full-name]
+  (db/get-author-by-name {:full_name full-name}))
+
 (defn create-publisher!
   [full-name]
   (db/create-publisher! {:full_name full-name}))
+
+(defn get-publisher-by-name
+  [full-name]
+  (db/get-publisher-by-name {:full_name full-name}))
 
 (defn create-book!
   "Merges the given book with an empty book. Note that the empty book has however neither :title nor :added given,
    as these are needed to be given by the user of this call.
 
    Note that the keys of the given book are expected in kebab-case."
-  [book]
+  [book & [publisher-id]]
   (transform-keys-and-insert
     db/create-book!
     (merge
       {:subtitle               nil
-       :fk-publisher           nil
+       :fk-publisher           publisher-id
        :asin                   nil
        :isbn-10                nil
        :isbn-13                nil
@@ -61,12 +69,7 @@
 
 (defn create-book-author!
   [book-id author-id]
-  (db/create-book-author! {:book_id book-id, :publisher_id author-id}))
-
-;; todo: now that these are prepared, I want to first add all books that we already have (doing that we might still learn
-;;  some stuff on the way...); then we can make it work for the old DB scripts, i.e. make it work with the API
-; to generify these, we might want to add these queries here into a single one? Or how do we do it?
-; Do we also want to use spec or scheme?
+  (db/create-book-author! {:book_id book-id, :author_id author-id}))
 
 (defn create-full-book!
   [{:keys [author_full_name
@@ -106,25 +109,4 @@
      :description            nil,
      :notes                  nil,
      :added                  (LocalDateTime/now),
-     :last_modified          nil})
-
-  ; TODO:
-  ; This transaction works; Now, let's clean it up!
-  (conman.core/with-transaction [db/*db* {}]
-    (let [author-name "Autor6"
-          publisher-name "Publisher1"
-          added-author (first (create-author! author-name))
-          added-publisher (first (create-publisher! publisher-name))
-          author-data (or added-author (db/get-author-by-name {:full_name author-name}))
-          publisher-data (or added-publisher (db/get-publisher-by-name {:full_name publisher-name}))
-          added-book (first (create-book! {:title "Book3", :added (LocalDateTime/now)}))]
-      (println "Author id: " (:id author-data)
-               "\nPublisher id:" (:id publisher-data)
-               "\nBook:" added-book
-               "\nBook id:" (:id added-book))
-      (db/create-book-publisher! {:book_id (:id added-book), :publisher_id (:id publisher-data)})
-      (db/create-book-author! {:book_id (:id added-book), :author_id (:id author-data)})
-      (println "Author:" author-data
-               "\nPublisher:" publisher-data
-               "\nBook:" added-book)))
-  )
+     :last_modified          nil}))
