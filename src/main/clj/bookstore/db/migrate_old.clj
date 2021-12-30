@@ -238,7 +238,6 @@
        :cover-image-id         (UUID/fromString (:books.book/cover-id amazon-book))
        :weight                 nil
        :price                  (:books.book/price amazon-book)
-       ; TODO: Is edition and variation really the same thing? Do I maybe still need "variation" in my DB?
        :edition-name           (:books.book/variation amazon-book)
        :number-of-pages        (:books.book/book-length amazon-book)
        :physical-dimensions    nil
