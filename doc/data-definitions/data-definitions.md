@@ -1,6 +1,15 @@
 # Data Definitions
 
-## Useful Other Schemas
+A note on this document:
+
+> I have quickly stopped discussing / writing up stuff in this document. 
+> 
+> Instead, I have focussed on writing actually relevant stuff into the actual migration scripts. (By this I
+> mean especially the last section, **Data Points**, which is only started here)
+> 
+> However, the general idea of looking into the ***Open Library* Schemas** might actually be very useful!
+
+## Other Useful Schemas
 
 ***Open Library***:
 
@@ -16,6 +25,12 @@ Open questions:
     - It has 2 parts, actually
     - It has many many different editions
     - (These would again have reprints, but I'm sure that I would count those into the same edition)
+
+> Answer: Books can be seen as having a hierarchy: book / edition / variation. A book might have several editions, e.g.
+> a 20th anniversary edition, which then again has several variations, e.g. a paperback and a hardcover.
+> 
+> I go into details of this also in the *migrate up* SQL scripts, where books (or, actually, variations) are actually
+> defined the way I'm saving them in the DB.
 
 ### Interesting
 
@@ -37,10 +52,9 @@ them.
 
   Note that for example ISBN wouldn't write something like that down. They just give a unique identifier to a book.
 
-  In the end, I have found out [that it is anyways best to use 'text' in Postgres][1], which has no constraints on
-  strings anyways!
-- I have quickly stopped discussing / writing up about this in this document. Some further information can be found in
-  the migration scripts themselves!
+  > In the end, I have found out [that it is anyway best to use 'text' in Postgres][1], which has no constraints on
+  strings anyway!
+
 
 The most useful resource has definitely been the [Open Library Schemata][7]. I have used them a lot do define my own
 schemas. I have put a copy of them in this folder, as they are so useful.
