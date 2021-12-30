@@ -1,13 +1,24 @@
-(ns bookstore.db.migrate-old
+(ns migrate.migrate-old
   "Used simply to migrate the old books that we had in MongoDB. Will be deleted afterwards..."
   (:require [clojure.string :as str]
-            [clojure.java.io :as io]
             [clojure.java.shell :refer :all]
             [clojure.spec.alpha :as s]
             [bookstore.db.data.books :as books-db])
-  (:import (java.time LocalDate LocalDateTime)
+  (:import (java.time LocalDate)
            (java.time.format DateTimeFormatter)
            (java.util Locale UUID)))
+
+
+;;; A note on this file:
+;;; I used this to migrate the old MongoDB books, which I had saved in a CLJ file, to the new PostgreSQL database.
+;;; This was done successfully on 30 December 2021. (Note that while the books itself were migrated, the full app was
+;;; not, meaning that the backend is still not migrated to the new database)
+;;;
+;;; This file is here for historical purposes mainly, *but* may also serve as a re-importing tool later on. I have
+;;; moved this file from its original place (where the original migration was executed) so maybe it won't work anymore
+;;; out of the box. I have also moved the data of the original books (the CLJ files) and I have tried to adapt it
+;;; accordingly in this file - but, since I haven't run it again yet, it may not work directly.
+
 
 (s/def :books.book/title string?)
 (s/def :books.book/language (s/nilable string?))
@@ -47,7 +58,7 @@
 
 (def old-books
   (read-string
-    (slurp "mongo/src/main/resources/books_template.clj")))
+    (slurp "env/dev/resources/book_data/books_template.clj")))
 
 
 (defn update-price [price]
