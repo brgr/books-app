@@ -1,14 +1,16 @@
 (ns bookstore.db.migrate-old
   "Used simply to migrate the old books that we had in MongoDB. Will be deleted afterwards..."
   (:require [clojure.string :as str]
-            [clojure.spec.alpha :as s])
-  (:import (java.time LocalDate)
+            [clojure.java.io :as io]
+            [clojure.java.shell :refer :all]
+            [clojure.spec.alpha :as s]
+            [bookstore.db.data.books :as books-db])
+  (:import (java.time LocalDate LocalDateTime)
            (java.time.format DateTimeFormatter)
            (java.util Locale UUID)))
 
 (s/def :books.book/title string?)
 (s/def :books.book/language (s/nilable string?))
-; todo: change key name of book img to use UUID; change all images, including thumbnails to use UUID!
 (s/def :books.book/amazon-book-image-front (s/nilable string?))
 (s/def :books.book/price (s/nilable number?))
 (s/def :books.book/isbn-10 (s/nilable string?))
@@ -205,5 +207,54 @@
   )
 
 (def ready-books
+  "Note that :books.book/amazon-book-image-front can be dismissed in here! It's the old book format"
   (read-string (slurp "mongo/src/main/resources/books_template_postgres_ready.clj")))
 
+(comment
+  (count ready-books)
+
+  (last ready-books)
+
+  (def my-book (last ready-books))
+
+  (add-single-book my-book)
+
+  ; Taking this last book as a template, let's change it s.t. we can call the
+  ; functions in data.books
+
+  ; TODO: The following did not work on insert:
+  ;  - publisher: Completely not added
+  ;  - author: Completely not added
+  (defn add-single-book
+    [amazon-book]
+    (let [db-book {:authors                (:authors amazon-book)
+                   :publisher              (:publisher amazon-book)
+
+                   :title                  (:books.book/title amazon-book)
+                   :subtitle               nil
+                   :added                  (LocalDate/parse (:books.book/item-added-date amazon-book))
+                   :asin                   (:books.book/asin amazon-book)
+                   :isbn-10                (:books.book/isbn-10 amazon-book)
+                   :isbn-13                (:books.book/isbn-13 amazon-book)
+                   :language               (:books.book/language amazon-book)
+                   :cover-image-id         (UUID/fromString (:books.book/cover-id amazon-book))
+                   :weight                 nil
+                   :price                  (:books.book/price amazon-book)
+                   ; TODO: Is edition and variation really the same thing? Do I maybe still need "variation" in my DB?
+                   :edition-name           (:books.book/variation amazon-book)
+                   :number-of-pages        (:books.book/book-length amazon-book)
+                   :physical-dimensions    nil
+                   :physical-format        nil
+                   :publish-country        nil
+                   :publish-date           (LocalDate/parse (:books.book/publish-date amazon-book))
+                   :publish-date-precision "day"
+                   :description            (:books.book/description amazon-book)
+                   :notes                  nil
+                   :last-modified          nil}]
+      (println db-book)
+      (books-db/create-full-book! db-book)))
+
+
+  (LocalDate/parse "2021-12-27")
+
+  )
