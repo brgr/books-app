@@ -14,7 +14,7 @@ start-backend: docker/down uberwar docker/rebuild
 dev/setup-images:
 	mkdir -p public/img/thumbnails || true
 	mkdir -p public/img/front_matters || true
-	ln -srf mongo/src/main/resources/front_matters/*.jpg public/img/front_matters/
+	ln -srf env/dev/resources/front_matters/*.jpg public/img/front_matters/
 
 dev/backend: docker/database dev/setup-images ring-server
 

@@ -2,13 +2,9 @@
   :description "A small book CRUD app"
   :url "http://example.com/FIXME"
 
-  :source-paths ["src/main/clj"
-                 ; todo: remove this mongo source once it's not used anymore
-                 "mongo/src/main/clj"]
+  :source-paths ["src/main/clj"]
   :test-paths ["src/test/clj"]
   :resource-paths ["src/main/resources"
-                   ; todo: remove these mongo resource once mongo isn't used anymore
-                   "mongo/src/main/resources"
                    "env/shared/resources"]
 
   :profiles {:uberwar      {:env {:database-url "database"}}
