@@ -39,6 +39,7 @@
           :books.book/publish-date
           :books.book/publisher
           :books.book/description
+          ; Note that variation is slightly wrong. It should be edition instead
           :books.book/variation
           :books.book/item-added-date
           :books.book/item-added-date-precision
@@ -210,46 +211,57 @@
   "Note that :books.book/amazon-book-image-front can be dismissed in here! It's the old book format"
   (read-string (slurp "mongo/src/main/resources/books_template_postgres_ready.clj")))
 
+(defn add-single-book
+  [amazon-book]
+  (books-db/create-full-book!
+    {:authors                (:books.book/authors amazon-book)
+     :publisher              (:books.book/publisher amazon-book)
+
+     :title                  (:books.book/title amazon-book)
+     :subtitle               nil
+     :added                  (LocalDate/parse (:books.book/item-added-date amazon-book))
+     :asin                   (:books.book/asin amazon-book)
+     :isbn-10                (:books.book/isbn-10 amazon-book)
+     :isbn-13                (:books.book/isbn-13 amazon-book)
+     :language               (:books.book/language amazon-book)
+     :cover-image-id         (UUID/fromString (:books.book/cover-id amazon-book))
+     :weight                 nil
+     :price                  (:books.book/price amazon-book)
+     :edition-name           (:books.book/variation amazon-book)
+     :number-of-pages        (:books.book/book-length amazon-book)
+     :physical-dimensions    nil
+     :physical-format        nil
+     :publish-country        nil
+     :publish-date           (if (not (empty? (:books.book/publish-date amazon-book)))
+                               (LocalDate/parse (:books.book/publish-date amazon-book)))
+     :publish-date-precision "day"
+     :description            (:books.book/description amazon-book)
+     :notes                  nil
+     :last-modified          nil}))
+
 (comment
+  ;; Let's try it for a single book!
+
   (count ready-books)
-
-  (last ready-books)
-
   (def my-book (last ready-books))
 
+  ;; The following add the last of my books to the database
   (add-single-book my-book)
 
-  ; Taking this last book as a template, let's change it s.t. we can call the
-  ; functions in data.books
+  (map :books.book/publish-date ready-books)
+  (map :books.book/item-added-date ready-books)
 
-  (defn add-single-book
-    [amazon-book]
-    (books-db/create-full-book!
-      {:authors                (:books.book/authors amazon-book)
-       :publisher              (:books.book/publisher amazon-book)
-
-       :title                  (:books.book/title amazon-book)
-       :subtitle               nil
-       :added                  (LocalDate/parse (:books.book/item-added-date amazon-book))
-       :asin                   (:books.book/asin amazon-book)
-       :isbn-10                (:books.book/isbn-10 amazon-book)
-       :isbn-13                (:books.book/isbn-13 amazon-book)
-       :language               (:books.book/language amazon-book)
-       :cover-image-id         (UUID/fromString (:books.book/cover-id amazon-book))
-       :weight                 nil
-       :price                  (:books.book/price amazon-book)
-       :edition-name           (:books.book/variation amazon-book)
-       :number-of-pages        (:books.book/book-length amazon-book)
-       :physical-dimensions    nil
-       :physical-format        nil
-       :publish-country        nil
-       :publish-date           (LocalDate/parse (:books.book/publish-date amazon-book))
-       :publish-date-precision "day"
-       :description            (:books.book/description amazon-book)
-       :notes                  nil
-       :last-modified          nil}))
+  ;; Is date parsing working:
+  (LocalDate/parse "2021-12-27"))
 
 
-  (LocalDate/parse "2021-12-27")
+(comment
+  ;; <<< ACTUAL MIGRATION >>>
+  ;; Now, let's run the actual migration...
 
-  )
+  ;; Run the following function to actually migrate (i.e. add) all saved books in the DB
+  (do
+    (println "Do you really want to add (migrate) all books into the database? Enter [y] to continue")
+    (if (= "y" (read-line))
+      (map add-single-book ready-books)
+      (println "Migration aborted"))))
