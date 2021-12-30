@@ -26,6 +26,12 @@
           (queries/get-publisher-by-name publisher-name)))))
 
 (defn create-full-book!
+  "Creates a full in the database. This also takes authors and publishers,
+   which are however not newly created if they already exist.
+   Authors are first taken out of the key :authors. The publisher is taken
+   out of the key :publisher.
+   The rest of the keys are the same as in the SQL script, in kebab case
+   though, as that is changed later."
   [book]
   (conman/with-transaction [core/*db* {}]
     (let [author-names (:authors book)
