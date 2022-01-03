@@ -213,6 +213,10 @@ it is very likely that they are useful later.
 Pagination should not be done with `limit` in databases. Instead, there are better ways to do it, read more on
 it [here][18].
 
+## API Tokens
+
+[Here][23] is an article and its respective discussion on HN regarding API tokens, in regard to authentication etc.
+
 
 [1]: https://unix.stackexchange.com/questions/90853/how-can-i-run-ssh-add-automatically-without-a-password-prompt
 
@@ -257,3 +261,5 @@ it [here][18].
 [21]: https://luminusweb.com/docs/environment.html
 
 [22]: https://cursive-ide.com/userguide/leiningen.html
+
+[23]: https://news.ycombinator.com/item?id=28295348

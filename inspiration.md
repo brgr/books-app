@@ -1,4 +1,4 @@
-# Inspiration
+# Inspiration and Ideas
 
 ## Project-Related Inspiration
 
@@ -36,9 +36,8 @@ To find more libraries: [Wikipedia Book Search / Sources][7] ([see below for mor
 
 Not directly related to anything with books.
 
-### Open Projects in General
-
-Open projects in general, that are nicely done.
+### Free and Open Projects in General
+Free and open projects in general, that are nicely done.
 
 - [lichess][2]: Play chess online. It's a really nice website used by many people all over the world. The author relies
   fully on donations. [Here][3] is a nice list of how many donations the author gets and how it is spent. [Here][4] is a
@@ -51,6 +50,10 @@ And make money.
 
 - Lichess (see above)
 - pinboard.in
+
+  The creator has a blog also: www.idlewords.com.
+  However, I think the topics on there are mostly just political. Somewhere (On another blog though: https://blog.pinboard.in) he also writes about Pinboard, amount of users etc.
+
 - Cursive IDE
 
 ## UI
