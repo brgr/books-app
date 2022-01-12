@@ -1,7 +1,7 @@
 (ns bookstore.api.routes
   (:require
     [reitit.ring :as ring]
-    #_#_[bookstore.api.routes.import.amazon :refer [amazon-import-routes]]
+    #_[bookstore.api.routes.import.amazon :refer [amazon-import-routes]]
     [bookstore.api.routes.search.amazon :refer [amazon-search-routes]]
     [bookstore.api.routes.books :refer [book-management-routes]]
     [bookstore.api.swagger :refer [swagger-json-route
@@ -11,7 +11,7 @@
 
 (def routes
   [book-management-routes
-   #_#_amazon-import-routes
+   #_amazon-import-routes
    amazon-search-routes
    swagger-json-route])
 

@@ -1,19 +1,10 @@
 (ns bookstore.api.routes.books
   (:require
     [schema.core :as s]
-    #_#_[bookstore.db.model :as bookstore]
-        [bookstore.db.update]
     [bookstore.config :refer [env]]
     [bookstore.db.queries :as queries]
-    [clojure.java.io :as io]
-    [bookstore.files.file-management :refer [get-file-name]])
+    [clojure.java.io :as io])
   (:import (java.time LocalDateTime)))
-
-;; TODO: I can now start changing stuff here!
-;; I need to go over these and fix them one by one. Most probably all of them won't work anymore, as for now
-;; I don't have a single SELECT query. I need to see what kind of queries I need, add them first in SQL, then finally
-;; call them here.
-;; Like this, I should be able to slowly make the app work again.
 
 (def books-routes
   ["/books"
