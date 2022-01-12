@@ -3,16 +3,15 @@ docker-directory = ./docker
 docker-compose-file = $(docker-directory)/docker-compose.yml
 
 
-# Note: The && here is important, otherwise it won't execute in that directory (the Makefile does not keep track of its
-# environment)
 frontend:
+	# Note: The && here is important, otherwise it won't execute in that directory, because the Makefile does not keep
+	# track of its environment
 	cd wishlist-frontend && lein do clean, shadow watch client
 
 start-backend: docker/down uberwar docker/rebuild
 	docker-compose -f $(docker-compose-file) up -d
 
 dev/setup-images:
-	#mkdir -p public/img/thumbnails || true
 	mkdir -p env/dev/resources/public/img/front_matters || true
 	ln -srf env/dev/resources/front_matters/*.jpg env/dev/resources/public/img/front_matters/
 
