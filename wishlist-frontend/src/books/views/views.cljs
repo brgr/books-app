@@ -50,12 +50,12 @@
      [:div.book-list-grid
       (for [book books]
         ; todo: add the id to the route! (look up reitit documentation for that)
-        (let [image-source (str "http://localhost:3000/book/" (book :_id) "/front-matter")
-              image-alt-text (str (book :_id))]
+        (let [image-source (str "http://localhost:3000/book/" (book :book_id) "/front-matter")
+              image-alt-text (str (book :book_id))]
           ; fixme: somehow display books that have no cover
-          (when (not-empty (:amazon-book-image-front book))
+          (when (not-empty (:cover_image_id book))
             [:div.single-book-in-list
-             [:a {:href (routing/href :books.routing/book {:id (book :_id)})}
+             [:a {:href (routing/href :books.routing/book {:id (book :book_id)})}
               [:img {:src image-source, :alt image-alt-text}]
               [:br]
               ;[:p (book :title) "  "
