@@ -12,9 +12,9 @@ start-backend: docker/down uberwar docker/rebuild
 	docker-compose -f $(docker-compose-file) up -d
 
 dev/setup-images:
-	mkdir -p public/img/thumbnails || true
-	mkdir -p public/img/front_matters || true
-	ln -srf env/dev/resources/front_matters/*.jpg public/img/front_matters/
+	#mkdir -p public/img/thumbnails || true
+	mkdir -p env/dev/resources/public/img/front_matters || true
+	ln -srf env/dev/resources/front_matters/*.jpg env/dev/resources/public/img/front_matters/
 
 dev/backend: docker/down docker/database dev/setup-images ring-server
 
