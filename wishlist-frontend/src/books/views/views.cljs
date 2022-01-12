@@ -30,15 +30,15 @@
 (defn single-book-view []
   (let [current-book-id @(subscribe [:current-book-id])
         all-books @(subscribe [:all-books])
-        book (first ((group-by :_id all-books) current-book-id))]
+        book (first ((group-by :book_id all-books) current-book-id))]
     [:div.single-book-view
      [:h1 (book :title)]
      [:h2 (book :author)]
      [:p
       [:a {:href (str "https://amazon.de" (book :amazon-url))}
        "Amazon Link"]]
-     [:img {:src (str "http://localhost:3000/books/" (book :_id) "/front_matter")
-            :alt (str (book :_id))}]
+     [:img {:src (str "http://localhost:3000/books/" (book :book_id) "/front_matter")
+            :alt (str (book :book_id))}]
      [:br]
      [:code "" (str (with-out-str (cljs.pprint/pprint book)))]]))
 
@@ -97,7 +97,7 @@
          (let [image-source (:thumbnail-url book)]
            ; fixme: somehow display books that have no cover
            [:div.single-book-in-list
-            [:a {:href (routing/href :books.routing/book {:id (book :_id)})}
+            [:a {:href (routing/href :books.routing/book {:id (book :book_id)})}
              [:img {:src image-source}]
              [:br]]]))]]]))
 
