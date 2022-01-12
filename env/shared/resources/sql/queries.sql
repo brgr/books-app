@@ -88,3 +88,9 @@ WHERE
 GROUP BY
     b.id, p.id
 LIMIT :n;
+
+-- :name delete-book-by-id! :! :n
+-- :doc Delete a book given its id.
+DELETE FROM books
+WHERE id = :id;
+

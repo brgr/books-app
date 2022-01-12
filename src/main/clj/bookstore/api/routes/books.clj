@@ -40,20 +40,18 @@
                                 inserted-book (queries/create-book! book)]
                             {:status 200
                              :body   inserted-book}))}}]
-   #_["/:book-id"
+   ["/:book-id"
     [""
      {:delete {:summary    "Given a books id, delete this book from the database"
                :parameters {:path {:book-id s/Str}}
                ;:responses  {200 {:body s/Any}} ; is this correct like this?
                :handler    (fn [{{{:keys [book-id]} :path} :parameters}]
-                             (let [write-result (bookstore/remove-book-by-id book-id)
-                                   count-removed-books (.getN write-result)]
-                               (if (= 1 count-removed-books)
-                                 {:status 200
-                                  :body   {:id book-id}}
-                                 {:status 404
-                                  :body   {:id book-id}})))}}]
-    ["/front-matter"
+                             (if (= 1 (queries/delete-book-by-id! (Integer/parseInt book-id)))
+                               {:status 200
+                                :body   {:id book-id}}
+                               {:status 404
+                                :body   {:id book-id}}))}}]
+    #_["/front-matter"
      {:get {:summary    "Given a book id, returns a jpg picture of its front matter"
             :parameters {:path {:book-id s/Str}}
             :swagger    {:produces ["image/jpg"]}

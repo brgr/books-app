@@ -72,3 +72,7 @@
 (defn get-first-n-books
   [n]
   (db/get-first-n-books {:n n}))
+
+(defn delete-book-by-id!
+  [book-id]
+  (db/delete-book-by-id! {:id book-id}))
