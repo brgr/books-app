@@ -23,3 +23,5 @@ resources/bookstore
 **/.shadow-cljs
 **/public.js*
 **/shadow-cljs.edn
+
+env/dev/resources/public
