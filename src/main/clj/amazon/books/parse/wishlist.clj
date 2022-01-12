@@ -13,6 +13,8 @@
     amazon-author-string))
 
 (defn- book-data [wishlist-item]
+  ; FIXME: This id here might be the item ID, but *NOT* the amazon ID! With amazon ID, we would understand the ASIN,
+  ;  which can also be found from this site, but it's not the same as this. Change it!
   (let [id (.attr wishlist-item "data-itemid")
         title (->> (str "#itemName_" id)
                    (.select wishlist-item)
