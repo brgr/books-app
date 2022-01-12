@@ -11,9 +11,7 @@
   (:require
     [bookstore.db.core :as db]
     [camel-snake-kebab.extras :refer [transform-keys]]
-    [camel-snake-kebab.core :refer [->snake_case_keyword]])
-  (:import
-    (java.time LocalDateTime)))
+    [camel-snake-kebab.core :refer [->snake_case_keyword]]))
 
 (defn- transform-keys-and-insert
   "A utility function that transforms normal kebab-case keys into snake_case keys, and then performs the given
@@ -70,3 +68,12 @@
 (defn create-book-author!
   [book-id author-id]
   (db/create-book-author! {:book_id book-id, :author_id author-id}))
+
+(defn get-first-n-books
+  [n]
+  (db/get-first-n-books {:n n}))
+
+(comment
+  (get-first-n-books 3)
+  (count (get-first-n-books 10)))
+

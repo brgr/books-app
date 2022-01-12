@@ -1,12 +1,12 @@
 (ns bookstore.db.model
-  (:require
+  #_#_(:require
     [monger.collection :as collection]
     [monger.conversion :as conversion]
     [monger.query :refer [with-collection find]]
     [bookstore.db.access :refer [get-db books-collection stringify-id]])
   (:import (org.bson.types ObjectId)))
 
-(defn insert-new-book [book]
+#_#_#_#_#_#_#_#_#_(defn insert-new-book [book]
   (let [db (get-db)]
     (-> (collection/insert-and-return db books-collection book)
         (stringify-id))))

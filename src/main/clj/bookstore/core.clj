@@ -1,12 +1,37 @@
 (ns bookstore.core
   (:require
+    [mount.core :as mount]
     [bookstore.nrepl :as nrepl]
     ; todo: add the migrations at project start (have a look at luminus!)
     ;[luminus-migrations.core :as migrations]
+    [bookstore.handler :as handler]
     [bookstore.config :refer [env]]
-    [clojure.tools.logging :as log]
-    [mount.core :as mount])
+    [luminus.http-server :as http]
+    [clojure.tools.cli :refer [parse-opts]]
+    [clojure.tools.logging :as log])
   (:gen-class))
+
+;; log uncaught exceptions in threads
+(Thread/setDefaultUncaughtExceptionHandler
+  (reify Thread$UncaughtExceptionHandler
+    (uncaughtException [_ thread ex]
+      (log/error {:what      :uncaught-exception
+                  :exception ex
+                  :where     (str "Uncaught exception on" (.getName thread))}))))
+
+(def cli-options
+  [["-p" "--port PORT" "Port number"
+    :parse-fn #(Integer/parseInt %)]])
+
+(mount/defstate ^{:on-reload :noop} http-server
+  :start
+  (http/start
+    (-> env
+        (update :io-threads #(or % (* 2 (.availableProcessors (Runtime/getRuntime)))))
+        (assoc  :handler (handler/app))
+        (update :port #(or (-> env :options :port) %))))
+  :stop
+  (http/stop http-server))
 
 (mount/defstate ^{:on-reload :noop} repl-server
   :start
@@ -16,3 +41,19 @@
   :stop
   (when repl-server
     (nrepl/stop repl-server)))
+
+(defn stop-app []
+  (doseq [component (:stopped (mount/stop))]
+    (log/info component "stopped"))
+  (shutdown-agents))
+
+(defn start-app [args]
+  (doseq [component (-> args
+                        (parse-opts cli-options)
+                        mount/start-with-args
+                        :started)]
+    (log/info component "started"))
+  (.addShutdownHook (Runtime/getRuntime) (Thread. stop-app)))
+
+(defn -main [& args]
+  (start-app args))

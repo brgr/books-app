@@ -1,7 +1,7 @@
-(ns books.env
+(ns bookstore.env
   (:require
     [clojure.tools.logging :as log]
-    [books.dev-middleware :refer [wrap-dev]]))
+    [bookstore.dev-middleware :refer [wrap-dev]]))
 
 (def defaults
   {:init

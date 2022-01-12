@@ -1,7 +1,7 @@
 (ns bookstore.api.routes
   (:require
     [reitit.ring :as ring]
-    [bookstore.api.routes.import.amazon :refer [amazon-import-routes]]
+    #_#_[bookstore.api.routes.import.amazon :refer [amazon-import-routes]]
     [bookstore.api.routes.search.amazon :refer [amazon-search-routes]]
     [bookstore.api.routes.books :refer [book-management-routes]]
     [bookstore.api.swagger :refer [swagger-json-route
@@ -11,7 +11,7 @@
 
 (def routes
   [book-management-routes
-   amazon-import-routes
+   #_#_amazon-import-routes
    amazon-search-routes
    swagger-json-route])
 
@@ -19,12 +19,15 @@
   (ring/create-default-handler
     {:not-found (constantly {:status 404 :body "Not found"})}))
 
-(def app-routes
+(def home-routes-router
+  (ring/router routes reitit-options))
+
+(def home-routes
   (ring/ring-handler
     (ring/router routes reitit-options)
     (ring/routes
       swagger-ui-handler
       default-404-handler)))
 
-(def app
-  (wrap-cors app-routes))
+;(def app
+;  (wrap-cors home-routes))

@@ -1,5 +1,5 @@
 (ns bookstore.db.update
-  (:require [environ.core :refer [env]]
+  (:require [bookstore.config :refer [env]]
             [amazon.books.fetch.image :as image-fetch]
             [bookstore.db.model :as model]
             [bookstore.db.access :refer [get-db books-collection stringify-id]]
@@ -8,7 +8,7 @@
             [clojure.string :as str])
   (:import (org.bson.types ObjectId)))
 
-(defn- update-book-thumbnail [book-id thumbnail-filename]
+#_#_#_(defn- update-book-thumbnail [book-id thumbnail-filename]
   (let [db (get-db)]
     (collection/update
       db

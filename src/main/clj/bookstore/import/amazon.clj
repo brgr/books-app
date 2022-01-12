@@ -2,7 +2,7 @@
   (:require [amazon.books.parse.wishlist :refer [load-books-from-amazon-wishlist-url]]
             [amazon.books.parse.single-book :refer [load-book]]
             [amazon.books.fetch.image :refer [load-and-save-file]]
-            [environ.core :refer [env]]
+            [bookstore.config :refer [env]]
             [clojure.string :as str]))
 
 (def books-loaded (atom 0))

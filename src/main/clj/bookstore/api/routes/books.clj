@@ -1,10 +1,11 @@
 (ns bookstore.api.routes.books
-  (:require [bookstore.db.model :as bookstore]
-            [schema.core :as s]
-            [bookstore.db.update]
-            [clojure.java.io :as io]
-            [environ.core :refer [env]]
-            [bookstore.files.file-management :refer [get-file-name]]))
+  (:require
+    [schema.core :as s]
+    #_#_[bookstore.db.model :as bookstore]
+    [bookstore.db.update]
+    [bookstore.db.queries :as queries]
+    [clojure.java.io :as io]
+    [bookstore.files.file-management :refer [get-file-name]]))
 
 (def books-routes
   ["/books"
@@ -16,13 +17,13 @@
               :status  200
               :handler (fn [_]
                          {:status 200
-                          :body   {:result (bookstore/first-n-books 30)}})}}])
+                          :body   {:result (queries/get-first-n-books 30)}})}}])
 
 (def book-routes
   ["/book"
    {:swagger {:tags ["book"]}}
 
-   [""
+   #_#_[""
     {:post {:summary    "Insert a new book"
             :parameters {:body s/Any}                       ; todo: check that book is of correct type!
             ;:responses  {200 {:body s/Any}} ; is this correct like this?

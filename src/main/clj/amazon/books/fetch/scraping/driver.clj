@@ -1,8 +1,9 @@
 (ns amazon.books.fetch.scraping.driver
-  (:require [etaoin.api :refer [chrome firefox-headless firefox go with-driver get-source quit get-logs]]
-            [clojure.string :as str]
-            [etaoin.api :refer :all]
-            [environ.core :refer [env]]))
+  (:require
+    [etaoin.api :refer [chrome firefox-headless firefox go with-driver get-source quit get-logs]]
+    [etaoin.api :refer :all]
+    [clojure.string :as str]
+    [bookstore.config :refer [env]]))
 
 ; The useragents were originally taken from this site: (only the Browser user agents)
 ; https://techpatterns.com/downloads/firefox/useragentswitcher.xml

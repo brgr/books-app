@@ -37,7 +37,17 @@
                  ; todo: remove monger....
                  [com.novemberain/monger "3.1.0"]
                  [org.clojure/tools.logging "1.1.0"]
+                 [org.clojure/tools.cli "1.0.206"]
                  [org.postgresql/postgresql "42.2.18"]
+                 [luminus-transit "0.1.3"]
+                 [luminus-undertow "0.1.14"]
+                 [luminus/ring-ttl-session "0.3.3"]
+                 [metosin/ring-http-response "0.9.3"]
+                 [ring-webjars "0.2.0"]
+                 [ring/ring-core "1.9.4"]
+                 [ring/ring-defaults "0.3.3"]
+                 [selmer "1.12.49"]
+                 [markdown-clj "1.10.8"]
                  [luminus-migrations "0.7.1"]
                  [mount "0.1.16"]
                  [cprop "0.1.17"]
@@ -55,6 +65,7 @@
   :injections [(require 'hashp.core)]
 
   :ring {:handler bookstore.api.routes/app}
+  :main ^:skip-aot bookstore.core
 
   :repl-options {:init-ns amazon-wishlist.core}
 

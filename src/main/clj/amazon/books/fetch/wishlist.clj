@@ -1,6 +1,7 @@
 (ns amazon.books.fetch.wishlist
-  (:require [etaoin.api :refer :all]
-            [amazon.books.fetch.scraping.driver :refer [get-driver]]))
+  (:require
+    [etaoin.api :refer :all]
+    [amazon.books.fetch.scraping.driver :refer [get-driver]]))
 
 (defn- more-books-available? [driver]
   (not (empty? (query-all driver {:tag :div :fn/has-class :wl-see-more}))))
