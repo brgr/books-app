@@ -5,7 +5,7 @@
     [reitit.swagger :as swagger]
     [muuntaja.core :as m]
     [reitit.ring.middleware.muuntaja :as muuntaja]
-    [reitit.ring.middleware.exception :as exception]
+    [bookstore.middleware.exception :as exception]
     [reitit.ring.middleware.multipart :as multipart]
     [reitit.ring.middleware.parameters :as parameters]
     [reitit.ring.coercion :as coercion]

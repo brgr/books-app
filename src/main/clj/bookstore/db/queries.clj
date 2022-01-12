@@ -72,8 +72,3 @@
 (defn get-first-n-books
   [n]
   (db/get-first-n-books {:n n}))
-
-(comment
-  (get-first-n-books 3)
-  (count (get-first-n-books 10)))
-

@@ -2,10 +2,17 @@
   (:require
     [schema.core :as s]
     #_#_[bookstore.db.model :as bookstore]
-    [bookstore.db.update]
+        [bookstore.db.update]
     [bookstore.db.queries :as queries]
     [clojure.java.io :as io]
-    [bookstore.files.file-management :refer [get-file-name]]))
+    [bookstore.files.file-management :refer [get-file-name]])
+  (:import (java.time LocalDateTime)))
+
+;; TODO: I can now start changing stuff here!
+;; I need to go over these and fix them one by one. Most probably all of them won't work anymore, as for now
+;; I don't have a single SELECT query. I need to see what kind of queries I need, add them first in SQL, then finally
+;; call them here.
+;; Like this, I should be able to slowly make the app work again.
 
 (def books-routes
   ["/books"
@@ -23,15 +30,17 @@
   ["/book"
    {:swagger {:tags ["book"]}}
 
-   #_#_[""
+   [""
     {:post {:summary    "Insert a new book"
+            :description "Example: {\"title\": \"test\", \"added\": \"1999-01-08T04:05:06\"}"
             :parameters {:body s/Any}                       ; todo: check that book is of correct type!
             ;:responses  {200 {:body s/Any}} ; is this correct like this?
             :handler    (fn [{{book :body} :parameters}]
-                          (let [inserted-book (bookstore/insert-new-book book)]
+                          (let [book (assoc book :added (LocalDateTime/parse (:added book)))
+                                inserted-book (queries/create-book! book)]
                             {:status 200
                              :body   inserted-book}))}}]
-   ["/:book-id"
+   #_["/:book-id"
     [""
      {:delete {:summary    "Given a books id, delete this book from the database"
                :parameters {:path {:book-id s/Str}}
