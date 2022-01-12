@@ -89,6 +89,12 @@ GROUP BY
     b.id, p.id
 LIMIT :n;
 
+-- :name get-book-by-id :? :1
+-- :doc Gets a book by its id.
+SELECT *
+FROM books
+WHERE id = :id;
+
 -- :name delete-book-by-id! :! :n
 -- :doc Delete a book given its id.
 DELETE FROM books

@@ -3,6 +3,7 @@
     [schema.core :as s]
     #_#_[bookstore.db.model :as bookstore]
         [bookstore.db.update]
+    [bookstore.config :refer [env]]
     [bookstore.db.queries :as queries]
     [clojure.java.io :as io]
     [bookstore.files.file-management :refer [get-file-name]])
@@ -51,17 +52,17 @@
                                 :body   {:id book-id}}
                                {:status 404
                                 :body   {:id book-id}}))}}]
-    #_["/front-matter"
+    ["/front-matter"
      {:get {:summary    "Given a book id, returns a jpg picture of its front matter"
             :parameters {:path {:book-id s/Str}}
             :swagger    {:produces ["image/jpg"]}
-            ; fixme: handle case where there is no image! (what is happening now, in that case?)
+            ; Fixme: Handle case where there is no image! (What is happening now, in that case?)
             :handler    (fn [{{{:keys [book-id]} :path} :parameters}]
                           {:status  200
                            :headers {"Content-Type" "image/png"}
-                           :body    (when-let [image-url (:amazon-book-image-front (bookstore.db.model/get-book-by-id book-id))]
+                           :body    (when-let [cover-image-id (:cover_image_id (queries/get-book-by-id (Integer/parseInt book-id)))]
                                       (io/input-stream
-                                        (io/resource (str (:front-matter-dir env) (get-file-name image-url)))))})}}]]])
+                                        (io/resource (str (env :front-matter-dir) (str cover-image-id) "_front.jpg"))))})}}]]])
 
 (def book-management-routes
   [books-routes
