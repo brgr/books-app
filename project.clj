@@ -34,8 +34,6 @@
                  [etaoin "0.3.10"]
                  [nrepl "0.8.3"]
                  [ch.qos.logback/logback-classic "1.2.5"]
-                 ; todo: remove monger....
-                 [com.novemberain/monger "3.1.0"]
                  [org.clojure/tools.logging "1.1.0"]
                  [org.clojure/tools.cli "1.0.206"]
                  [org.postgresql/postgresql "42.2.18"]
