@@ -16,19 +16,19 @@ dev/setup-images:
 	mkdir -p public/img/front_matters || true
 	ln -srf env/dev/resources/front_matters/*.jpg public/img/front_matters/
 
-dev/backend: docker/database dev/setup-images ring-server
+dev/backend: docker/down docker/database dev/setup-images ring-server
 
 # Runs a local server on port 3000
 # This has the advantage of updating changes made to it in real-time, while Docker would need to be restarted all the
 # time.
 ring-server:
-	lein ring server
+	lein run
 
 docker/rebuild: docker/down uberwar
 	docker-compose -f $(docker-compose-file) build jetty-ring
 
 docker/database:
-	docker-compose -f $(docker-compose-file) up -d database mongo-express
+	docker-compose -f $(docker-compose-file) up -d database adminer
 
 docker/down:
 	docker-compose -f $(docker-compose-file) down
