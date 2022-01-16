@@ -7,6 +7,8 @@
  ;:nrepl-port 7000
 
  :database-url                        "jdbc:postgresql://localhost:5432/books_dev?user=pguser&password=3ZmW9M38mX8AQGqBP"
+ ;; TODO: I think we don't have a thumbnails dir anymore and can remove that here
+ ;;  However: I also need to change it in amazon-related namespaces
  :thumbnails-dir                      "public/img/thumbnails/"
  :front-matter-dir                    "public/img/front_matters/"
 
