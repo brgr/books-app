@@ -1,11 +1,11 @@
 (ns bookstore.import.amazon
   (:require [amazon.books.parse.wishlist :refer [load-books-from-amazon-wishlist-url]]
             [amazon.books.parse.single-book :refer [load-book]]
-            [amazon.books.fetch.image :refer [load-and-save-file]]
+            #_[amazon.books.fetch.image :refer [load-and-save-file]]
             [bookstore.config :refer [env]]
             [clojure.string :as str]))
 
-(def books-loaded (atom 0))
+#_#_#_#_#_#_#_(def books-loaded (atom 0))
 
 (defn load-book-content [wishlist-book]
   (try

@@ -1,8 +1,8 @@
 (ns amazon.books.fetch.image
-  (:require [bookstore.files.file-management :refer [get-file-name]]
+  (:require #_[bookstore.files.file-management :refer [get-file-name]]
             [clojure.java.io :as io]))
 
-(defn load-and-save-file
+#_#_(defn load-and-save-file
   ([uri output-path]
    (let [filename (get-file-name uri)
          filepath (str output-path filename)]

@@ -1,7 +1,7 @@
 (ns bookstore.api.routes.import.amazon
   (:require
     [schema.core :as s]
-    [bookstore.import.amazon :refer [import-wishlist books-loaded]]))
+    #_[bookstore.import.amazon :refer [import-wishlist books-loaded]]))
 
 ;; TODO: I have currently disabled this / This is currently unused.
 ;; 1. The main reason is that it's mostly unused and for a long time not tested.
@@ -14,7 +14,7 @@
 ;;    I'm still working on the books app as well, there is no real need to immediately have a fully-fledged wishlist
 ;;    import feature.
 
-(def amazon-import-routes
+#_(def amazon-import-routes
   [["/import/amazon"
     {:swagger {:tags ["import"]}}
 
