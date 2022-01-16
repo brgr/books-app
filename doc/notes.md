@@ -27,6 +27,20 @@ For more info:
 https://serverfault.com/questions/758225/cannot-connect-to-mongodb-in-docker
 (see: service name instead of IP)
 
+## Cursive IDE
+
+Notes on the IntelliJ IDEA plugin called `Cursive`, that I personally mostly use.
+
+### Fix/Add source/resource paths
+
+Sometimes one might want to add source or resource paths to the project, often also for specific projects.
+As an example: We re-configured the project so that it would contain DEV sources in `env/dev/clj`, and PROD sources
+in `env/prod/clj`. We can specify this in our `project.clj` and so far all was fine. However, after adding these
+source paths in `project.clj` and after importing the changes / updating leiningen, the new source paths would still
+not show in IntelliJ. To fix this, one needs to still **select the profile in the *Leiningen* tab**.
+
+I found this tip [here][22].
+
 ## Servers
 
 Quick note on Jetty: Both Jetty and Tomcat are widely used. I have decided to use Jetty just by chance. I think in the
@@ -142,7 +156,7 @@ environment variable set to recognize the env variables. This is why I have put 
 Update August 2021:
 
 I will switch to use the `cprop` library together with `mount`, mainly because it's used by Luminus and therefore also
-has some very good explanations on it. The general documentation from Luminus can be found [here][21]. They explain 
+has some very good explanations on it. The general documentation from Luminus can be found [here][21]. They explain
 pretty well why the directory structure etc. exists like it does.
 
 ## SSH Key: With or without passphrase?
@@ -153,7 +167,7 @@ private key alone is actually enough.
 
 For a discussion on this, see [here][1].
 
-## Github Actions
+## GitHub Actions
 
 [Awesome Github Actions][3]
 
@@ -241,3 +255,5 @@ it [here][18].
 [20]: https://gist.github.com/akovantsev/44e2a0e10908785d1f40d3d3bcfff574
 
 [21]: https://luminusweb.com/docs/environment.html
+
+[22]: https://cursive-ide.com/userguide/leiningen.html
