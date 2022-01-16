@@ -8,7 +8,7 @@ frontend:
 	# track of its environment
 	cd wishlist-frontend && lein do clean, shadow watch client
 
-start-backend: docker/down uberwar docker/rebuild
+start-backend: docker/down docker/rebuild
 	docker-compose -f $(docker-compose-file) up -d
 
 dev/setup-images:
@@ -23,7 +23,7 @@ dev/backend: docker/down docker/database dev/setup-images ring-server
 ring-server:
 	lein run
 
-docker/rebuild: docker/down uberwar
+docker/rebuild: docker/down
 	docker-compose -f $(docker-compose-file) build jetty-ring
 
 docker/database:
