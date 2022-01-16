@@ -2,13 +2,17 @@
   :description "A small book CRUD app"
   :url "http://example.com/FIXME"
 
+  :min-lein-version "2.0.0"
+
   :source-paths ["src/main/clj"]
   :test-paths ["src/test/clj"]
   :resource-paths ["src/main/resources"
                    "env/shared/resources"]
+  :target-path "target/%s/"
+  :main ^:skip-aot bookstore.core
 
   :profiles {:uberjar      {:omit-source true
-                            :aot [bookstore.core]                         ;:all
+                            :aot :all
                             :uberjar-name "bookstore.jar"
                             :source-paths ["env/prod/clj" ]
                             :resource-paths ["env/prod/resources"]}
@@ -60,10 +64,6 @@
                  [manifold "0.1.8"]
                  [ring-cors "0.1.13"]
                  [camel-snake-kebab "0.4.2"]]
-
-  :main ^:skip-aot bookstore.core
-
-  :repl-options {:init-ns amazon-wishlist.core}
 
   ; per default, we don't want to test amazon or integration, as these take too long
   :test-selectors {:default     (fn [m] (not (or (:amazon m) (:integration m))))

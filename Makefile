@@ -40,8 +40,9 @@ prod/build:
 # Concretely, the database is set up s.t. it accesses the local one. Other things are however not set up, e.g. the
 # front_matters dir.
 prod/run-locally: prod/build
-	chmod +x ./target/bookstore.jar
-	DATABASE_URL='jdbc:postgresql://localhost:5432/books_dev?user=pguser&password=3ZmW9M38mX8AQGqBP' ./target/bookstore.jar
+	chmod +x ./target/uberjar/bookstore.jar
+	DATABASE_URL='jdbc:postgresql://localhost:5432/books_dev?user=pguser&password=3ZmW9M38mX8AQGqBP' ./target/uberjar/bookstore.jar
+
 
 clean:
 	# Remove all images that are not associated with a container
