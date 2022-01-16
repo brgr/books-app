@@ -6,8 +6,8 @@
 (def defaults
   {:init
    (fn []
-     (log/info "\n-=[luminus-postgres-template started successfully using the development profile]=-"))
+     (log/info "\n-=[bookstore started successfully using the development profile]=-"))
    :stop
    (fn []
-     (log/info "\n-=[luminus-postgres-template has shut down successfully]=-"))
+     (log/info "\n-=[bookstore has shut down successfully]=-"))
    :middleware wrap-dev})
