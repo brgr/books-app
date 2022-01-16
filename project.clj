@@ -7,7 +7,11 @@
   :resource-paths ["src/main/resources"
                    "env/shared/resources"]
 
-  :profiles {:uberwar      {:env {:database-url "database"}}
+  :profiles {:uberjar      {:omit-source true
+                            :aot [bookstore.core]                         ;:all
+                            :uberjar-name "bookstore.jar"
+                            :source-paths ["env/prod/clj" ]
+                            :resource-paths ["env/prod/resources"]}
 
              :dev          [:project/dev :profiles/dev]
 
@@ -55,14 +59,8 @@
                  [org.jsoup/jsoup "1.13.1"]
                  [manifold "0.1.8"]
                  [ring-cors "0.1.13"]
-                 [hashp "0.2.1"]
                  [camel-snake-kebab "0.4.2"]]
 
-  :plugins [[lein-ring "0.12.5"]]
-
-  :injections [(require 'hashp.core)]
-
-  :ring {:handler bookstore.api.routes/app}
   :main ^:skip-aot bookstore.core
 
   :repl-options {:init-ns amazon-wishlist.core}
