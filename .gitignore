@@ -1,13 +1,16 @@
 **/target
 /classes
 /checkouts
-profiles.clj
+/log
+outdated_profiles.clj
 pom.xml
 pom.xml.asc
 *.jar
 *.class
 /.lein-*
+**/.lein-*
 /.nrepl-port
+**/.nrepl-port
 .hgignore
 .hg/
 
@@ -20,3 +23,5 @@ resources/bookstore
 **/.shadow-cljs
 **/public.js*
 **/shadow-cljs.edn
+
+env/dev/resources/public

@@ -1,34 +1,38 @@
 (ns amazon.books.fetch.scraping.driver
-  (:require [etaoin.api :refer [chrome firefox-headless firefox go with-driver get-source quit get-logs]]
-            [clojure.string :as str]
-            [etaoin.api :refer :all]
-            [environ.core :refer [env]]))
+  (:require
+    [etaoin.api :refer [chrome firefox-headless firefox go with-driver get-source quit get-logs]]
+    [etaoin.api :refer :all]
+    [clojure.string :as str]
+    [bookstore.config :refer [env]]))
 
-; The useragents were originally taken from this site: (only the Browser user agents)
+; The user agents were originally taken from this site: (only the Browser user agents)
 ; https://techpatterns.com/downloads/firefox/useragentswitcher.xml
-(def user-agents (-> (slurp (env :user-agents-file))
-                     (str/split #"\n")))
+(defn get-user-agents []
+  (-> (slurp (env :user-agents-file))
+      (str/split #"\n")))
 
-(def prefs-file-template (env :firefox-profile-prefs-template-file))
-; fixme: make this more dynamic, see issue #6
-(def profile-prefs-file (str (env :firefox-profile-directory) "prefs.js"))
+(defn get-prefs-file-template []
+  (env :firefox-profile-prefs-template-file))
+; Fixme: Make this more dynamic, see issue #6
+(defn get-profile-prefs-file []
+  (str (env :firefox-profile-directory) "prefs.js"))
 
 (defn add-preference [preference value]
-  (spit profile-prefs-file
+  (spit (get-profile-prefs-file)
         (str "\nuser_pref(\"" preference "\", \"" value "\");")
         :append true))
 
 (defn remove-preference [preference]
-  (as-> (slurp profile-prefs-file) $
+  (as-> (slurp (get-profile-prefs-file)) $
         (clojure.string/split $ #"\n")
         (filter #(complement (str/includes? % preference)) $)
         (clojure.string/join $)))
 
 (defn get-driver []
-  (->> (slurp prefs-file-template)
-       (spit profile-prefs-file))
+  (->> (slurp (get-prefs-file-template))
+       (spit (get-profile-prefs-file)))
   (remove-preference "useragent")
-  (add-preference "general.useragent.override" (rand-nth user-agents))
+  (add-preference "general.useragent.override" (rand-nth (get-user-agents)))
   (firefox {:headless     (= "true" (env :headless-scraping))
             :size         [1400 920]
             ; Note that we use another browser here (not the main installation of firefox)

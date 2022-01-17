@@ -1,10 +1,10 @@
 (ns bookstore.api.routes.books
-  (:require [bookstore.db.model :as bookstore]
-            [schema.core :as s]
-            [bookstore.db.update]
-            [clojure.java.io :as io]
-            [environ.core :refer [env]]
-            [bookstore.files.file-management :refer [get-file-name]]))
+  (:require
+    [schema.core :as s]
+    [bookstore.config :refer [env]]
+    [bookstore.db.queries :as queries]
+    [clojure.java.io :as io])
+  (:import (java.time LocalDateTime)))
 
 (def books-routes
   ["/books"
@@ -16,7 +16,7 @@
               :status  200
               :handler (fn [_]
                          {:status 200
-                          :body   {:result (bookstore/first-n-books 30)}})}}])
+                          :body   {:result (queries/get-first-n-books 30)}})}}])
 
 (def book-routes
   ["/book"
@@ -24,10 +24,12 @@
 
    [""
     {:post {:summary    "Insert a new book"
+            :description "Example: {\"title\": \"test\", \"added\": \"1999-01-08T04:05:06\"}"
             :parameters {:body s/Any}                       ; todo: check that book is of correct type!
             ;:responses  {200 {:body s/Any}} ; is this correct like this?
             :handler    (fn [{{book :body} :parameters}]
-                          (let [inserted-book (bookstore/insert-new-book book)]
+                          (let [book (assoc book :added (LocalDateTime/parse (:added book)))
+                                inserted-book (queries/create-book! book)]
                             {:status 200
                              :body   inserted-book}))}}]
    ["/:book-id"
@@ -36,24 +38,22 @@
                :parameters {:path {:book-id s/Str}}
                ;:responses  {200 {:body s/Any}} ; is this correct like this?
                :handler    (fn [{{{:keys [book-id]} :path} :parameters}]
-                             (let [write-result (bookstore/remove-book-by-id book-id)
-                                   count-removed-books (.getN write-result)]
-                               (if (= 1 count-removed-books)
-                                 {:status 200
-                                  :body   {:id book-id}}
-                                 {:status 404
-                                  :body   {:id book-id}})))}}]
+                             (if (= 1 (queries/delete-book-by-id! (Integer/parseInt book-id)))
+                               {:status 200
+                                :body   {:id book-id}}
+                               {:status 404
+                                :body   {:id book-id}}))}}]
     ["/front-matter"
      {:get {:summary    "Given a book id, returns a jpg picture of its front matter"
             :parameters {:path {:book-id s/Str}}
             :swagger    {:produces ["image/jpg"]}
-            ; fixme: handle case where there is no image! (what is happening now, in that case?)
+            ; Fixme: Handle case where there is no image! (What is happening now, in that case?)
             :handler    (fn [{{{:keys [book-id]} :path} :parameters}]
                           {:status  200
                            :headers {"Content-Type" "image/png"}
-                           :body    (when-let [image-url (:amazon-book-image-front (bookstore.db.model/get-book-by-id book-id))]
+                           :body    (when-let [cover-image-id (:cover_image_id (queries/get-book-by-id (Integer/parseInt book-id)))]
                                       (io/input-stream
-                                        (io/resource (str (:front-matter-dir env) (get-file-name image-url)))))})}}]]])
+                                        (io/resource (str (env :front-matter-dir) (str cover-image-id) "_front.jpg"))))})}}]]])
 
 (def book-management-routes
   [books-routes

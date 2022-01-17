@@ -48,7 +48,7 @@
   :remove-book-by-id
   (fn [db [_ book-to-remove]]
     (do
-      (DELETE (str BACKEND-URI "/books/book") {:url-params      {:id (book-to-remove :_id)}
+      (DELETE (str BACKEND-URI "/books/book") {:url-params      {:id (book-to-remove :book_id)}
                                                :response-format :json
                                                :handler         #(println "Worked fine:" %1)
                                                :error-handler   #(println "Error:" %1)})

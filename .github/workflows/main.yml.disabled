@@ -1,6 +1,13 @@
 name: Build + Deploy
 #description: 'Build and deploy to my DigitalOcean droplet'
 
+# TODO: This file is out of date... by a lot!
+#  It still uses MongoDB, for example, which I have migrated away from. But I am pretty sure that also other things in
+#  this file won't work. (I guess there is a reason why this file is already disabled while I am writing this comment
+#  here)
+#  Anyways, for now I'm leaving this file here, for future reference - if I would want to work with Github Actions
+#  again. But feel free to remove it :-)
+
 # Note: At the moment, no server is set up for deployment - it is only tested locally. Thus also the IP addresses etc.
 #  that are listed here, as well as all jobs, don't work.
 
@@ -14,11 +21,11 @@ jobs:
       - name: Run tests (lein test)
         run: lein test
       - name: Start MongoDB in a docker container
-        run: docker-compose -f wishlist-docker/docker-compose.yml up -d
+        run: docker-compose -f docker/docker-compose.yml up -d
       - name: Run integration tests (lein test :integration)
         run: lein test :integration
       - name: Shut down docker containers
-        run: docker-compose -f wishlist-docker/docker-compose.yml down
+        run: docker-compose -f docker/docker-compose.yml down
 
   build:
     name: Build
